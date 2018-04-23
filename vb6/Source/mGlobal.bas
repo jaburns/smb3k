@@ -17,7 +17,8 @@ Public Const ENEMYBOUNCE As Long = 4
 Public Const ENEMYBIGBOUNCE As Long = 13
 Public Const PI As Double = 3.14159265358979
 
-Public Declare Function ShowCursor Lib "user32" (ByVal bShow As Long) As Long
+'((Not supporting "Declare Function" in Rust interpreter. Just commenting it out here.))
+'Public Declare Function ShowCursor Lib "user32" (ByVal bShow As Long) As Long
 
 
 'the main gfx engine
@@ -166,19 +167,20 @@ Public gameGreens As Long
 Public gameMarioStat As udeMarioStatus
 
 
-'
+'((Not supporting "Declare Function" in Rust interpreter, or dealing with the mouse at all.))
 'show and hide the mouse
 Public Sub Mouse_Hide()
-    Dim ret As Long
-    Do
-        ret = ShowCursor(False)
-    Loop Until ret <= -1
+'   Dim ret As Long
+'   Do
+'       ret = ShowCursor(False)
+'   Loop Until ret <= -1
 End Sub
 Public Sub Mouse_Show()
-   Dim ret
-   Do
-      ret = ShowCursor(True)
-   Loop Until ret >= 0
+    DoNothing
+'  Dim ret
+'  Do
+'     ret = ShowCursor(True)
+'  Loop Until ret >= 0
 End Sub
 
 
