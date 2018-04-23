@@ -15,7 +15,7 @@ fn space() -> Parser<'static, u8, ()> {
 
 fn word() -> Parser<'static, u8, String> {
     none_of(b" \t\r\n`()")
-        .repeat(0..)
+        .repeat(1..)
         .convert(String::from_utf8)
 }
 
@@ -51,21 +51,29 @@ fn option_decl() -> Parser<'static, u8, TopLevelBlock> {
     seq(b"Option Explicit").map(|_| TopLevelBlock::OptionExplicit)
 }
 
+fn array_range() -> Parser<'static, u8, Option<VarKind>> {
+    let inner = integer() - space() - seq(b"To") - space() + integer();
+    let matched = (sym(b'(') * inner.opt() - sym(b')')).opt() - space();
+
+    // TODO Handle case where only upperbound is supplied in array decl
+
+    matched.map(|outer| {
+                    outer.map(|inner| match inner {
+                                  Some((a, b)) => VarKind::RangeArray(a, b),
+                                  None => VarKind::DynamicArray,
+                              })
+                })
+}
+
 fn var_decl() -> Parser<'static, u8, VarDeclaration> {
-    let range = sym(b'(') * none_of(b")").repeat(0..) - sym(b')');
-    let name_and_maybe_range = word() + range.opt() - space();
+    let name_and_maybe_range = word() + array_range();
     let maybe_new_and_type_name = seq(b"As") * space() * (seq(b"New") - space()).opt() + word();
     let matched = name_and_maybe_range + maybe_new_and_type_name;
 
     matched.map(|((n, r), (new, t))| {
         let kind = match new {
             Some(_) => VarKind::AutoInstantiate,
-            None => {
-                match r {
-                    Some(_) => VarKind::DynamicArray,
-                    None => VarKind::Standard,
-                }
-            }
+            None => r.unwrap_or(VarKind::Standard),
         };
 
         VarDeclaration {
@@ -170,7 +178,7 @@ fn function_decl() -> Parser<'static, u8, TopLevelBlock> {
     matched.map(|((((a, k), (n, p)), r), b)| {
         TopLevelBlock::Function {
             access_level: a.unwrap(),
-            kind: k.unwrap(),
+            kind: k.unwrap_or(FunctionKind::PropertySet),
             name: n,
             params: p,
             return_type: r.unwrap_or(String::new()),
@@ -204,9 +212,10 @@ fn match_eof() -> Parser<'static, u8, BlockParseResult> {
 }
 
 fn top_level_block() -> Parser<'static, u8, BlockParseResult> {
-    let block_matches =
-        option_decl() | attribute_decl() | type_decl() | enum_decl() | const_decl() |
-        top_field_decl() | function_decl() | ignored_header_decl() | class_marker_decl();
+    let block_matches = option_decl() | attribute_decl() | ignored_header_decl() |
+                        class_marker_decl() | function_decl() |
+                        type_decl() | enum_decl() | const_decl() |
+                        top_field_decl();
 
     block_matches.map(BlockParseResult::Block) | match_eof() |
     none_of(b"")

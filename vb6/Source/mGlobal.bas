@@ -170,17 +170,10 @@ Public gameMarioStat As udeMarioStatus
 '((Not supporting "Declare Function" in Rust interpreter, or dealing with the mouse at all.))
 'show and hide the mouse
 Public Sub Mouse_Hide()
-'   Dim ret As Long
-'   Do
-'       ret = ShowCursor(False)
-'   Loop Until ret <= -1
+    Dim i As Long
 End Sub
 Public Sub Mouse_Show()
-    DoNothing
-'  Dim ret
-'  Do
-'     ret = ShowCursor(True)
-'  Loop Until ret >= 0
+    Dim i As Long
 End Sub
 
 
