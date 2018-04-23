@@ -1,19 +1,18 @@
 
 #[derive(Debug)]
 pub enum AccessLevel {
-    Public, 
+    Public,
     Private,
 }
 
 #[derive(Debug)]
-pub struct FunctionParam {
-}
+pub struct FunctionParam {}
 
 #[derive(Debug)]
 pub enum FunctionKind {
-    Sub, 
-    Function, 
-    PropertyGet, 
+    Sub,
+    Function,
+    PropertyGet,
     PropertySet,
 }
 
@@ -21,7 +20,7 @@ pub enum FunctionKind {
 pub enum VarKind {
     Standard,
     DynamicArray,
-    RangeArray(i32,i32),
+    RangeArray(i32, i32),
     AutoInstantiate,
 }
 
@@ -36,10 +35,7 @@ pub struct VarDeclaration {
 pub enum TopLevelBlock {
     ClassMarker,
 
-    Attribute { 
-        name: String, 
-        value: String,
-    },
+    Attribute { name: String, value: String },
 
     OptionExplicit,
 
@@ -64,7 +60,7 @@ pub enum TopLevelBlock {
     Enum {
         access_level: AccessLevel,
         name: String,
-        values: Vec<(String,i32)>,
+        values: Vec<(String, i32)>,
     },
 
     Function {
