@@ -18,8 +18,8 @@ Public Enum udeScrollStyle
     lScr_Down
 End Enum
 
-Private Const BAR_FORECOLOR = vbGreen
-Private Const BAR_BACKCOLOR = vbBlue
+Private Const BAR_FORECOLOR As Long = vbGreen
+Private Const BAR_BACKCOLOR As Long = vbBlue
 
 'this object has all the info on mario
 Public Mario As New ocMario

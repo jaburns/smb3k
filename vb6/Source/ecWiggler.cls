@@ -9,9 +9,9 @@ Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
 Option Explicit
 
-Private Const NORM_SPEED = 5
-Private Const PISSED_SPEED = 2
-Private Const TIME_SPENT_PISSED = 500
+Private Const NORM_SPEED As Long = 5
+Private Const PISSED_SPEED As Long = 2
+Private Const TIME_SPENT_PISSED As Long = 500
 
 Private xInit As Single
 Private yInit As Single

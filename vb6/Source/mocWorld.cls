@@ -124,7 +124,7 @@ Public Sub setNodeImage(ID As Long, bVal As Byte)
     oNodes(ID).znodeImage = bVal
 End Sub
 Public Sub setEntryPoint(ID As Long, bMode As Byte, bTag As Byte) 'mode=0-4   tag=1-16
-    
+    Dim i As Long 
 End Sub
 Public Sub setEntryPointValue(ID As Long, bVal As Byte)
     If bVal < 0 Or bVal > 80 Then Exit Sub

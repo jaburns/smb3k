@@ -33,7 +33,8 @@ Private zoTallCactus() As ecCactus
 Private zoBulletBill() As ecBulletBill
 Private zoCheepCheep() As ecCheepCheep
 Private zoBobomb() As ecBobomb
-Private zoBossGoomboss As eBossGoomboss, bGoombossOn As Boolean
+Private zoBossGoomboss As eBossGoomboss
+Private bGoombossOn As Boolean
 Private zoHiddenTile() As objHiddenTileInfo
 Private zoWiggler() As ecWiggler
 

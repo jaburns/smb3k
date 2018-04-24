@@ -1,12 +1,15 @@
 Attribute VB_Name = "mObjects"
 Option Explicit
 
-Private zoBrickBreak(4) As ocBrickBreak, curBrick As Long
-'Private zoBrickBreak(4) As ocBrickBreak, curBrick As Long
-Private zoGotCoin(4) As ocBegottenCoin, curGotCoin As Long
-Private zoCactusBall(4) As ocCactusBall, curCactusBall As Long
+Private zoBrickBreak(4) As ocBrickBreak
+Private curBrick As Long
+Private zoGotCoin(4) As ocBegottenCoin
+Private curGotCoin As Long
+Private zoCactusBall(4) As ocCactusBall
+Private curCactusBall As Long
 Private zoMushroom As ocAmanita
-Private zoUpMushroom(4) As ocAmanita, curMushroom As Long
+Private zoUpMushroom(4) As ocAmanita
+Private curMushroom As Long
 Private zoDownMushroom As ocAmanita
 Private zoFlower As ocFlower
 Private zoGetHammer As ocFlower

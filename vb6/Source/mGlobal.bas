@@ -26,6 +26,8 @@ Public GFX As New DXGraphics
 
 Public sMarioSkin As String
 
+Private doge(15) As String
+
 'current game data
 Public sWorldSetName As String
 Public sWorldList() As String
