@@ -239,7 +239,10 @@ End Sub
 
 
 Private Sub FindLevelPipeLocations()
-Dim i As Long, X As Long, Y As Long, TMP As udeLTileTag
+Dim i As Long
+Dim X As Long
+Dim Y As Long
+Dim TMP As udeLTileTag
     
     For i = 1 To 16
         lPipeX(i) = -1
@@ -340,8 +343,10 @@ End Sub
 
 
 Public Sub LevelBlockSwitch()
-Dim X As Long, Y As Long
-Dim xTest As Long, yTest As Long
+Dim X As Long
+Dim Y As Long
+Dim xTest As Long
+Dim yTest As Long
 
 
     For X = 0 To (curLevel.width + 0)

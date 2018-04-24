@@ -41,7 +41,9 @@ Private zoWiggler() As ecWiggler
 
 'this also finds the tags and other special things
 Public Sub FindAndCreateEnemies()
-Dim TMP As Long, X As Long, Y As Long
+Dim TMP As Long
+Dim X As Long
+Dim Y As Long
 Dim tType As udeLTileType
 Dim tEnemy As udeLTileEnemy
 Dim tTag As udeLTileTag

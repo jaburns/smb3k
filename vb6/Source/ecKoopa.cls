@@ -375,7 +375,9 @@ Dim tTile As udeLTileType
         If kStyle = KOOPA_BOUNCER Then xSpeed = Abs(xSpeed) Else xSpeed = curSpeed
     End If
     
-Dim sTestX As Single, sTestY As Single, i As Long
+Dim sTestX As Single
+Dim sTestY As Single
+Dim i As Long
     If Not bShell Then
         For i = 1 To GetShellCount
             If GetShellisShelled(i) Then

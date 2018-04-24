@@ -44,7 +44,8 @@ Public mapExitToLoadGame As Boolean
 
 
 Public Function ShowWorldMap(lWorld As Long, Optional ByVal startNode As Long = -1) As Long
-Dim i As Long, u As Long
+Dim i As Long
+Dim u As Long
 Dim testTag As Byte
 
     mapExitToNewWorld = 0
@@ -376,7 +377,10 @@ End Function
 
 
 Private Sub showSaveScreen(Optional ByVal insideScene As Boolean = True)
-Dim i As Long, u As Long, curSel As Long, lKeyDown As Long
+Dim i As Long
+Dim u As Long
+Dim curSel As Long
+Dim lKeyDown As Long
 Dim bSavedGameLoaded As Boolean
 
     If insideScene Then GFX.EndScene

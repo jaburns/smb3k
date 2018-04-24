@@ -34,7 +34,9 @@ Public oEnemySkin As udtEnemySkin
 
 Public Sub SaveEnemySkinFile(sPath As String)
 On Error GoTo errOut:
-Dim fFile As Long, i As Long: fFile = FreeFile
+Dim fFile As Long
+Dim i As Long
+fFile = FreeFile
 Open sPath For Binary Access Write Lock Read Write As fFile
 Put fFile, 1, oEnemySkin
 errOut:
@@ -44,8 +46,11 @@ End Sub
 
 Public Sub LoadEnemySkinFile(sPath As String)
 On Error GoTo errOut:
-Dim fFile As Long, i As Long: fFile = FreeFile
-Open sPath For Input As fFile: Close fFile
+Dim fFile As Long
+Dim i As Long
+fFile = FreeFile
+Open sPath For Input As fFile
+Close fFile
 Open sPath For Binary Access Read Lock Write As fFile
 Get fFile, 1, oEnemySkin
 errOut:

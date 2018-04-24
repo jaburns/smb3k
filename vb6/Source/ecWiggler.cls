@@ -58,7 +58,8 @@ End Sub
 
 
 Public Sub HandleMe()
-Dim i As Long, u As Long
+Dim i As Long
+Dim u As Long
 
     If Not bAlive Then
         If xInit < screenLeft - 128 Or xInit > screenLeft + 768 _
@@ -243,7 +244,10 @@ Dim tTile As udeLTileType
         xSpeed(lBall) = curSpeed
     End If
     
-Dim sTestX As Single, sTestY As Single, i As Long, u As Long
+Dim sTestX As Single
+Dim sTestY As Single
+Dim i As Long
+Dim u As Long
     For i = 1 To GetShellCount
         If GetShellisShelled(i) Then
             sTestX = GetShellX(i) - xPos(lBall)

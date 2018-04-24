@@ -147,7 +147,9 @@ Private Sub MoveMe()
         xSpeed = 1
     End If
     
-Dim sTestX As Single, sTestY As Single, i As Long
+Dim sTestX As Single
+Dim sTestY As Single
+Dim i As Long
     For i = 1 To GetShellCount
         If GetShellisShelled(i) Then
             sTestX = GetShellX(i) - xPos

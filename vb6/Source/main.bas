@@ -236,7 +236,10 @@ End Sub
 
 'is true if returaning to game
 Private Function ShowLoadGameScreen(bFirstRun As Boolean) As Boolean
-Dim i As Long, u As Long, curSel As Long, selMax As Long
+Dim i As Long
+Dim u As Long
+Dim curSel As Long
+Dim selMax As Long
 Dim lKeyDown As Long
     
     Music.LoadFile App.Path & "\Mods\" & sWorldSetName & "\Menu.mid"
