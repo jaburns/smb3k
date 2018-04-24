@@ -92,7 +92,8 @@ End Sub
 
 Public Function cwdSaveWorldData(sPath As String) As Boolean
 On Error GoTo errOut
-Dim fFile As Long: fFile = FreeFile
+Dim fFile As Long
+fFile = FreeFile
     cwdSaveWorldData = False
     Open sPath For Binary Access Write Lock Read Write As fFile
     Put #fFile, 1, oCurWorldData
@@ -105,9 +106,11 @@ End Function
 Public Function cwdLoadWorldData(sPath As String) As Boolean
 On Error GoTo errOut
 'Dim oTMP as udtWorldData, i As Long, u As Long
-Dim fFile As Long: fFile = FreeFile
+Dim fFile As Long
+fFile = FreeFile
     cwdLoadWorldData = False
-    Open sPath For Input As fFile: Close fFile
+    Open sPath For Input As fFile
+    Close fFile
     Open sPath For Binary Access Read Lock Write As fFile
     Get #fFile, 1, oCurWorldData
 '        oCurWorldData.WorldName = oTMP.WorldName

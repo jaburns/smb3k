@@ -113,7 +113,8 @@ End Type
 
 
 Public Sub LoadLevelTileset(oTileset As udtLTileSetData, sPath As String)
-Dim lFile As Long: lFile = FreeFile
+Dim lFile As Long
+lFile = FreeFile
 Dim xx As Long
 Dim yy As Long
 Dim byt_ As Byte
@@ -145,7 +146,8 @@ Dim byt_ As Byte
 End Sub
 
 Public Sub SaveLevelTileset(oTileset As udtLTileSetData, sPath As String)
-Dim lFile As Long: lFile = FreeFile
+Dim lFile As Long
+lFile = FreeFile
 Dim xx As Long
 Dim yy As Long
 Dim byt_ As Byte

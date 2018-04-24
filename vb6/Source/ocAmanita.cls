@@ -23,7 +23,8 @@ Public Sub CreateAt(X As Single, Y As Single, bFaceRight As Boolean, mStyle As I
     xPos = X
     yPos = Y
     imStyle = mStyle
-    If imStyle > 1 Then imStyle = 1: If imStyle < -1 Then imStyle = -1
+    If imStyle > 1 Then imStyle = 1
+    If imStyle < -1 Then imStyle = -1
     If bFaceRight Then xSpeed = 2 Else xSpeed = -2
     isReserved = bReserved
     If inYSpeed = -1 And Not bReserved Then
@@ -45,9 +46,12 @@ Dim yDraw As Single
     If Not bActive Then Exit Sub
     
     Select Case imStyle
-        Case -1: yDraw = 64
-        Case 0:  yDraw = 0
-        Case 1:  yDraw = 32
+        Case -1
+            yDraw = 64
+        Case 0
+            yDraw = 0
+        Case 1
+            yDraw = 32
     End Select
     
     If growVal < 32 Then
@@ -62,8 +66,14 @@ Dim yDraw As Single
             If xPos <= -1 Then xPos = GetLevelWidth
             If xPos >= GetLevelWidth + 1 Then xPos = 0
         Else
-            If xPos <= 16 Then xPos = 16: xSpeed = 2
-            If xPos >= GetLevelWidth - 16 Then xPos = GetLevelWidth - 16: xSpeed = -2
+            If xPos <= 16 Then 
+                xPos = 16
+                xSpeed = 2
+            End If
+            If xPos >= GetLevelWidth - 16 Then 
+                xPos = GetLevelWidth - 16
+                xSpeed = -2
+            End If
         End If
         
         xPos = xPos + xSpeed

@@ -33,7 +33,7 @@ Public oEnemySkin As udtEnemySkin
 
 
 Public Sub SaveEnemySkinFile(sPath As String)
-On Error GoTo errOut:
+On Error GoTo errOut
 Dim fFile As Long
 Dim i As Long
 fFile = FreeFile
@@ -45,7 +45,7 @@ End Sub
 
 
 Public Sub LoadEnemySkinFile(sPath As String)
-On Error GoTo errOut:
+On Error GoTo errOut
 Dim fFile As Long
 Dim i As Long
 fFile = FreeFile

@@ -213,7 +213,8 @@ End Function
 
 Public Sub LoadControlsFromFile(ByVal sPath As String)
 On Error GoTo errOut
-Dim fFile As Long: fFile = FreeFile
+Dim fFile As Long
+fFile = FreeFile
 Open sPath For Input As fFile
 Close fFile
 Open sPath For Binary Access Read Lock Write As fFile
@@ -227,7 +228,8 @@ endNoErr:
 End Sub
 
 Public Sub SaveControlsToFile(ByVal sPath As String)
-Dim fFile As Long: fFile = FreeFile
+Dim fFile As Long
+fFile = FreeFile
 Open sPath For Binary Access Write Lock Read Write As fFile
 Put #fFile, 1, oControlData
 Close fFile

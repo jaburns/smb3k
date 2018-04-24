@@ -153,7 +153,8 @@ End Sub
 
 
 Public Sub saveMap(sPath As String)
-Dim fFile As Long: fFile = FreeFile
+Dim fFile As Long
+fFile = FreeFile
 Dim tByte As Byte
 Dim tInt As Integer
 Dim i As Long
@@ -198,7 +199,8 @@ End Function
 
 
 Public Sub loadMap(sPath As String)
-Dim fFile As Long: fFile = FreeFile
+Dim fFile As Long
+fFile = FreeFile
 Dim tByte As Byte
 Dim tInt As Integer
 Dim i As Long

@@ -26,8 +26,6 @@ Public GFX As New DXGraphics
 
 Public sMarioSkin As String
 
-Private doge(15) As String
-
 'current game data
 Public sWorldSetName As String
 Public sWorldList() As String
@@ -274,7 +272,8 @@ Public Sub LoadEnemySurfaces()
 End Sub
 
 Public Sub LoadWorldList()
-Dim fFile As Long: fFile = FreeFile
+Dim fFile As Long
+fFile = FreeFile
 Dim i As Long
 Dim sTemp As String
     i = 0
@@ -298,7 +297,8 @@ End Sub
 
 Public Function fileExist(sPath As String) As Boolean
 On Local Error GoTo errNoFile
-Dim fFile As Long: fFile = FreeFile
+Dim fFile As Long
+fFile = FreeFile
 fileExist = False
 Open sPath For Input As fFile
 fileExist = True
@@ -373,7 +373,8 @@ End If
     Close fFile
 End Sub
 Public Sub SaveGameData()
-Dim fFile As Long: fFile = FreeFile
+Dim fFile As Long
+fFile = FreeFile
 Open App.Path & "\Mods\" & sWorldSetName & "\SavedGames.3ks" For Binary Access Write Lock Read Write As fFile
 Put fFile, 1, oSaveGameData
 Close fFile

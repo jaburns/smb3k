@@ -131,7 +131,8 @@ End Sub
 
 
 Public Sub SaveToFile(sPath As String)
-Dim lFile As Long: lFile = FreeFile
+Dim lFile As Long
+lFile = FreeFile
 Dim xx As Long
 Dim yy As Long
 Dim byt_ As Byte
@@ -171,7 +172,8 @@ End Sub
 
 
 Public Sub LoadFromFile(sPath As String)
-Dim lFile As Long: lFile = FreeFile
+Dim lFile As Long
+lFile = FreeFile
 Dim xx As Long
 Dim yy As Long
 Dim byt_ As Byte

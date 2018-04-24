@@ -93,10 +93,18 @@ Public Sub CreateAt(X As Long, Y As Long, koopaStyle As udeKoopaStyle, bDefaultS
     bShell = bAlwaysShell
     kStyle = koopaStyle
     Select Case kStyle
-        Case KOOPA_GREEN:  SrcHeight = 64: fileSrc = surfList.EnemyList.DumbKoopa
-        Case KOOPA_RED:  SrcHeight = 64: fileSrc = surfList.EnemyList.SmartKoopa
-        Case KOOPA_BEETLE: SrcHeight = 32: fileSrc = surfList.EnemyList.BuzzyBeetle
-        Case KOOPA_BOUNCER: SrcHeight = 32: fileSrc = surfList.EnemyList.BouncyKoopa
+        Case KOOPA_GREEN
+            SrcHeight = 64
+            fileSrc = surfList.EnemyList.DumbKoopa
+        Case KOOPA_RED  
+            SrcHeight = 64
+            fileSrc = surfList.EnemyList.SmartKoopa
+        Case KOOPA_BEETLE
+            SrcHeight = 32
+            fileSrc = surfList.EnemyList.BuzzyBeetle
+        Case KOOPA_BOUNCER
+            SrcHeight = 32
+            fileSrc = surfList.EnemyList.BouncyKoopa
     End Select
     
     curSpeed = IIf(bShell, lShellSpeed, WALK_SPEED)
@@ -361,8 +369,14 @@ Dim tTile As udeLTileType
         If xPos <= -1 Then xPos = GetLevelWidth
         If xPos >= GetLevelWidth + 1 Then xPos = 0
     Else
-        If xPos <= 16 Then xPos = 16: xSpeed = curSpeed
-        If xPos >= GetLevelWidth - 16 Then xPos = GetLevelWidth - 16: xSpeed = -curSpeed
+        If xPos <= 16 Then 
+            xPos = 16
+            xSpeed = curSpeed
+        End If
+        If xPos >= GetLevelWidth - 16 Then 
+            xPos = GetLevelWidth - 16
+            xSpeed = -curSpeed
+        End If
     End If
     
     If isTileSolid(xPos + 15, yPos - 16) Then

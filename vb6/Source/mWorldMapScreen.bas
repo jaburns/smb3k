@@ -277,11 +277,16 @@ Dim i As Long
     End If
     
     Select Case gameMarioStat
-        Case MarioSmall: xSrc = 0
-        Case MarioBig: xSrc = 1
-        Case MarioFlower: xSrc = 2
-        Case MarioMoonboot: xSrc = 3
-        Case MarioHammer: xSrc = 4
+        Case MarioSmall
+            xSrc = 0
+        Case MarioBig
+            xSrc = 1
+        Case MarioFlower
+            xSrc = 2
+        Case MarioMoonboot
+            xSrc = 3
+        Case MarioHammer
+            xSrc = 4
     End Select
         
     GFX.DrawSurface surfList.WorldMap, CSng(xOffset), CSng(yOffset), 640, 480, 0, 0

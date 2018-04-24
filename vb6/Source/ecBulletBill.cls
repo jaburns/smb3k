@@ -163,7 +163,10 @@ Dim i As Long
             lFaceDir = IIf(lSeekDir = 1, 32, 0)
         End If
         lFrame = lFrame + 1
-        If lFrame >= 2 Then lFrame = 0: bFrameOn = Not bFrameOn
+        If lFrame >= 2 Then 
+            lFrame = 0
+            bFrameOn = Not bFrameOn
+        End If
         If bFrameOn Then
             GFX.DrawSurface surfList.EnemyList.SurfBulletBill, CSng(lFaceDir), 64, 32, 32, xPos - screenLeft - 16, yPos - screenTop - 16
         Else

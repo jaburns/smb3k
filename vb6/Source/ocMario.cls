@@ -453,11 +453,16 @@ Dim tTag As udeLTileTag
     End If
     
     Select Case mStatus
-        Case MarioSmall: xSrc = 0
-        Case MarioBig: xSrc = 32
-        Case MarioMoonboot: xSrc = 64
-        Case MarioFlower: xSrc = 96
-        Case MarioHammer: xSrc = 128
+        Case MarioSmall
+            xSrc = 0
+        Case MarioBig
+            xSrc = 32
+        Case MarioMoonboot
+            xSrc = 64
+        Case MarioFlower
+            xSrc = 96
+        Case MarioHammer
+            xSrc = 128
     End Select
     
     If lPipeStat = mpEnterDown Or lPipeStat = mpEnterUp Then
@@ -880,8 +885,14 @@ Dim yTest As Long
         If xPos <= -9 Then xPos = GetLevelWidth + 8
         If xPos >= GetLevelWidth + 9 Then xPos = -8
     Else
-        If xPos <= 16 Then xPos = 16: sRun = 0
-        If xPos >= GetLevelWidth - 16 Then xPos = GetLevelWidth - 16: sRun = 0
+        If xPos <= 16 Then 
+            xPos = 16
+            sRun = 0
+        End If
+        If xPos >= GetLevelWidth - 16 Then 
+            xPos = GetLevelWidth - 16
+            sRun = 0
+        End If
     End If
     
     'horizontal bottom collision detection

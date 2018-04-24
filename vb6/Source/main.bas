@@ -109,11 +109,16 @@ returnToTop:
         
         If mapLevelEntryMode > -1 And levelReturnValue <> lvrPipe Then
             Select Case mapLevelEntryMode
-                Case 0: mpExitPipe = mpExitUp
-                Case 1: mpExitPipe = mpExitDown
-                Case 2: mpExitPipe = mpExitLeft
-                Case 3: mpExitPipe = mpExitRight
-                Case 4: mpExitPipe = mpExitDoor
+                Case 0
+                    mpExitPipe = mpExitUp
+                Case 1
+                    mpExitPipe = mpExitDown
+                Case 2
+                    mpExitPipe = mpExitLeft
+                Case 3
+                    mpExitPipe = mpExitRight
+                Case 4
+                    mpExitPipe = mpExitDoor
             End Select
             nextStartPipe = mapLevelEntryTag
         End If
@@ -209,11 +214,16 @@ Dim oldCurLevel As Long
             If gameLives < 0 Then bGameOver = True
         Case lvrPipe
             Select Case oCurWorldData.LevelData(curLevel).PipeDest(levelReturnPipe).destDir
-                Case 0: mpExitPipe = mpExitLeft
-                Case 1: mpExitPipe = mpExitRight
-                Case 2: mpExitPipe = mpExitUp
-                Case 3: mpExitPipe = mpExitDown
-                Case 4: mpExitPipe = mpExitDoor
+                Case 0
+                    mpExitPipe = mpExitLeft
+                Case 1
+                    mpExitPipe = mpExitRight
+                Case 2
+                    mpExitPipe = mpExitUp
+                Case 3
+                    mpExitPipe = mpExitDown
+                Case 4
+                    mpExitPipe = mpExitDoor
             End Select
             nextStartPipe = oCurWorldData.LevelData(curLevel).PipeDest(levelReturnPipe).destTag
             oldCurLevel = curLevel

@@ -159,8 +159,14 @@ Dim tTile As udeLTileType
         If xPos <= -1 Then xPos = GetLevelWidth
         If xPos >= GetLevelWidth + 1 Then xPos = 0
     Else
-        If xPos <= 16 Then xPos = 16: xSpeed = sActualSpeed
-        If xPos >= GetLevelWidth - 16 Then xPos = GetLevelWidth - 16: xSpeed = -sActualSpeed
+        If xPos <= 16 Then 
+            xPos = 16
+            xSpeed = sActualSpeed
+        End If
+        If xPos >= GetLevelWidth - 16 Then 
+            xPos = GetLevelWidth - 16
+            xSpeed = -sActualSpeed
+        End If
     End If
     
     If isTileSolid(xPos + 16, yPos - 16) Then

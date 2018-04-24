@@ -48,7 +48,11 @@ Dim i As Long
     curAnimSpeed = NORM_SPEED
     curSpeed = 1
     lPissedCount = 0
-    lFrame(0) = 0: lFrame(1) = 1: lFrame(2) = 2: lFrame(3) = 3: lFrame(4) = 0
+    lFrame(0) = 0
+    lFrame(1) = 1
+    lFrame(2) = 2
+    lFrame(3) = 3
+    lFrame(4) = 0
     lFrameCount = 0
     bAlive = True
     bDying = False
@@ -232,8 +236,14 @@ Dim tTile As udeLTileType
         If xPos(lBall) <= -1 Then xPos(lBall) = GetLevelWidth
         If xPos(lBall) >= GetLevelWidth + 1 Then xPos(lBall) = 0
     Else
-        If xPos(lBall) <= 16 Then xPos(lBall) = 16: xSpeed(lBall) = curSpeed
-        If xPos(lBall) >= GetLevelWidth - 16 Then xPos(lBall) = GetLevelWidth - 16: xSpeed(lBall) = -curSpeed
+        If xPos(lBall) <= 16 Then 
+            xPos(lBall) = 16
+            xSpeed(lBall) = curSpeed
+        End If
+        If xPos(lBall) >= GetLevelWidth - 16 Then 
+            xPos(lBall) = GetLevelWidth - 16
+            xSpeed(lBall) = -curSpeed
+        End If
     End If
     
     If isTileSolid(xPos(lBall) + 16, yPos(lBall) - 16) Then
