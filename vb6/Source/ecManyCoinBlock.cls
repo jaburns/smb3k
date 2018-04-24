@@ -68,8 +68,7 @@ Dim tType As udeLTileType
 Dim ySource As Single
 Dim i As Long
     
-    If xPos < screenLeft - 128 Or xPos > screenLeft + 768 _
-    Or yPos < screenTop - 128 Or yPos > screenTop + 608 Then Exit Sub
+    If xPos < screenLeft - 128 Or xPos > screenLeft + 768 Or yPos < screenTop - 128 Or yPos > screenTop + 608 Then Exit Sub
     
     If lTimeCount > 0 Then lTimeCount = lTimeCount + 1
     If lBounceCount > 0 Then

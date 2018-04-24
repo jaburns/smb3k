@@ -58,8 +58,7 @@ Dim i As Long
     
     If Not bActive Then
     
-        If xInit < screenLeft - 128 Or xInit > screenLeft + 768 _
-        Or yInit < screenTop - 128 Or yInit > screenTop + 608 Then Exit Sub
+        If xInit < screenLeft - 128 Or xInit > screenLeft + 768 Or yInit < screenTop - 128 Or yInit > screenTop + 608 Then Exit Sub
         
         lCount = lCount + 1
         Randomize
@@ -80,8 +79,7 @@ Dim i As Long
     Exit Sub
     End If
     
-    If xPos < screenLeft - 128 Or xPos > screenLeft + 768 _
-    Or yPos < screenTop - 128 Or yPos > screenTop + 608 Then bActive = False
+    If xPos < screenLeft - 128 Or xPos > screenLeft + 768 Or yPos < screenTop - 128 Or yPos > screenTop + 608 Then bActive = False
 
     If bDying Then
         ySpeed = ySpeed + 0.3
@@ -137,12 +135,10 @@ Dim i As Long
     
     For i = 0 To 1
         If getMarioHammerActive(i) Then
-            If getMarioHammerX(i) > xPos - 16 And getMarioHammerX(i) < xPos + 16 _
-            And getMarioHammerY(i) > yPos - 16 And getMarioHammerY(i) < yPos + 16 Then KillMe
+            If getMarioHammerX(i) > xPos - 16 And getMarioHammerX(i) < xPos + 16 And getMarioHammerY(i) > yPos - 16 And getMarioHammerY(i) < yPos + 16 Then KillMe
         End If
         If getMarioFireActive(i) Then
-            If getMarioFireX(i) > xPos - 16 And getMarioFireX(i) < xPos + 16 _
-            And getMarioFireY(i) > yPos - 16 And getMarioFireY(i) < yPos + 16 Then killMarioFire i
+            If getMarioFireX(i) > xPos - 16 And getMarioFireX(i) < xPos + 16 And getMarioFireY(i) > yPos - 16 And getMarioFireY(i) < yPos + 16 Then killMarioFire i
         End If
     Next i
 

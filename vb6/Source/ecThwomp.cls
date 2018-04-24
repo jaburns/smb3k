@@ -42,8 +42,7 @@ End Sub
 
 Public Sub HandleMe()
 
-    If xPos < screenLeft - 128 Or xPos > screenLeft + 768 _
-    Or yPos < screenTop - 128 Or yPos > screenTop + 608 Then
+    If xPos < screenLeft - 128 Or xPos > screenLeft + 768 Or yPos < screenTop - 128 Or yPos > screenTop + 608 Then
         
         Exit Sub
     End If
@@ -62,8 +61,7 @@ Public Sub HandleMe()
             lAnger = 2
             ySpeed = ySpeed + 0.45
             yPos = yPos + ySpeed
-            If getTileSolid(CLng(xPos - 16), CLng(yPos)) = trSolid _
-            Or getTileSolid(CLng(xPos + 16), CLng(yPos)) = trSolid Then
+            If getTileSolid(CLng(xPos - 16), CLng(yPos)) = trSolid Or getTileSolid(CLng(xPos + 16), CLng(yPos)) = trSolid Then
                 yPos = ((yPos \ 32) * 32)
                 ySpeed = 0
                 myStat = thpRising

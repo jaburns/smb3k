@@ -30,8 +30,7 @@ End Sub
 Public Sub HandleBall()
 
     If Not bActive Then Exit Sub
-    If yPos > screenTop + 512 Or yPos < screenTop _
-    Or xPos < screenLeft - 16 Or xPos > screenLeft + 656 Then 
+    If yPos > screenTop + 512 Or yPos < screenTop Or xPos < screenLeft - 16 Or xPos > screenLeft + 656 Then 
         bActive = False
         Exit Sub
     End If

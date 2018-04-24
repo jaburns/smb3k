@@ -46,12 +46,10 @@ Public Sub HandleMe()
 Dim i As Long
 
     If Not bAlive Then
-        If xInit < screenLeft - 128 Or xInit > screenLeft + 768 _
-        Or yInit < screenTop - 128 Or yInit > screenTop + 608 Then CreateAt CSng(xInit), CSng(yInit), bBlocked
+        If xInit < screenLeft - 128 Or xInit > screenLeft + 768 Or yInit < screenTop - 128 Or yInit > screenTop + 608 Then CreateAt CSng(xInit), CSng(yInit), bBlocked
         Exit Sub
     End If
-    If xPos < screenLeft - 128 Or xPos > screenLeft + 768 _
-    Or yPos < screenTop - 128 Or yPos > screenTop + 608 Then
+    If xPos < screenLeft - 128 Or xPos > screenLeft + 768 Or yPos < screenTop - 128 Or yPos > screenTop + 608 Then
         If xPos <> xInit And yPos <> yInit Then bAlive = False
         Exit Sub
     End If
@@ -65,8 +63,7 @@ Dim i As Long
             bDying = False
             Exit Sub
         End If
-        GFX.DrawSurface IIf(bBlocked, surfList.EnemyList.BlockCheepCheep, surfList.EnemyList.FreeCheepCheep), _
-                        IIf(xSpeed > 0, 128, 160), 0, 32, 32, xPos - screenLeft - 16, yPos - screenTop - 32
+        GFX.DrawSurface IIf(bBlocked, surfList.EnemyList.BlockCheepCheep, surfList.EnemyList.FreeCheepCheep), IIf(xSpeed > 0, 128, 160), 0, 32, 32, xPos - screenLeft - 16, yPos - screenTop - 32
         Exit Sub
     End If
     
@@ -99,12 +96,10 @@ Dim i As Long
     
     For i = 0 To 1
         If getMarioHammerActive(i) Then
-            If getMarioHammerX(i) > xPos - 16 And getMarioHammerX(i) < xPos + 16 _
-            And getMarioHammerY(i) > yPos - 32 And getMarioHammerY(i) < yPos Then KillMe
+            If getMarioHammerX(i) > xPos - 16 And getMarioHammerX(i) < xPos + 16 And getMarioHammerY(i) > yPos - 32 And getMarioHammerY(i) < yPos Then KillMe
         End If
         If getMarioFireActive(i) Then
-            If getMarioFireX(i) > xPos - 16 And getMarioFireX(i) < xPos + 16 _
-            And getMarioFireY(i) > yPos - 32 And getMarioFireY(i) < yPos Then
+            If getMarioFireX(i) > xPos - 16 And getMarioFireX(i) < xPos + 16 And getMarioFireY(i) > yPos - 32 And getMarioFireY(i) < yPos Then
                 killMarioFire i
                 KillMe
             End If
@@ -121,8 +116,7 @@ Dim i As Long
     Next i
     If inBombBlast(xPos, yPos - 16) Then KillMe
 
-    GFX.DrawSurface IIf(bBlocked, surfList.EnemyList.BlockCheepCheep, surfList.EnemyList.FreeCheepCheep), _
-                    IIf(xSpeed > 0, 0, 64) + IIf(bFrameOn, 32, 0), 0, 32, 32, xPos - screenLeft - 16, yPos - screenTop - 32
+    GFX.DrawSurface IIf(bBlocked, surfList.EnemyList.BlockCheepCheep, surfList.EnemyList.FreeCheepCheep), IIf(xSpeed > 0, 0, 64) + IIf(bFrameOn, 32, 0), 0, 32, 32, xPos - screenLeft - 16, yPos - screenTop - 32
     
 End Sub
 

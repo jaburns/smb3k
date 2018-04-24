@@ -378,13 +378,7 @@ Dim testTag As udeLTileTag
     testEnemy = GetTileEnemy(lX \ 32, lY \ 32)
     If testEnemy = OBJHIDETILE Then Exit Function
     testTile = GetTile(lX \ 32, lY \ 32)
-    isTileSolid = (testTile = SOLID _
-                Or testTile = BOUNCY _
-                Or testTile = BRICK _
-                Or testTile = COINBLOCK _
-                Or testTile = DEADLY _
-                Or testTile = INJURETILE _
-                Or testTile = ICE)
+    isTileSolid = (testTile = SOLID Or testTile = BOUNCY Or testTile = BRICK Or testTile = COINBLOCK Or testTile = DEADLY Or testTile = INJURETILE Or testTile = ICE)
     If Not isTileSolid Then
         isTileSolid = inManyCoinBlock(CSng(lX), CSng(lY))
         If isTileSolid Then Exit Function

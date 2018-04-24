@@ -50,13 +50,11 @@ Dim yStand As Single
 Dim i As Long
        
     If Not bActive Then
-        If xInit < screenLeft - 128 Or xInit > screenLeft + 768 _
-        Or yInit < screenTop - 128 Or yInit > screenTop + 608 Then CreateAt CLng(xInit), CLng(yInit), xSrc, ySrc
+        If xInit < screenLeft - 128 Or xInit > screenLeft + 768 Or yInit < screenTop - 128 Or yInit > screenTop + 608 Then CreateAt CLng(xInit), CLng(yInit), xSrc, ySrc
         Exit Sub
     End If
     
-    If xPos < screenLeft - 128 Or xPos > screenLeft + 768 _
-    Or yPos < screenTop - 128 Or yPos > screenTop + 608 Then Exit Sub
+    If xPos < screenLeft - 128 Or xPos > screenLeft + 768 Or yPos < screenTop - 128 Or yPos > screenTop + 608 Then Exit Sub
         
     If bFalling Then
         ySpeed = ySpeed + 0.5

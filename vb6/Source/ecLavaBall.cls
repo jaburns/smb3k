@@ -42,8 +42,7 @@ End Sub
 Public Sub HandleMe()
 Dim i As Long
 
-    If xPos < screenLeft - 128 Or xPos > screenLeft + 768 _
-    Or yPos < screenTop - 128 Or yPos > screenTop + 608 Then
+    If xPos < screenLeft - 128 Or xPos > screenLeft + 768 Or yPos < screenTop - 128 Or yPos > screenTop + 608 Then
         bJumping = False
         yPos = yInit
         lNextFireCount = 0

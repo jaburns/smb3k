@@ -132,13 +132,11 @@ Dim sYSrc As Single
 Dim i As Long
     
     If Not bAlive Then
-        If xInit < screenLeft - 128 Or xInit > screenLeft + 768 _
-        Or yInit < screenTop - 128 Or yInit > screenTop + 608 Then CreateAt CLng(xInit), CLng(yInit), kStyle, bAlwaysShell, bDefaultBouncy, bWatchForEdges
+        If xInit < screenLeft - 128 Or xInit > screenLeft + 768 Or yInit < screenTop - 128 Or yInit > screenTop + 608 Then CreateAt CLng(xInit), CLng(yInit), kStyle, bAlwaysShell, bDefaultBouncy, bWatchForEdges
         Exit Sub
     End If
     If Not bCarrying Then
-        If xPos < screenLeft - 128 Or xPos > screenLeft + 768 _
-        Or yPos < screenTop - 128 Or yPos > screenTop + 608 Then
+        If xPos < screenLeft - 128 Or xPos > screenLeft + 768 Or yPos < screenTop - 128 Or yPos > screenTop + 608 Then
             If xPos <> xInit Or yPos <> yInit Then bAlive = bCarrying
             Exit Sub
         End If
@@ -212,8 +210,7 @@ Dim i As Long
 '    If Not .isActive Then
 '        .CreateAt xPos, yPos, xSpeed * 4
 '    Else
-'        If Abs(.getXPos - Mario.xPos) < 24 Then _
-'        If .getYPos < Mario.yPos And .getYPos > Mario.yPos - IIf(Mario.isTall, 52, 32) Then Mario.Injure
+'        If Abs(.getXPos - Mario.xPos) < 24 Then If .getYPos < Mario.yPos And .getYPos > Mario.yPos - IIf(Mario.isTall, 52, 32) Then Mario.Injure
 '    End If
 '    .HandleBall
 '    End With
@@ -252,12 +249,10 @@ Dim i As Long
 
     For i = 0 To 1
         If getMarioHammerActive(i) Then
-            If getMarioHammerX(i) > xPos - 16 And getMarioHammerX(i) < xPos + 16 _
-            And getMarioHammerY(i) > yPos - 32 And getMarioHammerY(i) < yPos Then KillMe
+            If getMarioHammerX(i) > xPos - 16 And getMarioHammerX(i) < xPos + 16 And getMarioHammerY(i) > yPos - 32 And getMarioHammerY(i) < yPos Then KillMe
         End If
         If getMarioFireActive(i) Then
-            If getMarioFireX(i) > xPos - 16 And getMarioFireX(i) < xPos + 16 _
-            And getMarioFireY(i) > yPos - 32 And getMarioFireY(i) < yPos Then
+            If getMarioFireX(i) > xPos - 16 And getMarioFireX(i) < xPos + 16 And getMarioFireY(i) > yPos - 32 And getMarioFireY(i) < yPos Then
                 killMarioFire i
                 If kStyle <> KOOPA_BEETLE Then KillMe
             End If
@@ -332,12 +327,10 @@ Dim i As Long
 
     For i = 0 To 1
         If getMarioHammerActive(i) Then
-            If getMarioHammerX(i) > xPos - 16 And getMarioHammerX(i) < xPos + 16 _
-            And getMarioHammerY(i) > yPos - 32 And getMarioHammerY(i) < yPos Then KillMe
+            If getMarioHammerX(i) > xPos - 16 And getMarioHammerX(i) < xPos + 16 And getMarioHammerY(i) > yPos - 32 And getMarioHammerY(i) < yPos Then KillMe
         End If
         If getMarioFireActive(i) Then
-            If getMarioFireX(i) > xPos - 16 And getMarioFireX(i) < xPos + 16 _
-            And getMarioFireY(i) > yPos - 32 And getMarioFireY(i) < yPos Then
+            If getMarioFireX(i) > xPos - 16 And getMarioFireX(i) < xPos + 16 And getMarioFireY(i) > yPos - 32 And getMarioFireY(i) < yPos Then
                 killMarioFire i
                 If kStyle <> KOOPA_BEETLE Then KillMe
             End If

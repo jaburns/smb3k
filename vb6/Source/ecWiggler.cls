@@ -66,8 +66,7 @@ Dim i As Long
 Dim u As Long
 
     If Not bAlive Then
-        If xInit < screenLeft - 128 Or xInit > screenLeft + 768 _
-        Or yInit < screenTop - 128 Or yInit > screenTop + 608 Then CreateAt CSng(xInit), CSng(yInit), bWatchForEdges
+        If xInit < screenLeft - 128 Or xInit > screenLeft + 768 Or yInit < screenTop - 128 Or yInit > screenTop + 608 Then CreateAt CSng(xInit), CSng(yInit), bWatchForEdges
         Exit Sub
     End If
     
@@ -84,8 +83,7 @@ Dim u As Long
         Exit Sub
     End If
 
-    If xPos(0) < screenLeft - 128 Or xPos(0) > screenLeft + 768 _
-    Or yPos(0) < screenTop - 128 Or yPos(0) > screenTop + 608 Then
+    If xPos(0) < screenLeft - 128 Or xPos(0) > screenLeft + 768 Or yPos(0) < screenTop - 128 Or yPos(0) > screenTop + 608 Then
         If xPos(0) <> xInit And yPos(0) <> yInit Then bAlive = False
         Exit Sub
     End If
@@ -128,12 +126,10 @@ Dim u As Long
         End With
         For i = 0 To 1
             If getMarioHammerActive(i) And u = 0 Then
-                If getMarioHammerX(i) > xPos(u) - 16 And getMarioHammerX(i) < xPos(u) + 16 _
-                And getMarioHammerY(i) > yPos(u) - 32 And getMarioHammerY(i) < yPos(u) Then KillMe
+                If getMarioHammerX(i) > xPos(u) - 16 And getMarioHammerX(i) < xPos(u) + 16 And getMarioHammerY(i) > yPos(u) - 32 And getMarioHammerY(i) < yPos(u) Then KillMe
             End If
             If getMarioFireActive(i) Then
-                If getMarioFireX(i) > xPos(u) - 16 And getMarioFireX(i) < xPos(u) + 16 _
-                And getMarioFireY(i) > yPos(u) - 32 And getMarioFireY(i) < yPos(u) Then killMarioFire i
+                If getMarioFireX(i) > xPos(u) - 16 And getMarioFireX(i) < xPos(u) + 16 And getMarioFireY(i) > yPos(u) - 32 And getMarioFireY(i) < yPos(u) Then killMarioFire i
             End If
         Next i
         For i = 1 To GetShellCount

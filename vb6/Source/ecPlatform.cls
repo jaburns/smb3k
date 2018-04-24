@@ -49,13 +49,11 @@ Dim tType As udeLTileEnemy
 Dim i As Long
        
     If Not bActive Then
-        If xInit < screenLeft - 128 - sWidth Or xInit > screenLeft + 768 _
-        Or yInit < screenTop - 128 Or yInit > screenTop + 608 Then CreateAt CLng(xInit), CLng(yInit), CSng(lDefaultSpeed), sSize
+        If xInit < screenLeft - 128 - sWidth Or xInit > screenLeft + 768 Or yInit < screenTop - 128 Or yInit > screenTop + 608 Then CreateAt CLng(xInit), CLng(yInit), CSng(lDefaultSpeed), sSize
         Exit Sub
     End If
     
-    If xPos < screenLeft - 256 - sWidth Or xPos > screenLeft + 896 _
-    Or yPos < screenTop - 256 Or yPos > screenTop + 736 Then
+    If xPos < screenLeft - 256 - sWidth Or xPos > screenLeft + 896 Or yPos < screenTop - 256 Or yPos > screenTop + 736 Then
         bActive = False
         Exit Sub
     End If

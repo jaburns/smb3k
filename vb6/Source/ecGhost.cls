@@ -32,12 +32,10 @@ Public Sub HandleMe()
 Dim xSrc As Single
 Dim i As Long
 
-    If xPos < screenLeft - 128 Or xPos > screenLeft + 768 _
-    Or yPos < screenTop - 128 Or yPos > screenTop + 608 Then Exit Sub
+    If xPos < screenLeft - 128 Or xPos > screenLeft + 768 Or yPos < screenTop - 128 Or yPos > screenTop + 608 Then Exit Sub
     
     
-    bScary = (Mario.isFacingRight And xPos < Mario.xPos) Or _
-             (Mario.isFacingRight = False And xPos > Mario.xPos)
+    bScary = (Mario.isFacingRight And xPos < Mario.xPos) Or (Mario.isFacingRight = False And xPos > Mario.xPos)
     
     If bScary Then
     

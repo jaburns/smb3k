@@ -37,8 +37,7 @@ Dim DX As Single
 Dim dY As Single
 Dim i As Long
 
-    If xPos < screenLeft - 128 - DISC_RADIUS Or xPos > screenLeft + 768 + DISC_RADIUS _
-    Or yPos < screenTop - 128 - DISC_RADIUS Or yPos > screenTop + 608 + DISC_RADIUS Then Exit Sub
+    If xPos < screenLeft - 128 - DISC_RADIUS Or xPos > screenLeft + 768 + DISC_RADIUS Or yPos < screenTop - 128 - DISC_RADIUS Or yPos > screenTop + 608 + DISC_RADIUS Then Exit Sub
 
     lFrameCount = lFrameCount + 1
     If lFrameCount >= 2 Then

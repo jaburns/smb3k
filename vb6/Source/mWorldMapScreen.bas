@@ -153,33 +153,25 @@ Dim testTag As Byte
             
             For u = 0 To 0
             If GameKeyDown(Left) And nodeMap.LeftNode(curNode) > 0 Then
-                If nodeMap.NodeTag(curNode) > 40 And nodeMap.NodeTag(curNode) <= 110 Then _
-                    If Not oWorldPassData.bWorldPassed(curWorld).bLevelPassed(nodeMap.NodeTag(curNode) - 41) Then _
-                      If lastNode <> -1 And nodeMap.LeftNode(curNode) <> lastNode Then Exit For
+                If nodeMap.NodeTag(curNode) > 40 And nodeMap.NodeTag(curNode) <= 110 Then If Not oWorldPassData.bWorldPassed(curWorld).bLevelPassed(nodeMap.NodeTag(curNode) - 41) Then If lastNode <> -1 And nodeMap.LeftNode(curNode) <> lastNode Then Exit For
                 nextNode = nodeMap.LeftNode(curNode)
                 bGoing = True
                 dirMario = dLeft
                 getSpeeds
             ElseIf GameKeyDown(Right) And nodeMap.RightNode(curNode) > 0 Then
-                If nodeMap.NodeTag(curNode) > 40 And nodeMap.NodeTag(curNode) <= 110 Then _
-                    If Not oWorldPassData.bWorldPassed(curWorld).bLevelPassed(nodeMap.NodeTag(curNode) - 41) Then _
-                        If lastNode <> -1 And nodeMap.RightNode(curNode) <> lastNode Then Exit For
+                If nodeMap.NodeTag(curNode) > 40 And nodeMap.NodeTag(curNode) <= 110 Then If Not oWorldPassData.bWorldPassed(curWorld).bLevelPassed(nodeMap.NodeTag(curNode) - 41) Then If lastNode <> -1 And nodeMap.RightNode(curNode) <> lastNode Then Exit For
                 nextNode = nodeMap.RightNode(curNode)
                 bGoing = True
                 dirMario = dRight
                 getSpeeds
             ElseIf GameKeyDown(Up) And nodeMap.UpNode(curNode) > 0 Then
-                If nodeMap.NodeTag(curNode) > 40 And nodeMap.NodeTag(curNode) <= 110 Then _
-                    If Not oWorldPassData.bWorldPassed(curWorld).bLevelPassed(nodeMap.NodeTag(curNode) - 41) Then _
-                        If lastNode <> -1 And nodeMap.UpNode(curNode) <> lastNode Then Exit For
+                If nodeMap.NodeTag(curNode) > 40 And nodeMap.NodeTag(curNode) <= 110 Then If Not oWorldPassData.bWorldPassed(curWorld).bLevelPassed(nodeMap.NodeTag(curNode) - 41) Then If lastNode <> -1 And nodeMap.UpNode(curNode) <> lastNode Then Exit For
                 nextNode = nodeMap.UpNode(curNode)
                 bGoing = True
                 dirMario = dUp
                 getSpeeds
             ElseIf GameKeyDown(Down) And nodeMap.DownNode(curNode) > 0 Then
-                If nodeMap.NodeTag(curNode) > 40 And nodeMap.NodeTag(curNode) <= 110 Then _
-                    If Not oWorldPassData.bWorldPassed(curWorld).bLevelPassed(nodeMap.NodeTag(curNode) - 41) Then _
-                        If lastNode <> -1 And nodeMap.DownNode(curNode) <> lastNode Then Exit For
+                If nodeMap.NodeTag(curNode) > 40 And nodeMap.NodeTag(curNode) <= 110 Then If Not oWorldPassData.bWorldPassed(curWorld).bLevelPassed(nodeMap.NodeTag(curNode) - 41) Then If lastNode <> -1 And nodeMap.DownNode(curNode) <> lastNode Then Exit For
                 nextNode = nodeMap.DownNode(curNode)
                 bGoing = True
                 dirMario = dDown

@@ -59,12 +59,10 @@ Dim X As Long
 Dim Y As Long
     
     If Not bAlive Then
-        If xInit < screenLeft - 128 Or xInit > screenLeft + 768 _
-        Or yInit < screenTop - 128 Or yInit > screenTop + 608 Then CreateAt CSng(xInit), CSng(yInit), bWatchForEdges
+        If xInit < screenLeft - 128 Or xInit > screenLeft + 768 Or yInit < screenTop - 128 Or yInit > screenTop + 608 Then CreateAt CSng(xInit), CSng(yInit), bWatchForEdges
         Exit Sub
     End If
-    If xPos < screenLeft - 128 Or xPos > screenLeft + 768 _
-    Or yPos < screenTop - 128 Or yPos > screenTop + 608 Then
+    If xPos < screenLeft - 128 Or xPos > screenLeft + 768 Or yPos < screenTop - 128 Or yPos > screenTop + 608 Then
         If xPos <> xInit And yPos <> yInit Then bAlive = False
         Exit Sub
     End If
@@ -72,8 +70,7 @@ Dim Y As Long
     If bBlowingUp Then
         If lStompTime = 0 Then
             PlaySound Sounds.BobombExplode
-            If findDist(Mario.xPos, Mario.yPos, xPos, yPos) <= 64 Or _
-               findDist(Mario.xPos, Mario.yPos - 32, xPos, yPos) <= 64 Then Mario.Injure
+            If findDist(Mario.xPos, Mario.yPos, xPos, yPos) <= 64 Or findDist(Mario.xPos, Mario.yPos - 32, xPos, yPos) <= 64 Then Mario.Injure
             For X = -2 To 2
                 For Y = -2 To 2
                     If Not (Abs(X) = 2 And Abs(Y) = 2) Then
@@ -88,8 +85,7 @@ Dim Y As Long
             bBlowingUp = False
             Exit Sub
         End If
-        If lStompTime Mod 2 Then _
-            GFX.DrawSurface surfList.EnemyList.Bobomb, 128, 0, 64, 64, xPos - screenLeft - 64, yPos - screenTop - 80, 128, 128
+        If lStompTime Mod 2 Then GFX.DrawSurface surfList.EnemyList.Bobomb, 128, 0, 64, 64, xPos - screenLeft - 64, yPos - screenTop - 80, 128, 128
         Exit Sub
     End If
     
@@ -171,12 +167,10 @@ Dim Y As Long
     
     For i = 0 To 1
         If getMarioHammerActive(i) Then
-            If getMarioHammerX(i) > xPos - 16 And getMarioHammerX(i) < xPos + 16 _
-            And getMarioHammerY(i) > yPos - 32 And getMarioHammerY(i) < yPos Then KillMe
+            If getMarioHammerX(i) > xPos - 16 And getMarioHammerX(i) < xPos + 16 And getMarioHammerY(i) > yPos - 32 And getMarioHammerY(i) < yPos Then KillMe
         End If
         If getMarioFireActive(i) Then
-            If getMarioFireX(i) > xPos - 16 And getMarioFireX(i) < xPos + 16 _
-            And getMarioFireY(i) > yPos - 32 And getMarioFireY(i) < yPos Then
+            If getMarioFireX(i) > xPos - 16 And getMarioFireX(i) < xPos + 16 And getMarioFireY(i) > yPos - 32 And getMarioFireY(i) < yPos Then
                 killMarioFire i
             End If
         End If

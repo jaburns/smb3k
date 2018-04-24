@@ -86,59 +86,39 @@ Public Function GameKeyDown(lKey As GameKeys) As Boolean
     
     Select Case lKey
         Case GameKeys.Left
-            If (oKeyboard.IsDown(oControlData.btnLeft) And Not _
-                oKeyboard.IsDown(oControlData.btnRight)) Then _
-                GameKeyDown = True
+            If (oKeyboard.IsDown(oControlData.btnLeft) And Not oKeyboard.IsDown(oControlData.btnRight)) Then GameKeyDown = True
         Case GameKeys.Right
-            If (oKeyboard.IsDown(oControlData.btnRight) And Not _
-                oKeyboard.IsDown(oControlData.btnLeft)) Then _
-                GameKeyDown = True
+            If (oKeyboard.IsDown(oControlData.btnRight) And Not oKeyboard.IsDown(oControlData.btnLeft)) Then GameKeyDown = True
         Case GameKeys.Climb
-            If (oKeyboard.IsDown(oControlData.btnClimb) And Not _
-                oKeyboard.IsDown(oControlData.btnKeyboard.btnJump)) Then _
-                GameKeyDown = True
+            If (oKeyboard.IsDown(oControlData.btnClimb) And Not oKeyboard.IsDown(oControlData.btnKeyboard.btnJump)) Then GameKeyDown = True
         Case GameKeys.Up
-            If (oKeyboard.IsDown(oControlData.btnClimb)) Then _
-                GameKeyDown = True
+            If (oKeyboard.IsDown(oControlData.btnClimb)) Then GameKeyDown = True
         Case GameKeys.Down
-            If (oKeyboard.IsDown(oControlData.btnDuck)) Then _
-                GameKeyDown = True
+            If (oKeyboard.IsDown(oControlData.btnDuck)) Then GameKeyDown = True
         Case GameKeys.Jump
-            If (oKeyboard.IsDown(oControlData.btnKeyboard.btnJump)) Then _
-                GameKeyDown = True
+            If (oKeyboard.IsDown(oControlData.btnKeyboard.btnJump)) Then GameKeyDown = True
         Case GameKeys.Run
-            If (oKeyboard.IsDown(oControlData.btnKeyboard.btnRun)) Then _
-                GameKeyDown = True
+            If (oKeyboard.IsDown(oControlData.btnKeyboard.btnRun)) Then GameKeyDown = True
         Case GameKeys.Shoot
-            If (oKeyboard.IsDown(oControlData.btnKeyboard.btnShoot)) Then _
-                GameKeyDown = True
+            If (oKeyboard.IsDown(oControlData.btnKeyboard.btnShoot)) Then GameKeyDown = True
         Case GameKeys.Quit
-            If (oKeyboard.IsDown(oControlData.btnQuit)) Then _
-                GameKeyDown = True
+            If (oKeyboard.IsDown(oControlData.btnQuit)) Then GameKeyDown = True
         Case GameKeys.Pause
-            If (oKeyboard.IsDown(oControlData.btnKeyboard.btnPause)) Then _
-                GameKeyDown = True
+            If (oKeyboard.IsDown(oControlData.btnKeyboard.btnPause)) Then GameKeyDown = True
         Case GameKeys.Release
-            If (oKeyboard.IsDown(oControlData.btnKeyboard.btnRelease)) Then _
-                GameKeyDown = True
+            If (oKeyboard.IsDown(oControlData.btnKeyboard.btnRelease)) Then GameKeyDown = True
         Case GameKeys.LeaveLevel
-            If (oKeyboard.IsDown(oControlData.btnKeyboard.btnLeaveLevel)) Then _
-                GameKeyDown = True
+            If (oKeyboard.IsDown(oControlData.btnKeyboard.btnLeaveLevel)) Then GameKeyDown = True
         Case GameKeys.JoystickTestKey
-            If (oKeyboard.IsDown(oKeyboard.Key_J)) Then _
-                GameKeyDown = True
+            If (oKeyboard.IsDown(oKeyboard.Key_J)) Then GameKeyDown = True
         Case GameKeys.DebugA
-            If oKeyboard.IsDown(oKeyboard.Key_F9) Then _
-                GameKeyDown = True
+            If oKeyboard.IsDown(oKeyboard.Key_F9) Then GameKeyDown = True
         Case GameKeys.DebugB
-            If oKeyboard.IsDown(oKeyboard.Key_F10) Then _
-                GameKeyDown = True
+            If oKeyboard.IsDown(oKeyboard.Key_F10) Then GameKeyDown = True
         Case GameKeys.LoadGameKey
-            If oKeyboard.IsDown(oKeyboard.Key_L) Then _
-                GameKeyDown = True
+            If oKeyboard.IsDown(oKeyboard.Key_L) Then GameKeyDown = True
         Case GameKeys.QuitFromPauseKey
-            If oKeyboard.IsDown(oKeyboard.Key_Q) Then _
-                GameKeyDown = True
+            If oKeyboard.IsDown(oKeyboard.Key_Q) Then GameKeyDown = True
     End Select
     
 End Function
@@ -153,8 +133,7 @@ Private Function JoypadKeyDown(lKey As GameKeys) As Boolean
         Case GameKeys.Right
             If oJoystick.XAxis > oControlData.joyXSens Then JoypadKeyDown = True
         Case GameKeys.Climb
-            If (oJoystick.YAxis < -oControlData.joyYSens And Not _
-                oJoystick.ButtonDown(CInt(oControlData.btnJoystick.btnJump))) Then JoypadKeyDown = True
+            If (oJoystick.YAxis < -oControlData.joyYSens And Not oJoystick.ButtonDown(CInt(oControlData.btnJoystick.btnJump))) Then JoypadKeyDown = True
         Case GameKeys.Up
             If oJoystick.YAxis < -oControlData.joyYSens Then JoypadKeyDown = True
         Case GameKeys.Down

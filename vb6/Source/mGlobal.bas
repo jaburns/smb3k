@@ -212,9 +212,7 @@ Public Sub InitSurfaces()
     
 End Sub
 Private Function GetSkinPath(sBitmapName As String)
-    If Not fileExist(App.Path & "\Skins\" & sMarioSkin & "\" & sBitmapName) _
-    Then GetSkinPath = App.Path & "\Skins\Default\" & sBitmapName _
-    Else GetSkinPath = App.Path & "\Skins\" & sMarioSkin & "\" & sBitmapName
+    If Not fileExist(App.Path & "\Skins\" & sMarioSkin & "\" & sBitmapName) Then GetSkinPath = App.Path & "\Skins\Default\" & sBitmapName Else GetSkinPath = App.Path & "\Skins\" & sMarioSkin & "\" & sBitmapName
 End Function
 
 
@@ -312,8 +310,7 @@ End Function
 Public Sub DrawBonusMeter()
 Dim i As Long
     For i = 1 To 6
-    If i <= gameGreens Then GFX.DrawSurface surfList.BarIcons, 0, 0, 16, 16, 272 + (16 * (i - 1)), 0 _
-    Else GFX.DrawSurface surfList.BarIcons, 0, 16, 16, 16, 272 + (16 * (i - 1)), 0
+    If i <= gameGreens Then GFX.DrawSurface surfList.BarIcons, 0, 0, 16, 16, 272 + (16 * (i - 1)), 0 Else GFX.DrawSurface surfList.BarIcons, 0, 16, 16, 16, 272 + (16 * (i - 1)), 0
     Next i
     GFX.DrawSurface surfList.BarIcons, 16, 0, 48, 48, 296, 16 'Reserve Box
     Select Case marioReserveItem

@@ -52,12 +52,10 @@ Public Sub HandleMe()
 Dim i As Long
 
     If Not bAlive Then
-        If xInit < screenLeft - 128 Or xInit > screenLeft + 768 _
-        Or yInit < screenTop - 128 Or yInit > screenTop + 608 Then CreateAt CSng(xInit), CSng(yInit), bWatchForEdges
+        If xInit < screenLeft - 128 Or xInit > screenLeft + 768 Or yInit < screenTop - 128 Or yInit > screenTop + 608 Then CreateAt CSng(xInit), CSng(yInit), bWatchForEdges
         Exit Sub
     End If
-    If xPos < screenLeft - 128 Or xPos > screenLeft + 768 _
-    Or yPos < screenTop - 128 Or yPos > screenTop + 608 Then
+    If xPos < screenLeft - 128 Or xPos > screenLeft + 768 Or yPos < screenTop - 128 Or yPos > screenTop + 608 Then
         If xPos <> xInit And yPos <> yInit Then bAlive = False
         Exit Sub
     End If
@@ -107,12 +105,10 @@ Dim i As Long
     
     For i = 0 To 1
         If getMarioHammerActive(i) Then
-            If getMarioHammerX(i) > xPos - 16 And getMarioHammerX(i) < xPos + 16 _
-            And getMarioHammerY(i) > yPos - 32 And getMarioHammerY(i) < yPos Then KillMe
+            If getMarioHammerX(i) > xPos - 16 And getMarioHammerX(i) < xPos + 16 And getMarioHammerY(i) > yPos - 32 And getMarioHammerY(i) < yPos Then KillMe
         End If
         If getMarioFireActive(i) Then
-            If getMarioFireX(i) > xPos - 16 And getMarioFireX(i) < xPos + 16 _
-            And getMarioFireY(i) > yPos - 32 And getMarioFireY(i) < yPos Then
+            If getMarioFireX(i) > xPos - 16 And getMarioFireX(i) < xPos + 16 And getMarioFireY(i) > yPos - 32 And getMarioFireY(i) < yPos Then
                 killMarioFire i
                 KillMe
             End If

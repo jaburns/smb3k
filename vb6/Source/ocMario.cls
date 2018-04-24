@@ -245,8 +245,7 @@ Public Sub UpdatePosition()
 '                sEquipXSpeed = 0
 '                sEquipYSpeed = 0
 '                Exit Do
-'            ElseIf sEquipX < screenLeft Or sEquipX > screenLeft + 640 Or _
-'                   sEquipY < screenTop Or sEquipY > screenTop + 480 Then
+'            ElseIf sEquipX < screenLeft Or sEquipX > screenLeft + 640 Or sEquipY < screenTop Or sEquipY > screenTop + 480 Then
 '                lEquipFireStat = 0
 '                sEquipXSpeed = 0
 '                sEquipYSpeed = 0
@@ -306,8 +305,7 @@ Public Sub UpdatePosition()
 
     If GetTileEnemy(xPos \ 32, yPos \ 32) = OBJENDFLYING Then lBlueStarTime = 0
     
-    If (GetTileAtPoint(CLng(xPos), CLng(yPos) - 4) = VINE Or _
-    GetTileAtPoint(CLng(xPos), CLng(yPos) - IIf(mStatus = MarioSmall, 30, 52)) = VINE) And GameKeyDown(Climb) Then
+    If (GetTileAtPoint(CLng(xPos), CLng(yPos) - 4) = VINE Or GetTileAtPoint(CLng(xPos), CLng(yPos) - IIf(mStatus = MarioSmall, 30, 52)) = VINE) And GameKeyDown(Climb) Then
         bClimbing = Not bHandsFull
         sRun = Sgn(xSpeed)
     End If
@@ -364,8 +362,7 @@ Dim tTag As udeLTileTag
         tTypeA = GetTileAtPoint(CLng(xPos) - 18, CLng(yPos) + 2)
         tTypeB = GetTileAtPoint(CLng(xPos) - 14, CLng(yPos) + 2)
         tTag = GetTileTagAtPoint(CLng(xPos) - 16, CLng(yPos) + 2)
-        If GameKeyDown(Down) And sGravity = 0 And tTypeA = SOLID And _
-        tTypeB = SOLID And tTag >= 8 And tTag <= 23 And lPipeStat = mpNothing Then
+        If GameKeyDown(Down) And sGravity = 0 And tTypeA = SOLID And tTypeB = SOLID And tTag >= 8 And tTag <= 23 And lPipeStat = mpNothing Then
             If oCurWorldData.LevelData(curLevel).PipeDest(tTag - 7).destLevel >= 0 Then
                 lPipeStat = mpEnterDown
                 lPipeValue = 0
@@ -378,8 +375,7 @@ Dim tTag As udeLTileTag
         tTypeA = GetTileAtPoint(CLng(xPos) - 18, CLng(yPos) - IIf(mStatus = MarioSmall, 38, 64))
         tTypeB = GetTileAtPoint(CLng(xPos) - 14, CLng(yPos) - IIf(mStatus = MarioSmall, 38, 64))
         tTag = GetTileTagAtPoint(CLng(xPos) - 16, CLng(yPos) - IIf(mStatus = MarioSmall, 38, 64))
-        If GameKeyDown(Up) And tTypeA = SOLID And _
-        tTypeB = SOLID And tTag >= 8 And tTag <= 23 And lPipeStat = mpNothing Then
+        If GameKeyDown(Up) And tTypeA = SOLID And tTypeB = SOLID And tTag >= 8 And tTag <= 23 And lPipeStat = mpNothing Then
             If oCurWorldData.LevelData(curLevel).PipeDest(tTag - 7).destLevel >= 0 Then
                 lPipeStat = mpEnterUp
                 lPipeValue = 0
@@ -393,8 +389,7 @@ Dim tTag As udeLTileTag
         tTypeA = GetTileAtPoint(CLng(xPos) + 18, CLng(yPos) - 2)
         tTypeB = GetTileAtPoint(CLng(xPos) + 18, CLng(yPos) - 30)
         tTag = GetTileTagAtPoint(CLng(xPos) + 18, CLng(yPos) - 16)
-        If GameKeyDown(Right) And tTypeA = SOLID And sGravity = 0 And _
-        tTypeB = SOLID And tTag >= 8 And tTag <= 23 And lPipeStat = mpNothing Then
+        If GameKeyDown(Right) And tTypeA = SOLID And sGravity = 0 And tTypeB = SOLID And tTag >= 8 And tTag <= 23 And lPipeStat = mpNothing Then
             If oCurWorldData.LevelData(curLevel).PipeDest(tTag - 7).destLevel >= 0 Then
                 lPipeStat = mpEnterRight
                 lPipeValue = 0
@@ -407,8 +402,7 @@ Dim tTag As udeLTileTag
         tTypeA = GetTileAtPoint(CLng(xPos) - 18, CLng(yPos) - 2)
         tTypeB = GetTileAtPoint(CLng(xPos) - 18, CLng(yPos) - 30)
         tTag = GetTileTagAtPoint(CLng(xPos) - 18, CLng(yPos) - 16)
-        If GameKeyDown(Left) And tTypeA = SOLID And sGravity = 0 And _
-        tTypeB = SOLID And tTag >= 8 And tTag <= 23 And lPipeStat = mpNothing Then
+        If GameKeyDown(Left) And tTypeA = SOLID And sGravity = 0 And tTypeB = SOLID And tTag >= 8 And tTag <= 23 And lPipeStat = mpNothing Then
             If oCurWorldData.LevelData(curLevel).PipeDest(tTag - 7).destLevel >= 0 Then
                 lPipeStat = mpEnterLeft
                 lPipeValue = 0
@@ -484,9 +478,7 @@ Dim tTag As udeLTileTag
         SrcHeight = IIf(mStatus = MarioSmall, 32, 64)
         SrcWidth = 32 - lPipeValue
     ElseIf lPipeStat = mpExitDoor Or lPipeStat = mpEnterDoor Then
-        If lPipeStat = mpEnterDoor Then _
-            ySrc = IIf(mStatus = MarioSmall, 224, 192) Else _
-            ySrc = IIf(mStatus = MarioSmall, 32, 0)
+        If lPipeStat = mpEnterDoor Then ySrc = IIf(mStatus = MarioSmall, 224, 192) Else ySrc = IIf(mStatus = MarioSmall, 32, 0)
         SrcHeight = IIf(mStatus = MarioSmall, 32, 64)
         SrcWidth = 32
     End If
@@ -515,8 +507,7 @@ Dim oldCount As Long
         Exit Sub
     End If
     
-    If (GetTileAtPoint(CLng(xPos), CLng(yPos) - 2) <> VINE) And _
-    (GetTileAtPoint(CLng(xPos), CLng(yPos) - sngTop) <> VINE) Then
+    If (GetTileAtPoint(CLng(xPos), CLng(yPos) - 2) <> VINE) And (GetTileAtPoint(CLng(xPos), CLng(yPos) - sngTop) <> VINE) Then
         sRun = 0
         sJump = 0
         sGravity = 1
@@ -526,16 +517,12 @@ Dim oldCount As Long
     
     oldCount = climbFrameCount
     
-    If GameKeyDown(Climb) And _
-       (Not isTileSolid(CLng(xPos) - 14, CLng(yPos) - sngTop - 2)) And _
-       (Not isTileSolid(CLng(xPos) + 14, CLng(yPos) - sngTop - 2)) Then
+    If GameKeyDown(Climb) And (Not isTileSolid(CLng(xPos) - 14, CLng(yPos) - sngTop - 2)) And (Not isTileSolid(CLng(xPos) + 14, CLng(yPos) - sngTop - 2)) Then
         yPos = yPos - 2
         If climbFrameCount = oldCount Then climbFrameCount = climbFrameCount + 1
     End If
         
-    If GameKeyDown(Down) And _
-       (Not isTileSolid(CLng(xPos) - 14, CLng(yPos) + 2, True)) And _
-       (Not isTileSolid(CLng(xPos) + 14, CLng(yPos) + 2, True)) Then
+    If GameKeyDown(Down) And (Not isTileSolid(CLng(xPos) - 14, CLng(yPos) + 2, True)) And (Not isTileSolid(CLng(xPos) + 14, CLng(yPos) + 2, True)) Then
         yPos = yPos + 2
         If climbFrameCount = oldCount Then climbFrameCount = climbFrameCount + 1
     End If
@@ -816,8 +803,7 @@ Dim lHeadTop As Long
     If bTall Then lHeadTop = 48 Else lHeadTop = 30
 
     'test the tiles INSIDE mario
-    If isTileSolid(CLng(xPos), CLng(yPos - (lHeadTop / 2))) And sGravity < 0 Then _
-        yPos = yPos + (2 * Abs(sGravity))
+    If isTileSolid(CLng(xPos), CLng(yPos - (lHeadTop / 2))) And sGravity < 0 Then yPos = yPos + (2 * Abs(sGravity))
 
     'test the tiles above mario
     If sGravity < 0 Then
@@ -938,9 +924,7 @@ Dim yTest As Long
         End If
         
         If bTall Then
-            If isTileSolid(CLng(xPos), CLng(yPos) - 40) _
-            Then xPos = xPos - 2 _
-            Else xPos = ((CLng(xPos) \ 32) * 32) + 16
+            If isTileSolid(CLng(xPos), CLng(yPos) - 40) Then xPos = xPos - 2 Else xPos = ((CLng(xPos) \ 32) * 32) + 16
         Else
             xPos = ((CLng(xPos) \ 32) * 32) + 16
         End If
@@ -1012,8 +996,7 @@ Public Sub DrawOnScreen()
         If lPipeStat = mpEnterDown Or lPipeStat = mpExitUp Then
             GFX.DrawSurface surfList.MarioPipe, CSng(xSrc), CSng(ySrc), SrcWidth, SrcHeight, CSng(xOnScreen) - 16, CSng(yOnScreen) - SrcHeight
         ElseIf lPipeStat = mpEnterUp Or lPipeStat = mpExitDown Then
-            GFX.DrawSurface surfList.MarioPipe, CSng(xSrc), CSng(ySrc) + IIf(mStatus = MarioSmall, 32, 64) - SrcHeight, _
-                            SrcWidth, SrcHeight, CSng(xOnScreen) - 16, CSng(yOnScreen) - IIf(mStatus = MarioSmall, 32, 58)
+            GFX.DrawSurface surfList.MarioPipe, CSng(xSrc), CSng(ySrc) + IIf(mStatus = MarioSmall, 32, 64) - SrcHeight, SrcWidth, SrcHeight, CSng(xOnScreen) - 16, CSng(yOnScreen) - IIf(mStatus = MarioSmall, 32, 58)
         ElseIf lPipeStat = mpEnterRight Or lPipeStat = mpExitLeft Then
             GFX.DrawSurface surfList.MarioPipe, CSng(xSrc), CSng(ySrc), 32 - SrcWidth, SrcHeight, CSng(xOnScreen) - 16 + SrcWidth, CSng(yOnScreen) - SrcHeight
         ElseIf lPipeStat = mpEnterLeft Or lPipeStat = mpExitRight Then
@@ -1047,8 +1030,7 @@ Public Sub DrawOnScreen()
 '            GFX.DrawSurface surfList.Objects, 0, 192, 16, 16, sEquipX - screenLeft, sEquipY - screenTop
 '        End If
 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-        If bInvinsible Then _
-        GFX.DrawSurface surfList.Objects, 22, 64, 48, 45, CSng(xOnScreen) - 24, CSng(yOnScreen) - (SrcHeight / 2) - 22, , , sStarAngle, 50
+        If bInvinsible Then GFX.DrawSurface surfList.Objects, 22, 64, 48, 45, CSng(xOnScreen) - 24, CSng(yOnScreen) - (SrcHeight / 2) - 22, , , sStarAngle, 50
     End If
 End Sub
 

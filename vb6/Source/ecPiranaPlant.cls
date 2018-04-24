@@ -60,8 +60,7 @@ Dim lDraw As Long
 Dim i As Long
 
     If Not bAlive Then
-        If xPos < screenLeft - 128 Or xPos > screenLeft + 768 _
-        Or yPos < screenTop - 128 Or yPos > screenTop + 608 Then
+        If xPos < screenLeft - 128 Or xPos > screenLeft + 768 Or yPos < screenTop - 128 Or yPos > screenTop + 608 Then
             bAlive = True
             lNextBiteCount = 0
             lBiteValue = 0
@@ -69,8 +68,7 @@ Dim i As Long
         Exit Sub
     End If
 
-    If xPos < screenLeft - 128 Or xPos > screenLeft + 768 _
-    Or yPos < screenTop - 128 Or yPos > screenTop + 608 Then Exit Sub
+    If xPos < screenLeft - 128 Or xPos > screenLeft + 768 Or yPos < screenTop - 128 Or yPos > screenTop + 608 Then Exit Sub
     
     lFrame = lFrame + 1
     If lFrame >= lMaxFrame Then
@@ -111,12 +109,10 @@ Dim i As Long
     
         For i = 0 To 1
             If getMarioHammerActive(i) Then
-                If getMarioHammerX(i) > xPos - 16 And getMarioHammerX(i) < xPos + 16 _
-                And getMarioHammerY(i) > yPos - IIf(bDown, 0, lDraw) And getMarioHammerY(i) < yPos + IIf(bDown, lDraw, 0) Then KillMe
+                If getMarioHammerX(i) > xPos - 16 And getMarioHammerX(i) < xPos + 16 And getMarioHammerY(i) > yPos - IIf(bDown, 0, lDraw) And getMarioHammerY(i) < yPos + IIf(bDown, lDraw, 0) Then KillMe
             End If
             If getMarioFireActive(i) Then
-                If getMarioFireX(i) > xPos - 16 And getMarioFireX(i) < xPos + 16 _
-                And getMarioFireY(i) > yPos - IIf(bDown, 0, lDraw) And getMarioFireY(i) < yPos + IIf(bDown, lDraw, 0) Then
+                If getMarioFireX(i) > xPos - 16 And getMarioFireX(i) < xPos + 16 And getMarioFireY(i) > yPos - IIf(bDown, 0, lDraw) And getMarioFireY(i) < yPos + IIf(bDown, lDraw, 0) Then
                     killMarioFire i
                     KillMe
                 End If
