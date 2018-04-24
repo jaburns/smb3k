@@ -1,4 +1,3 @@
-
 #[derive(Debug)]
 pub enum AccessLevel {
     Public,
@@ -35,7 +34,10 @@ pub struct VarDeclaration {
 pub enum TopLevelBlock {
     ClassMarker,
 
-    Attribute { name: String, value: String },
+    Attribute {
+        name: String,
+        value: String,
+    },
 
     OptionExplicit,
 
@@ -76,6 +78,79 @@ pub enum TopLevelBlock {
 }
 
 #[derive(Debug)]
-pub struct StatementBlock {
-    pub contents: String,
+pub enum Expression {
+}
+
+#[derive(Debug)]
+pub struct Argument {}
+
+#[derive(Debug)]
+pub enum DoLoopKind {
+    While,
+    Until,
+}
+
+#[derive(Debug)]
+pub enum StatementBlock {
+    OnError,
+
+    Label {
+        name: String,
+    },
+
+    GoTo {
+        label_name: String,
+    },
+
+    Dim {
+        declaration: VarDeclaration,
+    },
+
+    ReDim {
+        preserve: bool,
+        target_name: String,
+        new_size: Expression, // int
+    },
+
+    Assignment {
+        to_name: String,
+        value: Expression, // typeof(lhs)
+    },
+
+    CallSub {
+        name: String,
+        args: Vec<Argument>,
+    },
+
+    IfBlock {
+        condition: Expression, // bool
+        main_body: Vec<StatementBlock>,
+        else_body: Vec<StatementBlock>,
+    },
+
+    WithBlock {
+        target_name: String,
+        body: Vec<StatementBlock>,
+    },
+
+    ForLoop {
+        index: String,
+        lower_bound: Expression, // int
+        upper_bound: Expression, // int
+        step: i32,
+        body: Vec<StatementBlock>,
+    },
+
+    DoLoop {
+        condition: Expression, // bool
+        kind: DoLoopKind,
+        eval_at_top: bool,
+        body: Vec<StatementBlock>,
+    },
+
+    FileOperation,
+
+    Unknown {
+        source: String,
+    },
 }
