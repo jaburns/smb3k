@@ -51,22 +51,25 @@ fn option_decl() -> Parser<'static, u8, TopLevelBlock> {
     seq(b"Option Explicit").map(|_| TopLevelBlock::OptionExplicit)
 }
 
-fn array_range() -> Parser<'static, u8, Option<VarKind>> {
-    let inner = integer() - space() - seq(b"To") - space() + integer();
-    let matched = (sym(b'(') * inner.opt() - sym(b')')).opt() - space();
+fn array_inner_range() -> Parser<'static, u8, VarKind> {
+    let inner = integer() - space() - seq(b"To") - space() + integer() - space();
+    inner.map(|(a, b)| VarKind::RangeArray(a, b))
+}
 
-    // TODO Handle case where only upperbound is supplied in array decl
+fn array_inner_single() -> Parser<'static, u8, VarKind> {
+    let inner = integer() - space();
+    inner.map(|a| VarKind::RangeArray(1, a))
+}
 
-    matched.map(|outer| {
-                    outer.map(|inner| match inner {
-                                  Some((a, b)) => VarKind::RangeArray(a, b),
-                                  None => VarKind::DynamicArray,
-                              })
-                })
+fn maybe_array() -> Parser<'static, u8, Option<VarKind>> {
+    let maybe_array_inner = (array_inner_range() | array_inner_single()).opt();
+    let matched = (sym(b'(') * space() * maybe_array_inner - sym(b')')).opt() - space();
+
+    matched.map(|outer| outer.map(|inner| inner.unwrap_or(VarKind::DynamicArray)))
 }
 
 fn var_decl() -> Parser<'static, u8, VarDeclaration> {
-    let name_and_maybe_range = word() + array_range();
+    let name_and_maybe_range = word() + maybe_array();
     let maybe_new_and_type_name = seq(b"As") * space() * (seq(b"New") - space()).opt() + word();
     let matched = name_and_maybe_range + maybe_new_and_type_name;
 
