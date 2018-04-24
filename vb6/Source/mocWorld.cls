@@ -135,18 +135,18 @@ End Sub
 
 
 Private Sub Class_Initialize()
-    ReDim oNodes(1 To 1)
+    ReDim oNodes(1)
     oNodes(1) = buildNode(100, 100, False, 0, 0, 0, 0, 0)
 End Sub
 
 
 
 Public Sub AddNode(iX As Integer, iY As Integer, bpassthrough As Boolean)
-    ReDim Preserve oNodes(1 To UBound(oNodes) + 1)
+    ReDim Preserve oNodes(UBound(oNodes) + 1)
     oNodes(UBound(oNodes)) = buildNode(iX, iY, False, 0, 0, 0, 0, 0)
 End Sub
 Public Sub removeNode()
-    If UBound(oNodes) > 1 Then ReDim Preserve oNodes(1 To UBound(oNodes) - 1)
+    If UBound(oNodes) > 1 Then ReDim Preserve oNodes(UBound(oNodes) - 1)
 End Sub
 
 
@@ -209,7 +209,7 @@ Dim i As Long
     Close fFile
     Open sPath For Binary Access Read Lock Write As fFile
         Get fFile, 1, tByte
-        ReDim oNodes(1 To tByte)
+        ReDim oNodes(tByte)
         For i = 1 To UBound(oNodes)
         With oNodes(i)
             Get fFile, , tInt
