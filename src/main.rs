@@ -3,9 +3,9 @@ extern crate pom;
 mod ast;
 mod parser;
 
+use std::collections::HashMap;
 use std::fs::*;
 use std::io::prelude::*;
-use std::collections::HashMap;
 
 use ast::*;
 use parser::*;
@@ -14,11 +14,11 @@ type Program = HashMap<String, Vec<TopLevelBlock>>;
 
 fn find_module_name(module: &Vec<TopLevelBlock>) -> Option<String> {
     for item in module {
-        match item { 
+        match item {
             &TopLevelBlock::Attribute {
-                 ref name,
-                 ref value,
-             } => {
+                ref name,
+                ref value,
+            } => {
                 if name == "VB_Name" {
                     println!("Parsed module name: {}", value);
                     return Some(value.clone());
@@ -38,7 +38,10 @@ fn read_file(path: &str) -> (String, Vec<TopLevelBlock>) {
 
     let result = parse_module(contents.as_str());
 
-    (find_module_name(&result).expect("Module '{}' did not have attribute VB_Name!"), result)
+    (
+        find_module_name(&result).expect("Module '{}' did not have attribute VB_Name!"),
+        result,
+    )
 }
 
 fn load_program() -> Program {
