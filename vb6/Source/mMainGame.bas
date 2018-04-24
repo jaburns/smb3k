@@ -351,7 +351,11 @@ Dim lSound As Long
     GFX.BeginScene 25
     
         If sEndWheelSpeed >= 0.1 Then sEndWheelSpeed = sEndWheelSpeed * 0.97 Else sEndWheelSpeed = 0
-        If lGrowth < 32 Then lGrowth = lGrowth + 3 Else If lGrowth > 32 Then lGrowth = 32
+        If lGrowth < 32 Then 
+            lGrowth = lGrowth + 3 
+        Else 
+            If lGrowth > 32 Then lGrowth = 32
+        End If
 
         If sOffsetY < 480 Then
             sRiseSpeed = sRiseSpeed + 0.2

@@ -163,7 +163,7 @@ returnToTop:
         bGameOver = False
     End If
     
-    If mapExitToLoadGame Then If ShowLoadGameScreen(False) Then GoTo returnToTop Else Exit Sub
+    If mapExitToLoadGame And ShowLoadGameScreen(False) Then GoTo returnToTop Else Exit Sub
     GoTo returnToVeryTop
     
 End Sub

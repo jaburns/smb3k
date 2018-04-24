@@ -172,7 +172,12 @@ Dim i As Long
         PlaySound Sounds.Bump
     End If
             
-    If lHurtCount Then xSrc = IIf(lHurtCount \ 2, 384, 0) Else If lSpitCount Then xSrc = 256 Else xSrc = IIf(bFrameOn, 0, 128)
+    If lHurtCount Then 
+        xSrc = IIf(lHurtCount \ 2, 384, 0) 
+    Else 
+        If lSpitCount Then xSrc = 256 Else xSrc = IIf(bFrameOn, 0, 128)
+    End If
+
     GFX.DrawSurface surfList.EnemyList.BOSSGoomboss, xSrc, 0, 128, 160, xPos - screenLeft, yPos - screenTop + 3
 
     ownShell.HandleMe

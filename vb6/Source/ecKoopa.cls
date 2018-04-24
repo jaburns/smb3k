@@ -194,7 +194,7 @@ Dim i As Long
             End If
         End If
     Next i
-    If kStyle <> KOOPA_BEETLE Then If inBombBlast(xPos, yPos - 16) Then KillMe
+    If kStyle <> KOOPA_BEETLE And inBombBlast(xPos, yPos - 16) Then KillMe
         
     If bShell Then HandleShell Else HandleWalker
     
@@ -210,7 +210,9 @@ Dim i As Long
 '    If Not .isActive Then
 '        .CreateAt xPos, yPos, xSpeed * 4
 '    Else
-'        If Abs(.getXPos - Mario.xPos) < 24 Then If .getYPos < Mario.yPos And .getYPos > Mario.yPos - IIf(Mario.isTall, 52, 32) Then Mario.Injure
+'        If Abs(.getXPos - Mario.xPos) < 24 Then 
+'           If .getYPos < Mario.yPos And .getYPos > Mario.yPos - IIf(Mario.isTall, 52, 32) Then Mario.Injure
+'       End If
 '    End If
 '    .HandleBall
 '    End With
@@ -429,7 +431,7 @@ Dim maxYSpeed As Long
     
     'test above jumpers
     If bShell Or bBouncy Then
-        If bShell Then If hitHiddenBlock(CLng(xPos), yPos - 32) Then PlaySound Sounds.Bump
+        If bShell And hitHiddenBlock(CLng(xPos), yPos - 32) Then PlaySound Sounds.Bump
         If isTileSolid(CLng(xPos), CLng(yPos) - IIf(bShell Or kStyle = KOOPA_BEETLE Or kStyle = KOOPA_BOUNCER, 32, 54)) Then
             If bShell Then HitSpecialBlock CLng(xPos), yPos - 32, xSpeed >= 0
             yPos = ((yPos \ 32) * 32) + 32

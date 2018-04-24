@@ -153,25 +153,25 @@ Dim testTag As Byte
             
             For u = 0 To 0
             If GameKeyDown(Left) And nodeMap.LeftNode(curNode) > 0 Then
-                If nodeMap.NodeTag(curNode) > 40 And nodeMap.NodeTag(curNode) <= 110 Then If Not oWorldPassData.bWorldPassed(curWorld).bLevelPassed(nodeMap.NodeTag(curNode) - 41) Then If lastNode <> -1 And nodeMap.LeftNode(curNode) <> lastNode Then Exit For
+                If (nodeMap.NodeTag(curNode) > 40 And nodeMap.NodeTag(curNode) <= 110) And (Not oWorldPassData.bWorldPassed(curWorld).bLevelPassed(nodeMap.NodeTag(curNode) - 41)) And (lastNode <> -1 And nodeMap.LeftNode(curNode) <> lastNode) Then Exit For
                 nextNode = nodeMap.LeftNode(curNode)
                 bGoing = True
                 dirMario = dLeft
                 getSpeeds
             ElseIf GameKeyDown(Right) And nodeMap.RightNode(curNode) > 0 Then
-                If nodeMap.NodeTag(curNode) > 40 And nodeMap.NodeTag(curNode) <= 110 Then If Not oWorldPassData.bWorldPassed(curWorld).bLevelPassed(nodeMap.NodeTag(curNode) - 41) Then If lastNode <> -1 And nodeMap.RightNode(curNode) <> lastNode Then Exit For
+                If (nodeMap.NodeTag(curNode) > 40 And nodeMap.NodeTag(curNode) <= 110) And (Not oWorldPassData.bWorldPassed(curWorld).bLevelPassed(nodeMap.NodeTag(curNode) - 41)) And (lastNode <> -1 And nodeMap.RightNode(curNode) <> lastNode) Then Exit For
                 nextNode = nodeMap.RightNode(curNode)
                 bGoing = True
                 dirMario = dRight
                 getSpeeds
             ElseIf GameKeyDown(Up) And nodeMap.UpNode(curNode) > 0 Then
-                If nodeMap.NodeTag(curNode) > 40 And nodeMap.NodeTag(curNode) <= 110 Then If Not oWorldPassData.bWorldPassed(curWorld).bLevelPassed(nodeMap.NodeTag(curNode) - 41) Then If lastNode <> -1 And nodeMap.UpNode(curNode) <> lastNode Then Exit For
+                If (nodeMap.NodeTag(curNode) > 40 And nodeMap.NodeTag(curNode) <= 110) And (Not oWorldPassData.bWorldPassed(curWorld).bLevelPassed(nodeMap.NodeTag(curNode) - 41)) And (lastNode <> -1 And nodeMap.UpNode(curNode) <> lastNode) Then Exit For
                 nextNode = nodeMap.UpNode(curNode)
                 bGoing = True
                 dirMario = dUp
                 getSpeeds
             ElseIf GameKeyDown(Down) And nodeMap.DownNode(curNode) > 0 Then
-                If nodeMap.NodeTag(curNode) > 40 And nodeMap.NodeTag(curNode) <= 110 Then If Not oWorldPassData.bWorldPassed(curWorld).bLevelPassed(nodeMap.NodeTag(curNode) - 41) Then If lastNode <> -1 And nodeMap.DownNode(curNode) <> lastNode Then Exit For
+                If (nodeMap.NodeTag(curNode) > 40 And nodeMap.NodeTag(curNode) <= 110) And (Not oWorldPassData.bWorldPassed(curWorld).bLevelPassed(nodeMap.NodeTag(curNode) - 41)) And (lastNode <> -1 And nodeMap.DownNode(curNode) <> lastNode) Then Exit For
                 nextNode = nodeMap.DownNode(curNode)
                 bGoing = True
                 dirMario = dDown
@@ -285,7 +285,7 @@ Dim i As Long
     For i = 0 To nodeMap.nodeCount
         If nodeMap.NodeImage(i) > 0 Then
             tst = (nodeMap.NodeImage(i) - 1) * 32
-            If nodeMap.NodeTag(i) > 40 And nodeMap.NodeTag(i) <= 110 Then If oWorldPassData.bWorldPassed(curWorld).bLevelPassed(nodeMap.NodeTag(i) - 41) Then tst = tst + 32
+            If nodeMap.NodeTag(i) > 40 And nodeMap.NodeTag(i) <= 110 And oWorldPassData.bWorldPassed(curWorld).bLevelPassed(nodeMap.NodeTag(i) - 41) Then tst = tst + 32
             GFX.DrawSurface surfList.WorldImages, tst, lImageFrame * 32, 32, 32, nodeMap.xPos(i) - xOffset - 16, nodeMap.yPos(i) - yOffset - 16
         End If
     Next i
