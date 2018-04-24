@@ -148,7 +148,7 @@ fn function_kind_keyword() -> Parser<'static, u8, Option<FunctionKind>> {
         "Function" => Some(FunctionKind::Function),
         "Sub" => Some(FunctionKind::Sub),
         "Get" => Some(FunctionKind::PropertyGet),
-        "Set" => Some(FunctionKind::PropertySet),
+        "Let" => Some(FunctionKind::PropertyLet),
         _ => None,
     })
 }
@@ -171,7 +171,7 @@ fn function_decl() -> Parser<'static, u8, TopLevelBlock> {
 
     matched.map(|((((a, k), (n, p)), r), b)| TopLevelBlock::Function {
         access_level: a.unwrap(),
-        kind: k.unwrap_or(FunctionKind::PropertySet),
+        kind: k.unwrap(),
         name: n,
         params: p,
         return_type: r.unwrap_or(String::new()),

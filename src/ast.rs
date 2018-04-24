@@ -1,3 +1,8 @@
+
+use std::collections::HashMap;
+
+pub type Program = HashMap<String, Vec<TopLevelBlock>>;
+
 #[derive(Debug)]
 pub enum AccessLevel {
     Public,
@@ -12,7 +17,7 @@ pub enum FunctionKind {
     Sub,
     Function,
     PropertyGet,
-    PropertySet,
+    PropertyLet,
 }
 
 #[derive(Debug)]

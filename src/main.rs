@@ -10,8 +10,6 @@ use std::io::prelude::*;
 use ast::*;
 use parser::*;
 
-type Program = HashMap<String, Vec<TopLevelBlock>>;
-
 fn find_module_name(module: &Vec<TopLevelBlock>) -> Option<String> {
     for item in module {
         match item {
