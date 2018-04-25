@@ -4,7 +4,6 @@ mod ast;
 mod parser;
 mod js_writer;
 
-use std::collections::HashMap;
 use std::fs::*;
 use std::io::prelude::*;
 
@@ -12,39 +11,16 @@ use ast::*;
 use parser::*;
 use js_writer::*;
 
-fn find_module_name(module: &Vec<TopLevelBlock>) -> Option<String> {
-    for item in module {
-        match item {
-            &TopLevelBlock::Attribute {
-                ref name,
-                ref value,
-            } => {
-                if name == "VB_Name" {
-                    return Some(value.clone());
-                }
-            }
-            _ => {}
-        };
-    }
-
-    None
-}
-
-fn read_file(path: &str) -> (String, Vec<TopLevelBlock>) {
+fn read_file(path: &str) -> Module {
     let mut file = File::open(path).unwrap();
     let mut contents = String::new();
     file.read_to_string(&mut contents).unwrap();
 
-    let result = parse_module(contents.as_str());
-
-    (
-        find_module_name(&result).expect("Module '{}' did not have attribute VB_Name!"),
-        result,
-    )
+     parse_module(contents.as_str())
 }
 
-fn load_program() -> HashMap<String, Vec<TopLevelBlock>> {
-    let mut result = HashMap::new();
+fn load_program() -> Vec<Module> {
+    let mut result = Vec::new();
 
     for maybe_path in read_dir("test_program").unwrap() {
         let path = maybe_path.unwrap().path();
@@ -52,13 +28,13 @@ fn load_program() -> HashMap<String, Vec<TopLevelBlock>> {
 
         if path_str.ends_with(".bas") || path_str.ends_with(".cls") {
             println!("\nLoading and parsing module at {}", path_str);
-            let (name, parsed) = read_file(path_str);
+            let module = read_file(path_str);
 
-            for block in &parsed {
+            for block in &module.contents {
                 println!("  :: {:?}", block);
             }
 
-            result.insert(name, parsed);
+            result.push(module);
         }
     }
 
@@ -72,7 +48,5 @@ fn main() {
 
     let js = write_program(&program);
 
-    println!("\n{}", js);
-
-    println!("\nDone!\n");
+    println!("\n{}\nDone!\n", js);
 }

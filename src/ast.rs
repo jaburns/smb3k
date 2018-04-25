@@ -32,6 +32,13 @@ pub struct VarDeclaration {
 }
 
 #[derive(Debug)]
+pub struct Module {
+    pub name: String,
+    pub is_class: bool,
+    pub contents: Vec<TopLevelBlock>,
+}
+
+#[derive(Debug)]
 pub enum TopLevelBlock {
     ClassMarker,
 
@@ -85,12 +92,14 @@ pub enum Expression {
 #[derive(Debug)]
 pub struct Argument {}
 
+#[allow(dead_code)]
 #[derive(PartialEq,Eq,Debug)]
 pub enum DoLoopKind {
     While,
     Until,
 }
 
+#[allow(dead_code)]
 #[derive(Debug)]
 pub enum StatementBlock {
     OnError,

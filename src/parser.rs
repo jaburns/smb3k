@@ -226,7 +226,35 @@ fn without_comments(line: &str) -> &str {
     }
 }
 
-pub fn parse_module(contents: &str) -> Vec<TopLevelBlock> {
+
+fn is_module_class(blocks: &Vec<TopLevelBlock>) -> bool {
+    blocks.iter().find(|ref x| match x {
+        TopLevelBlock::ClassMarker => true,
+        _ => false
+    })
+    .is_some()
+}
+
+fn find_module_name(blocks: &Vec<TopLevelBlock>) -> String {
+    for item in blocks {
+        match item {
+            &TopLevelBlock::Attribute {
+                ref name,
+                ref value,
+            } => {
+                if name == "VB_Name" {
+                    return value.clone()
+                }
+            }
+            _ => {}
+        };
+    }
+
+    panic!("Failed to parse! Module had no name.");
+}
+
+
+pub fn parse_module(contents: &str) -> Module {
     let mut trimmed_lines: Vec<String> = contents
         .lines()
         .map(|x| without_comments(x).trim())
@@ -266,5 +294,9 @@ pub fn parse_module(contents: &str) -> Vec<TopLevelBlock> {
         panic!("Failed to parse! A parser was likely partially matched.\n\n");
     }
 
-    results
+    Module {
+        name: find_module_name(&results),
+        is_class: is_module_class(&results),
+        contents: results
+    }
 }
