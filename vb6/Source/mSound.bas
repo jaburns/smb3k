@@ -47,7 +47,7 @@ Public bSoundEnabled As Boolean
 
 Public Sub LoadSounds()
 With zoSound
-    .Initialize frmMain.hWnd
+    .Initialize frmMain_hWnd
     Sounds.Jump = .LoadSound(App.Path & "\Data\Sound\Jump.wav")
     Sounds.Swim = .LoadSound(App.Path & "\Data\Sound\Swim.wav")
     Sounds.Coin = .LoadSound(App.Path & "\Data\Sound\Coin.wav")

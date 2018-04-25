@@ -13,12 +13,12 @@ End Sub
 
 Public Sub LoadMPEGMusic(ByVal sPath As String)
     oV.DStop
-    oV.DOpenFile sPath, 0, 0, 0, 0, frmMain.hWnd
+    oV.DOpenFile sPath, 0, 0, 0, 0, frmMain_hWnd
 End Sub
 
 Public Sub LoadMPEGVideo(ByVal sPath As String)
     oV.DStop
-    oV.DOpenFile sPath, 0, 0, 640, 480, frmMain.hWnd
+    oV.DOpenFile sPath, 0, 0, 640, 480, frmMain_hWnd
 End Sub
 
 Public Sub PauseMPEG()

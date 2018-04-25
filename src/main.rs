@@ -2,6 +2,7 @@ extern crate pom;
 
 mod ast;
 mod parser;
+mod js_writer;
 
 use std::collections::HashMap;
 use std::fs::*;
@@ -9,6 +10,7 @@ use std::io::prelude::*;
 
 use ast::*;
 use parser::*;
+use js_writer::*;
 
 fn find_module_name(module: &Vec<TopLevelBlock>) -> Option<String> {
     for item in module {
@@ -18,7 +20,6 @@ fn find_module_name(module: &Vec<TopLevelBlock>) -> Option<String> {
                 ref value,
             } => {
                 if name == "VB_Name" {
-                    println!("Parsed module name: {}", value);
                     return Some(value.clone());
                 }
             }
@@ -45,13 +46,18 @@ fn read_file(path: &str) -> (String, Vec<TopLevelBlock>) {
 fn load_program() -> Program {
     let mut result = HashMap::new();
 
-    for maybe_path in read_dir("vb6/Source").unwrap() {
+    for maybe_path in read_dir("test_program").unwrap() {
         let path = maybe_path.unwrap().path();
         let path_str = path.to_str().unwrap();
 
         if path_str.ends_with(".bas") || path_str.ends_with(".cls") {
-            println!("Loading and parsing module at {}", path_str);
+            println!("\nLoading and parsing module at {}", path_str);
             let (name, parsed) = read_file(path_str);
+
+            for block in &parsed {
+                println!("  :: {:?}", block);
+            }
+
             result.insert(name, parsed);
         }
     }
@@ -60,7 +66,13 @@ fn load_program() -> Program {
 }
 
 fn main() {
-    load_program();
+    let program = load_program();
 
-    println!("\nSUCCESS\n");
+    println!("\nDone parsing, generating JS...");
+
+    let js = write_program(&program);
+
+    println!("\n{}", js);
+
+    println!("\nDone!\n");
 }

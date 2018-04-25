@@ -15,20 +15,23 @@ Private bGameOver As Boolean
 Private sWorldSet() As String
 
 
+Public frmMain_hWnd As Long
+
 
 
 '
 ' this is where the game starts and ends
 '
-Private Sub Form_Load()
+Public Sub __main__()
+    frmMain_hWnd = 1337
 
     KillInput
-    InitInput hWnd
+    InitInput frmMain_hWnd
 
     'init everything
-    GFX.Initialize frmMain.hWnd, 640, 480, 16
+    GFX.Initialize frmMain_hWnd, 640, 480, 16
     Set oMouse = New DXMouse
-    oMouse.Initialize hWnd, 0, 0, 640, 480, 1
+    oMouse.Initialize frmMain_hWnd, 0, 0, 640, 480, 1
     InitSurfaces
     LoadSounds
     InitObjects

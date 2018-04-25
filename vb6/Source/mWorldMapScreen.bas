@@ -72,9 +72,9 @@ Dim testTag As Byte
     surfList.WorldMap = GFX.CreateSurface(App.Path & "\Mods\" & sWorldSetName & "\" & sWorldList(lWorld) & "\Worldmap.gif", 1, False, True)
     If surfList.WorldImages <> 0 Then GFX.DestroySurface surfList.WorldImages
     surfList.WorldImages = GFX.CreateSurface(App.Path & "\Mods\" & sWorldSetName & "\" & sWorldList(lWorld) & "\MapObjects.bmp", 0, False, False)
-    frmMain.picLoadSize.Picture = LoadPicture(App.Path & "\Mods\" & sWorldSetName & "\" & sWorldList(lWorld) & "\Worldmap.gif")
-    mapWidth = frmMain.picLoadSize.width
-    mapHeight = frmMain.picLoadSize.height
+    frmMain_picLoadSize.Picture = LoadPicture(App.Path & "\Mods\" & sWorldSetName & "\" & sWorldList(lWorld) & "\Worldmap.gif")
+    mapWidth = frmMain_picLoadSize.width
+    mapHeight = frmMain_picLoadSize.height
     
     'position mario if hes just entering the world
     If startNode < -10 And startNode >= -20 Then
