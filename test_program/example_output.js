@@ -7,6 +7,7 @@ const Console_Log = console.log.bind(console);
 
 const new_SomeClass = () => {
     let localField;
+    let publicField;
 
     const Class_Initialize = () => {
         localField = 123;
@@ -18,6 +19,9 @@ const new_SomeClass = () => {
         get ReadValue() {
             return localField;
         },
+
+        get publicField() { return publicField; },
+        set publicField(x) { publicField = x; },
 
         SetValueTo: (newValue) => {
             localField = newValue;
@@ -60,6 +64,7 @@ const module_OtherModule = (() => {
 
     return {
         CallOtherSub: () => {
+            classInstance.publicField = 99;
             classInstance.CallMethod(1, someGlobal);
             classInstance.SetValueTo(classInstance.ReadValue + 10000);
             classInstance.CallMethod(0, 0);

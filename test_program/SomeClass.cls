@@ -6,6 +6,7 @@ Attribute VB_Name = "SomeClass"
 Option Explicit
 
 Private localField As Long
+Public publicField As Single
 
 Public Property Get ReadValue() As Long
     ReadValue = localField
@@ -20,5 +21,5 @@ Public Sub SetValueTo(newValue As Long)
 End Sub
 
 Public Sub CallMethod(a As Single, b As Single)
-    Console_Log a, b, SOME_CONST, localField
+    Console_Log a, b, SOME_CONST, localField, publicField
 End Sub

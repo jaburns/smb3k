@@ -22,7 +22,7 @@ fn read_file(path: &str) -> Module {
 fn load_program() -> Vec<Module> {
     let mut result = Vec::new();
 
-    for maybe_path in read_dir("test_program").unwrap() {
+    for maybe_path in read_dir("vb6/Source").unwrap() {
         let path = maybe_path.unwrap().path();
         let path_str = path.to_str().unwrap();
 

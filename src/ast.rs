@@ -16,7 +16,7 @@ pub enum FunctionKind {
     PropertyLet,
 }
 
-#[derive(Debug)]
+#[derive(PartialEq,Eq,Debug)]
 pub enum VarKind {
     Standard,
     DynamicArray,
