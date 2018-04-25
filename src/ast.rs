@@ -1,9 +1,5 @@
 
-use std::collections::HashMap;
-
-pub type Program = HashMap<String, Vec<TopLevelBlock>>;
-
-#[derive(Debug)]
+#[derive(PartialEq,Eq,Debug)]
 pub enum AccessLevel {
     Public,
     Private,
@@ -12,7 +8,7 @@ pub enum AccessLevel {
 #[derive(Debug)]
 pub struct FunctionParam {}
 
-#[derive(Debug)]
+#[derive(PartialEq,Eq,Debug)]
 pub enum FunctionKind {
     Sub,
     Function,
@@ -89,7 +85,7 @@ pub enum Expression {
 #[derive(Debug)]
 pub struct Argument {}
 
-#[derive(Debug)]
+#[derive(PartialEq,Eq,Debug)]
 pub enum DoLoopKind {
     While,
     Until,

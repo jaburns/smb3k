@@ -43,7 +43,7 @@ fn read_file(path: &str) -> (String, Vec<TopLevelBlock>) {
     )
 }
 
-fn load_program() -> Program {
+fn load_program() -> HashMap<String, Vec<TopLevelBlock>> {
     let mut result = HashMap::new();
 
     for maybe_path in read_dir("test_program").unwrap() {
