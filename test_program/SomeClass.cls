@@ -20,6 +20,6 @@ Public Sub SetValueTo(newValue As Long)
     localField = newValue
 End Sub
 
-Public Sub CallMethod(a As Single, b As Single)
+Public Sub CallMethod(a As Single, Optional ByVal b As Single = 12)
     Console_Log a, b, SOME_CONST, localField, publicField
 End Sub

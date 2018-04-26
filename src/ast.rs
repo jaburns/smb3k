@@ -1,22 +1,17 @@
-
-#[derive(PartialEq,Eq,Debug)]
+#[derive(PartialEq, Eq, Debug)]
 pub enum AccessLevel {
     Public,
     Private,
 }
 
-#[derive(Debug)]
-pub struct FunctionParam {}
-
-#[derive(PartialEq,Eq,Debug)]
+#[derive(PartialEq, Eq, Debug)]
 pub enum FunctionKind {
     Sub,
     Function,
     PropertyGet,
-    PropertyLet,
 }
 
-#[derive(PartialEq,Eq,Debug)]
+#[derive(PartialEq, Eq, Debug)]
 pub enum VarKind {
     Standard,
     DynamicArray,
@@ -25,10 +20,24 @@ pub enum VarKind {
 }
 
 #[derive(Debug)]
+pub struct FunctionParam {
+    pub name: String,
+    pub type_name: String,
+    pub default_value: Option<String>,
+}
+
+#[derive(Debug)]
 pub struct VarDeclaration {
     pub name: String,
     pub type_name: String,
     pub kind: VarKind,
+}
+
+#[derive(Debug)]
+pub struct TypeDeclaration {
+    pub access_level: AccessLevel,
+    pub name: String,
+    pub fields: Vec<VarDeclaration>,
 }
 
 #[derive(Debug)]
@@ -47,8 +56,6 @@ pub enum TopLevelBlock {
         value: String,
     },
 
-    OptionExplicit,
-
     Field {
         access_level: AccessLevel,
         declaration: VarDeclaration,
@@ -61,16 +68,12 @@ pub enum TopLevelBlock {
         value: String,
     },
 
-    Type {
-        access_level: AccessLevel,
-        name: String,
-        fields: Vec<VarDeclaration>,
-    },
+    Type(TypeDeclaration),
 
     Enum {
         access_level: AccessLevel,
         name: String,
-        values: Vec<(String, i32)>,
+        values: Vec<(String, Option<i32>)>,
     },
 
     Function {
@@ -93,7 +96,7 @@ pub enum Expression {
 pub struct Argument {}
 
 #[allow(dead_code)]
-#[derive(PartialEq,Eq,Debug)]
+#[derive(PartialEq, Eq, Debug)]
 pub enum DoLoopKind {
     While,
     Until,

@@ -46,10 +46,6 @@ fn attribute_decl() -> Parser<'static, u8, TopLevelBlock> {
     matched.map(|(n, v)| TopLevelBlock::Attribute { name: n, value: v })
 }
 
-fn option_decl() -> Parser<'static, u8, TopLevelBlock> {
-    seq(b"Option Explicit").map(|_| TopLevelBlock::OptionExplicit)
-}
-
 fn array_inner_range() -> Parser<'static, u8, VarKind> {
     let inner = integer() - space() - seq(b"To") - space() + integer() - space();
     inner.map(|(a, b)| VarKind::RangeArray(a, b))
@@ -91,21 +87,18 @@ fn type_decl() -> Parser<'static, u8, TopLevelBlock> {
     let members = list(var_decl(), sym(b'`'));
     let matched = begin + members - seq(b"`End Type");
 
-    matched.map(|((a, n), f)| TopLevelBlock::Type {
-        access_level: a.unwrap(),
-        name: n,
-        fields: f,
+    matched.map(|((a, n), f)| {
+        TopLevelBlock::Type(TypeDeclaration {
+            access_level: a.unwrap(),
+            name: n,
+            fields: f,
+        })
     })
 }
 
-fn enum_decl_member() -> Parser<'static, u8, (String, i32)> {
+fn enum_decl_member() -> Parser<'static, u8, (String, Option<i32>)> {
     let maybe_value = (sym(b'=') * space() * integer()).opt();
-    let mapped_value = maybe_value.map(|x| match x {
-        Some(i) => i,
-        None => 0,
-    });
-
-    !seq(b"End Enum") * word() - space() + mapped_value
+    !seq(b"End Enum") * word() - space() + maybe_value
 }
 
 fn enum_decl() -> Parser<'static, u8, TopLevelBlock> {
@@ -122,8 +115,7 @@ fn enum_decl() -> Parser<'static, u8, TopLevelBlock> {
 
 fn const_decl() -> Parser<'static, u8, TopLevelBlock> {
     let access_and_name = access_level() - space() - seq(b"Const") - space() + word() - space();
-    let type_and_value =
-        seq(b"As") * space() * word() - space() - sym(b'=') - space() + (string() | word());
+    let type_and_value = seq(b"As") * space() * word() - space() - sym(b'=') - space() + word();
     let matched = access_and_name + type_and_value;
 
     matched.map(|((a, n), (t, v))| TopLevelBlock::Constant {
@@ -148,16 +140,39 @@ fn function_kind_keyword() -> Parser<'static, u8, Option<FunctionKind>> {
         "Function" => Some(FunctionKind::Function),
         "Sub" => Some(FunctionKind::Sub),
         "Get" => Some(FunctionKind::PropertyGet),
-        "Let" => Some(FunctionKind::PropertyLet),
         _ => None,
     })
 }
 
+fn function_param() -> Parser<'static, u8, FunctionParam> {
+    let name_and_type = (seq(b"Optional") - space()).opt() * (seq(b"ByVal") - space()).opt()
+        * word() - space() - seq(b"As") - space() + word() - space();
+    let default_value = (sym(b'=') * space() * word()).opt();
+    let param = name_and_type + default_value - space();
+
+    param.map(|((n, t), v)| FunctionParam {
+        name: n,
+        type_name: t,
+        default_value: v,
+    })
+}
+
 fn function_param_list() -> Parser<'static, u8, Vec<FunctionParam>> {
-    let param = none_of(b",)").repeat(0..);
+    let param = none_of(b",)").repeat(1..).convert(String::from_utf8);
     let params = list(param, sym(b',') * space());
     let inner = sym(b'(') * space() * params.opt() - sym(b')');
-    inner.map(|_| Vec::new())
+    inner.map(|x| match x {
+        Some(params) => params
+            .iter()
+            .map(|param| {
+                let mut input = DataInput::new(param.as_bytes());
+                function_param()
+                    .parse(&mut input)
+                    .expect("Failed to parse function parameters!")
+            })
+            .collect(),
+        None => Vec::new(),
+    })
 }
 
 fn function_decl() -> Parser<'static, u8, TopLevelBlock> {
@@ -189,6 +204,10 @@ fn ignored_header_decl() -> Parser<'static, u8, TopLevelBlock> {
 
 fn class_marker_decl() -> Parser<'static, u8, TopLevelBlock> {
     seq(b"VERSION 1.0 CLASS").map(|_| TopLevelBlock::ClassMarker)
+}
+
+fn option_decl() -> Parser<'static, u8, TopLevelBlock> {
+    seq(b"Option Explicit").map(|_| TopLevelBlock::Empty)
 }
 
 fn statement() -> Parser<'static, u8, StatementBlock> {
@@ -226,13 +245,14 @@ fn without_comments(line: &str) -> &str {
     }
 }
 
-
 fn is_module_class(blocks: &Vec<TopLevelBlock>) -> bool {
-    blocks.iter().find(|ref x| match x {
-        TopLevelBlock::ClassMarker => true,
-        _ => false
-    })
-    .is_some()
+    blocks
+        .iter()
+        .find(|ref x| match x {
+            TopLevelBlock::ClassMarker => true,
+            _ => false,
+        })
+        .is_some()
 }
 
 fn find_module_name(blocks: &Vec<TopLevelBlock>) -> String {
@@ -243,7 +263,7 @@ fn find_module_name(blocks: &Vec<TopLevelBlock>) -> String {
                 ref value,
             } => {
                 if name == "VB_Name" {
-                    return value.clone()
+                    return value.clone();
                 }
             }
             _ => {}
@@ -252,7 +272,6 @@ fn find_module_name(blocks: &Vec<TopLevelBlock>) -> String {
 
     panic!("Failed to parse! Module had no name.");
 }
-
 
 pub fn parse_module(contents: &str) -> Module {
     let mut trimmed_lines: Vec<String> = contents
@@ -297,6 +316,6 @@ pub fn parse_module(contents: &str) -> Module {
     Module {
         name: find_module_name(&results),
         is_class: is_module_class(&results),
-        contents: results
+        contents: results,
     }
 }
