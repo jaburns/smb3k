@@ -7,8 +7,19 @@ fn write_let(decl: &VarDeclaration) -> String {
             decl.name.as_str(),
             decl.type_name.as_str()
         ),
-        _ => format!("let {};", decl.name.as_str()),
+        VarKind::RangeArray(lower, upper) => format!("let {} = __makeArray({}, {});", decl.name.as_str(), lower, (upper - lower + 1)),
+        VarKind::DynamicArray => format!("let {} = __makeArray(1, 0);", decl.name.as_str()),
+        VarKind::Standard => format!("let {} = {};", decl.name.as_str(), get_default_value(decl.type_name.as_str()).as_str())
     }
+}
+
+fn get_default_value(type_name: &str) -> String {
+    String::from(match type_name {
+        "String" => "\"\"",
+        "Long" | "Single" | "Integer" | "Double" => "0",
+        "Boolean" => "False",
+        _ => "{}",
+    })
 }
 
 fn write_module_header(module: &Module) -> String {
@@ -204,6 +215,8 @@ pub fn write_program(program: &Vec<Module>) -> String {
     let mut result = String::new();
 
     result.push_str("(() => {\n");
+    
+    // TODO: Define __makeArray, True, False
 
     for module in program {
         result.push_str(write_module(module).as_str());

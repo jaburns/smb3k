@@ -53,7 +53,7 @@ fn array_inner_range() -> Parser<'static, u8, VarKind> {
 
 fn array_inner_single() -> Parser<'static, u8, VarKind> {
     let inner = integer() - space();
-    inner.map(|a| VarKind::RangeArray(1, a))
+    inner.map(|a| VarKind::RangeArray(0, a))
 }
 
 fn maybe_array() -> Parser<'static, u8, Option<VarKind>> {
