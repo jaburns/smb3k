@@ -1,34 +1,88 @@
 use ast::*;
 
-fn write_let(decl: &VarDeclaration) -> String {
-    match decl.kind {
-        VarKind::AutoInstantiate => format!(
-            "let {} = new_{}();",
-            decl.name.as_str(),
-            decl.type_name.as_str()
-        ),
+/*
+const __makeArray(lowerIndex, count, makeElem) => {
+    let arr = [];
+    for (let i = 0; i < count; i++) {
+        arr.push(makeElem());
+    }
+
+    return (lookup, write, redim) => {
+        if (typeof redim !== 'undefined') {
+
+        } else if (typeof write !== 'undefined') {
+            arr[lookup - lowerIndex] = write;
+        } else {
+            return arr[lookup - lowerIndex];
+        }
+    };
+};
+
+let arr = __makeArray(1, 5, () => (0));
+
+// "arr(2)" in expression
+arr(2);  
+// "arr(2) = 10"
+arr(2, 10);
+// "ReDim Preserve arr(LocalVar + 1)"
+arr(null, null, {preserve: true, count: (LocalVar + 1)});
+
+
+*/
+
+use std::collections::HashMap;
+
+type TypeLookup<'a> = HashMap<String, &'a Vec<VarDeclaration>>;
+
+fn write_let(decl: &VarDeclaration, type_lookup: &TypeLookup) -> String {
+    format!(
+        "let {} = {};",
+        decl.name.as_str(),
+        write_default_value(&decl.kind, decl.type_name.as_str(), type_lookup).as_str()
+    )
+}
+
+// TODO makeArray should populate an array with default values of struct kinds
+fn write_default_value(decl_kind: &VarKind, type_name: &str, type_lookup: &TypeLookup) -> String {
+    match decl_kind {
+        VarKind::AutoInstantiate => format!("new_{}()", type_name),
         VarKind::RangeArray(lower, upper) => format!(
-            "let {} = __makeArray({}, {});",
-            decl.name.as_str(),
+            "__makeArray({}, {}, ()=>({}))",
             lower,
-            (upper - lower + 1)
+            (upper - lower + 1),
+            write_default_value(&VarKind::Standard, type_name, type_lookup)
         ),
-        VarKind::DynamicArray => format!("let {} = __makeArray(1, 0);", decl.name.as_str()),
-        VarKind::Standard => format!(
-            "let {} = {};",
-            decl.name.as_str(),
-            get_default_value(decl.type_name.as_str()).as_str()
+        VarKind::DynamicArray => format!(
+            "__makeArray(1, 0, ()=>({}))",
+            write_default_value(&VarKind::Standard, type_name, type_lookup)
         ),
+        VarKind::Standard => match type_name {
+            "String" => String::from("\"\""),
+            "Long" | "Single" | "Integer" | "Double" => String::from("0"),
+            "Boolean" => String::from("False"),
+            _ => write_default_object(type_name, type_lookup),
+        },
     }
 }
 
-fn get_default_value(type_name: &str) -> String {
-    String::from(match type_name {
-        "String" => "\"\"",
-        "Long" | "Single" | "Integer" | "Double" => "0",
-        "Boolean" => "False",
-        _ => "{}",
-    })
+fn write_default_object(type_name: &str, type_lookup: &TypeLookup) -> String {
+    if !type_lookup.contains_key(type_name) {
+        return String::from("{}");
+    }
+
+    let mut result = String::from("{");
+    for member in type_lookup[type_name] {
+        result.push_str(
+            format!(
+                "\"{}\":{},",
+                member.name,
+                write_default_value(&member.kind, member.type_name.as_str(), type_lookup).as_str()
+            ).as_str(),
+        );
+    }
+    result.pop();
+    result.push_str("}");
+    result
 }
 
 fn write_module_header(module: &Module) -> String {
@@ -51,6 +105,19 @@ fn join_lines(lines: &Vec<String>) -> String {
     lines
         .iter()
         .fold(String::new(), |acc, line| acc + "\n" + line) + "\n"
+}
+
+fn write_function_body(body: &Vec<StatementBlock>) -> String {
+    // for s in body {
+    //     match s {
+    //         StatementBlock::Unknown { source } => {
+    //             result.push_str(source.as_str());
+    //             result.push_str("\n");
+    //         }
+    //         _ => {}
+    //     }
+    // }
+    String::new()
 }
 
 fn write_function(params: &Vec<FunctionParam>, body: &Vec<StatementBlock>) -> String {
@@ -77,22 +144,14 @@ fn write_function(params: &Vec<FunctionParam>, body: &Vec<StatementBlock>) -> St
         }
     }
 
-    // for s in body {
-    //     match s {
-    //         StatementBlock::Unknown { source } => {
-    //             result.push_str(source.as_str());
-    //             result.push_str("\n");
-    //         }
-    //         _ => {}
-    //     }
-    // }
+    result.push_str(write_function_body(body).as_str());
 
     result.push_str("}");
 
     result
 }
 
-fn write_module(module: &Module) -> String {
+fn write_module(module: &Module, type_lookup: &TypeLookup) -> String {
     let mut pre_header: Vec<String> = Vec::new();
     let mut post_header: Vec<String> = Vec::new();
     let mut return_block: Vec<String> = Vec::new();
@@ -118,7 +177,7 @@ fn write_module(module: &Module) -> String {
                 declaration,
             } => {
                 if module.is_class {
-                    post_header.push(write_let(&declaration));
+                    post_header.push(write_let(&declaration, type_lookup));
                     if *access_level == AccessLevel::Public {
                         return_block.push(format!(
                             "get {0}() {{ return {0}; }},",
@@ -132,10 +191,10 @@ fn write_module(module: &Module) -> String {
                 } else {
                     match access_level {
                         AccessLevel::Public => {
-                            pre_header.push(write_let(&declaration));
+                            pre_header.push(write_let(&declaration, type_lookup));
                         }
                         AccessLevel::Private => {
-                            post_header.push(write_let(&declaration));
+                            post_header.push(write_let(&declaration, type_lookup));
                         }
                     }
                 }
@@ -171,9 +230,9 @@ fn write_module(module: &Module) -> String {
                 AccessLevel::Public => {
                     if *kind == FunctionKind::PropertyGet && params.len() > 0 {
                         return_block.push(format!(
-                            "get {}: {},",
+                            "get {}() {{ {} }},",
                             name.as_str(),
-                            write_function(params, body).as_str()
+                            write_function_body(body).as_str()
                         ));
                     } else {
                         return_block.push(format!(
@@ -220,15 +279,31 @@ fn write_module(module: &Module) -> String {
     result
 }
 
+fn collect_types(program: &Vec<Module>) -> TypeLookup {
+    let mut result = HashMap::new();
+
+    for module in program {
+        for block in &module.contents {
+            if let TopLevelBlock::Type(type_decl) = block {
+                result.insert(type_decl.name.clone(), &type_decl.fields);
+            }
+        }
+    }
+
+    result
+}
+
 pub fn write_program(program: &Vec<Module>) -> String {
     let mut result = String::new();
+
+    let type_lookup = collect_types(program);
 
     result.push_str("(() => {\n");
 
     // TODO: Define __makeArray, True, False
 
     for module in program {
-        result.push_str(write_module(module).as_str());
+        result.push_str(write_module(module, &type_lookup).as_str());
         result.push_str("\n");
     }
 
