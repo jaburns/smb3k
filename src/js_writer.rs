@@ -49,21 +49,23 @@ fn write_function(params: &Vec<FunctionParam>, body: &Vec<StatementBlock>) -> St
     for p in params {
         match &p.default_value {
             Some(v) => {
-                result.push_str(format!("if (typeof {0} === 'undefined') {0} = {1};\n", p.name, v).as_str());
+                result.push_str(
+                    format!("if (typeof {0} === 'undefined') {0} = {1};\n", p.name, v).as_str(),
+                );
             }
             None => {}
         }
     }
 
- // for s in body {
- //     match s {
- //         StatementBlock::Unknown { source } => {
- //             result.push_str(source.as_str());
- //             result.push_str("\n");
- //         }
- //         _ => {}
- //     }
- // }
+    // for s in body {
+    //     match s {
+    //         StatementBlock::Unknown { source } => {
+    //             result.push_str(source.as_str());
+    //             result.push_str("\n");
+    //         }
+    //         _ => {}
+    //     }
+    // }
 
     result.push_str("}");
 
@@ -83,14 +85,13 @@ fn write_module(module: &Module) -> String {
                 name,
                 value,
                 ..
-            } => match access_level {
-                AccessLevel::Public => {
-                    pre_header.push(format!("const {} = {};", name.as_str(), value.as_str()));
-                }
-                AccessLevel::Private => {
-                    post_header.push(format!("const {} = {};", name.as_str(), value.as_str()));
-                }
-            },
+            } => {
+                let code = format!("const {} = {};", name.as_str(), value.as_str());
+                match access_level {
+                    AccessLevel::Public => pre_header.push(code),
+                    AccessLevel::Private => post_header.push(code),
+                };
+            }
 
             TopLevelBlock::Field {
                 access_level,
@@ -120,6 +121,25 @@ fn write_module(module: &Module) -> String {
                 }
             }
 
+            TopLevelBlock::Enum {
+                access_level,
+                values,
+                ..
+            } => {
+                let mut val: i32 = 0;
+
+                for (name, custom_val) in values {
+                    val = custom_val.unwrap_or(val);
+                    let code = format!("const {} = {};", name.as_str(), val);
+                    val += 1;
+
+                    match access_level {
+                        AccessLevel::Public => pre_header.push(code),
+                        AccessLevel::Private => post_header.push(code),
+                    };
+                }
+            }
+
             TopLevelBlock::Function {
                 access_level,
                 kind,
@@ -127,40 +147,38 @@ fn write_module(module: &Module) -> String {
                 params,
                 body,
                 ..
-            } => {
-                match access_level {
-                    AccessLevel::Public => {
-                        if *kind == FunctionKind::PropertyGet && params.len() > 0 {
-                            return_block.push(format!(
-                                "get {}: {},",
-                                name.as_str(),
-                                write_function(params, body).as_str()
-                            ));
-                        } else {
-                            return_block.push(format!(
-                                "{}: {},",
-                                name.as_str(),
-                                write_function(params, body).as_str()
-                            ));
-                        }
-
-                        if !module.is_class {
-                            post_footer.push(format!(
-                                "const {0} = module_{1}.{0};",
-                                name.as_str(),
-                                module.name.as_str()
-                            ));
-                        }
-                    }
-                    AccessLevel::Private => {
-                        post_header.push(format!(
-                            "const {} = {};",
+            } => match access_level {
+                AccessLevel::Public => {
+                    if *kind == FunctionKind::PropertyGet && params.len() > 0 {
+                        return_block.push(format!(
+                            "get {}: {},",
+                            name.as_str(),
+                            write_function(params, body).as_str()
+                        ));
+                    } else {
+                        return_block.push(format!(
+                            "{}: {},",
                             name.as_str(),
                             write_function(params, body).as_str()
                         ));
                     }
+
+                    if !module.is_class {
+                        post_footer.push(format!(
+                            "const {0} = module_{1}.{0};",
+                            name.as_str(),
+                            module.name.as_str()
+                        ));
+                    }
                 }
-            }
+                AccessLevel::Private => {
+                    post_header.push(format!(
+                        "const {} = {};",
+                        name.as_str(),
+                        write_function(params, body).as_str()
+                    ));
+                }
+            },
 
             _ => {}
         }
