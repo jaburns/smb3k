@@ -34,7 +34,40 @@ fn join_lines(lines: &Vec<String>) -> String {
 }
 
 fn write_function(params: &Vec<FunctionParam>, body: &Vec<StatementBlock>) -> String {
-    "() => {}".to_string()
+    let mut result = String::new();
+    result.push_str("(");
+
+    if params.len() > 0 {
+        for p in params {
+            result.push_str(format!("{},", p.name).as_str());
+        }
+        result.pop();
+    }
+
+    result.push_str(") => {\n");
+
+    for p in params {
+        match &p.default_value {
+            Some(v) => {
+                result.push_str(format!("if (typeof {0} === 'undefined') {0} = {1};\n", p.name, v).as_str());
+            }
+            None => {}
+        }
+    }
+
+ // for s in body {
+ //     match s {
+ //         StatementBlock::Unknown { source } => {
+ //             result.push_str(source.as_str());
+ //             result.push_str("\n");
+ //         }
+ //         _ => {}
+ //     }
+ // }
+
+    result.push_str("}");
+
+    result
 }
 
 fn write_module(module: &Module) -> String {
@@ -92,13 +125,12 @@ fn write_module(module: &Module) -> String {
                 kind,
                 name,
                 params,
-                return_type,
                 body,
+                ..
             } => {
                 match access_level {
                     AccessLevel::Public => {
-                        if *kind == FunctionKind::PropertyGet {
-                            // && params.count == 0
+                        if *kind == FunctionKind::PropertyGet && params.len() > 0 {
                             return_block.push(format!(
                                 "get {}: {},",
                                 name.as_str(),

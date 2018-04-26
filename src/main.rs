@@ -22,16 +22,16 @@ fn read_file(path: &str) -> Module {
 fn load_program() -> Vec<Module> {
     let mut result = Vec::new();
 
-    for maybe_path in read_dir("test_program").unwrap() {
+    for maybe_path in read_dir("vb6/Source").unwrap() {
         let path = maybe_path.unwrap().path();
         let path_str = path.to_str().unwrap();
 
         if path_str.ends_with(".bas") || path_str.ends_with(".cls") {
-            println!("\nLoading and parsing module at {}", path_str);
+            println!("\n//Loading and parsing module at {}", path_str);
             let module = read_file(path_str);
 
             for block in &module.contents {
-                println!("  :: {:?}", block);
+                println!("//  :: {:?}", block);
             }
 
             result.push(module);
@@ -44,9 +44,9 @@ fn load_program() -> Vec<Module> {
 fn main() {
     let program = load_program();
 
-    println!("\nDone parsing, generating JS...");
+    println!("\n//Done parsing, generating JS...");
 
     let js = write_program(&program);
 
-    println!("\n{}\nDone!\n", js);
+    println!("\n{}\n//Done!\n", js);
 }
