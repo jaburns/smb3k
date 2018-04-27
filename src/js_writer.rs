@@ -12,7 +12,8 @@ fn write_let(decl: &VarDeclaration, type_lookup: &TypeLookup) -> String {
     )
 }
 
-// TODO makeArray should populate an array with default values of struct kinds
+// TODO default value for enum is not set correctly, nor default value for class reference.
+// Probably we can just set unknowns to 0 and it will work.
 fn write_default_value(decl_kind: &VarKind, type_name: &str, type_lookup: &TypeLookup) -> String {
     match decl_kind {
         VarKind::AutoInstantiate => format!("new_{}()", type_name),
@@ -78,16 +79,20 @@ fn join_lines(lines: &Vec<String>) -> String {
 }
 
 fn write_function_body(body: &Vec<StatementBlock>) -> String {
-    // for s in body {
-    //     match s {
-    //         StatementBlock::Unknown { source } => {
-    //             result.push_str(source.as_str());
-    //             result.push_str("\n");
-    //         }
-    //         _ => {}
-    //     }
-    // }
-    String::new()
+    let mut result = String::new();
+
+    for s in body {
+        match s {
+            StatementBlock::Unknown { source } => {
+                result.push_str("// ");
+                result.push_str(source.as_str());
+                result.push_str("\n");
+            }
+            _ => {}
+        }
+    }
+
+    result
 }
 
 fn write_function(is_async: bool, params: &Vec<FunctionParam>, body: &Vec<StatementBlock>) -> String {
@@ -131,6 +136,8 @@ fn write_module(module: &Module, type_lookup: &TypeLookup) -> String {
     let mut post_header: Vec<String> = Vec::new();
     let mut return_block: Vec<String> = Vec::new();
     let mut post_footer: Vec<String> = Vec::new();
+
+    // TODO call Class_Initialize and Class_Terminate if they exist
 
     for block in &module.contents {
         match block {
