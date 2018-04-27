@@ -4,5 +4,4 @@ version = "0.0.1"
 authors = []
 
 [dependencies]
-nom = "3.2.1"
 pom = "1.1.0"
