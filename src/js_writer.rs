@@ -213,7 +213,8 @@ fn write_module(module: &Module, type_lookup: &TypeLookup) -> String {
                 if *access_level == AccessLevel::Public && *kind == FunctionKind::PropertyGet
                     && params.len() == 0
                 {
-                    // This is inaccessible to the class it is defined in. Unsure if this is a problem yet.
+                    // This is inaccessible to the class it is defined in.
+                    // Accessing local properties only happens in ocMario, TODO: Refactor class to avoid.
                     return_block.push(format!(
                         "get {}() {{ {} }},",
                         name.as_str(),
