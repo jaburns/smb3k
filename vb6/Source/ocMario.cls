@@ -307,7 +307,7 @@ Async Public Sub UpdatePosition()
     
     If (GetTileAtPoint(CLng(xPos), CLng(yPos) - 4) = VINE Or GetTileAtPoint(CLng(xPos), CLng(yPos) - IIf(mStatus = MarioSmall, 30, 52)) = VINE) And GameKeyDown(Climb) Then
         bClimbing = Not bHandsFull
-        sRun = Sgn(xSpeed)
+        sRun = Sgn(sRun)
     End If
 
     If Not GameKeyDown(Jump) And sJump = 0 Then bHoldJump = False
@@ -1006,7 +1006,7 @@ Public Sub DrawOnScreen()
         End If
     Else
         If Not (bStarFrameOn And lStarTime > 0) Then
-            If isPowerful And Not (lBlueStarTime < 100 And bStarFrameOn) Then
+            If (lBlueStarTime > 0) And Not (lBlueStarTime < 100 And bStarFrameOn) Then
                 If bMarioFaceRight Then
                     GFX.DrawSurface surfList.MarioWings, IIf(lWingFrameTime > 0, 32, 0), 32, 32, 32, CSng(xOnScreen), CSng(yOnScreen) - SrcHeight - IIf(bTall, 8, 20)
                 Else
@@ -1014,7 +1014,7 @@ Public Sub DrawOnScreen()
                 End If
             End If
             GFX.DrawSurface IIf(bHandsFull, surfList.MarioCarry, surfList.Mario), CSng(xSrc), CSng(ySrc), 32, SrcHeight, CSng(xOnScreen) - 16, CSng(yOnScreen) - SrcHeight
-            If isPowerful And Not (lBlueStarTime < 100 And bStarFrameOn) Then
+            If (lBlueStarTime > 0) And Not (lBlueStarTime < 100 And bStarFrameOn) Then
                 If bMarioFaceRight Then
                     GFX.DrawSurface surfList.MarioWings, IIf(lWingFrameTime > 0, 32, 0), 0, 32, 32, CSng(xOnScreen) - 32, CSng(yOnScreen) - SrcHeight - IIf(bTall, 8, 20)
                 Else
@@ -1030,7 +1030,7 @@ Public Sub DrawOnScreen()
 '            GFX.DrawSurface surfList.Objects, 0, 192, 16, 16, sEquipX - screenLeft, sEquipY - screenTop
 '        End If
 ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-        If bInvinsible Then GFX.DrawSurface surfList.Objects, 22, 64, 48, 45, CSng(xOnScreen) - 24, CSng(yOnScreen) - (SrcHeight / 2) - 22, , , sStarAngle, 50
+        If ((lStarTime > 0) And bStarOffence) Then GFX.DrawSurface surfList.Objects, 22, 64, 48, 45, CSng(xOnScreen) - 24, CSng(yOnScreen) - (SrcHeight / 2) - 22, , , sStarAngle, 50
     End If
 End Sub
 
