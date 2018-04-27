@@ -1,35 +1,5 @@
 use ast::*;
 
-/*
-const __makeArray(lowerIndex, count, makeElem) => {
-    let arr = [];
-    for (let i = 0; i < count; i++) {
-        arr.push(makeElem());
-    }
-
-    return (lookup, write, redim) => {
-        if (typeof redim !== 'undefined') {
-
-        } else if (typeof write !== 'undefined') {
-            arr[lookup - lowerIndex] = write;
-        } else {
-            return arr[lookup - lowerIndex];
-        }
-    };
-};
-
-let arr = __makeArray(1, 5, () => (0));
-
-// "arr(2)" in expression
-arr(2);  
-// "arr(2) = 10"
-arr(2, 10);
-// "ReDim Preserve arr(LocalVar + 1)"
-arr(null, null, {preserve: true, count: (LocalVar + 1)});
-
-
-*/
-
 use std::collections::HashMap;
 
 type TypeLookup<'a> = HashMap<String, &'a Vec<VarDeclaration>>;
@@ -299,8 +269,6 @@ pub fn write_program(program: &Vec<Module>) -> String {
     let type_lookup = collect_types(program);
 
     result.push_str("(() => {\n");
-
-    // TODO: Define __makeArray, True, False
 
     for module in program {
         result.push_str(write_module(module, &type_lookup).as_str());

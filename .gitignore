@@ -1,5 +1,8 @@
 .vs
-/target
 **/*.rs.bk
+target/
+node_modules/
+public/
+package-lock.json
 Thumbs.db
-out.js
+js/generatedGame.js

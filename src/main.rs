@@ -27,13 +27,8 @@ fn load_program() -> Vec<Module> {
         let path_str = path.to_str().unwrap();
 
         if path_str.ends_with(".bas") || path_str.ends_with(".cls") {
-            println!("\n//Loading and parsing module at {}", path_str);
+            println!("// Loading and parsing module at {}", path_str);
             let module = read_file(path_str);
-
-            for block in &module.contents {
-                println!("//  :: {:?}", block);
-            }
-
             result.push(module);
         }
     }
@@ -43,10 +38,7 @@ fn load_program() -> Vec<Module> {
 
 fn main() {
     let program = load_program();
-
-    println!("\n//Done parsing, generating JS...");
-
+    println!("\n// Done parsing, generating JS...");
     let js = write_program(&program);
-
-    println!("\n{}\n//Done!\n", js);
+    println!("\n{}\n// Done!\n", js);
 }
