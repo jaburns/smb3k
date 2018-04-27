@@ -2,7 +2,7 @@
 **/*.rs.bk
 target/
 node_modules/
-public/
+public/bundle.js*
 package-lock.json
 Thumbs.db
 js/game.js

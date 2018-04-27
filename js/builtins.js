@@ -35,11 +35,22 @@ window.__makeArray = (lowerIndex, count, makeElem) => {
 
     return (lookup, write, redim) => {
         if (typeof redim === 'object') {
-            // "ReDim Preserve arr(LocalVar + 1)"
-            //arr(null, null, {preserve: true, count: (LocalVar + 1)});
-        } else if (typeof write !== 'undefined') {
+            const new_arr = [];
+
+            for (let i = 0; i < redim.count; i++) {
+                if (redim.preserve && i < arr.length) {
+                    new_arr.push(arr[i])
+                } else {
+                    new_arr.push(makeElem());
+                }
+            }
+
+            arr = new_arr;
+        } 
+        else if (typeof write !== 'undefined') {
             arr[lookup - lowerIndex] = write;
-        } else {
+        } 
+        else {
             return arr[lookup - lowerIndex];
         }
     };
