@@ -90,11 +90,9 @@ pub enum TopLevelBlock {
 }
 
 #[derive(Debug)]
-pub enum Expression {
+pub struct Expression {
+    pub body: String,
 }
-
-#[derive(Debug)]
-pub struct Argument {}
 
 #[allow(dead_code)]
 #[derive(PartialEq, Eq, Debug)]
@@ -106,16 +104,6 @@ pub enum DoLoopKind {
 #[allow(dead_code)]
 #[derive(Debug)]
 pub enum StatementBlock {
-    OnError,
-
-    Label {
-        name: String,
-    },
-
-    GoTo {
-        label_name: String,
-    },
-
     Dim {
         declaration: VarDeclaration,
     },
@@ -133,7 +121,7 @@ pub enum StatementBlock {
 
     CallSub {
         name: String,
-        args: Vec<Argument>,
+        args: Vec<Expression>,
     },
 
     IfBlock {
@@ -164,7 +152,7 @@ pub enum StatementBlock {
 
     FileOperation,
 
-    Unknown {
-        source: String,
-    },
+    Unknown(Expression),
+
+    Empty,
 }

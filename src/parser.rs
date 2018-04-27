@@ -318,22 +318,39 @@ fn end_function() -> Parser<'static, u8, ()> {
 }
 
 fn statement() -> Parser<'static, u8, StatementBlock> {
-    !end_function() * (
-        on_error_statement() | dim_statement() | unknown_statement()
-    )
+    let matched = on_error_statement() | dim_statement() | assignment_statement()
+        | label_statement() | unknown_statement();
+
+    !end_function() * matched
 }
 
 fn on_error_statement() -> Parser<'static, u8, StatementBlock> {
-    (seq(b"On Error") - none_of(b"`").repeat(0..)).map(|_| StatementBlock::OnError)
+    (seq(b"On Error") - none_of(b"`").repeat(0..)).map(|_| StatementBlock::Empty)
+}
+
+fn label_statement() -> Parser<'static, u8, StatementBlock> {
+    (word() * sym(b':')).map(|_| StatementBlock::Empty)
 }
 
 fn dim_statement() -> Parser<'static, u8, StatementBlock> {
     (seq(b"Dim") * space() * var_decl()).map(|v| StatementBlock::Dim { declaration: v })
 }
 
-fn unknown_statement() -> Parser<'static, u8, StatementBlock> {
+fn assignment_statement() -> Parser<'static, u8, StatementBlock> {
+    let matched = word() - space() - sym(b'=') - space() + expression();
+    matched.map(|(to, exp)| StatementBlock::Assignment {
+        to_name: to,
+        value: exp,
+    })
+}
+
+fn expression() -> Parser<'static, u8, Expression> {
     none_of(b"`")
         .repeat(0..)
         .convert(String::from_utf8)
-        .map(|x| StatementBlock::Unknown { source: x })
+        .map(|x| Expression { body: x })
+}
+
+fn unknown_statement() -> Parser<'static, u8, StatementBlock> {
+    expression().map(|x| StatementBlock::Unknown(x))
 }

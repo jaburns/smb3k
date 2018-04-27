@@ -76,6 +76,10 @@ fn join_lines(lines: &Vec<String>) -> String {
         .fold(String::new(), |acc, line| acc + "\n" + line) + "\n"
 }
 
+fn translate_expression(expression: &Expression) -> String {
+    expression.body.clone()
+}
+
 fn write_function_body(body: &Vec<StatementBlock>, type_lookup: &TypeLookup) -> String {
     let mut result = String::new();
 
@@ -83,15 +87,20 @@ fn write_function_body(body: &Vec<StatementBlock>, type_lookup: &TypeLookup) -> 
         match s {
             StatementBlock::Dim { declaration } => {
                 result.push_str(write_let(declaration, type_lookup).as_str());
-                result.push_str("\n");
             }
-            StatementBlock::Unknown { source } => {
+            StatementBlock::Assignment { to_name, value } => {
+                result.push_str(to_name);
+                result.push_str(" = ");
+                result.push_str(translate_expression(value).as_str());
+                result.push_str(";");
+            }
+            StatementBlock::Unknown(Expression { body }) => {
                 result.push_str("// ");
-                result.push_str(source.as_str());
-                result.push_str("\n");
+                result.push_str(body.as_str());
             }
             _ => {}
         }
+        result.push_str("\n");
     }
 
     result
@@ -101,7 +110,7 @@ fn write_function(
     is_async: bool,
     params: &Vec<FunctionParam>,
     body: &Vec<StatementBlock>,
-    type_lookup: &TypeLookup
+    type_lookup: &TypeLookup,
 ) -> String {
     let mut result = String::new();
 
