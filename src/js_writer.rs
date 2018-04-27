@@ -12,8 +12,6 @@ fn write_let(decl: &VarDeclaration, type_lookup: &TypeLookup) -> String {
     )
 }
 
-// TODO default value for enum is not set correctly, nor default value for class reference.
-// Probably we can just set unknowns to 0 and it will work.
 fn write_default_value(decl_kind: &VarKind, type_name: &str, type_lookup: &TypeLookup) -> String {
     match decl_kind {
         VarKind::AutoInstantiate => format!("new_{}()", type_name),
@@ -38,7 +36,7 @@ fn write_default_value(decl_kind: &VarKind, type_name: &str, type_lookup: &TypeL
 
 fn write_default_object(type_name: &str, type_lookup: &TypeLookup) -> String {
     if !type_lookup.contains_key(type_name) {
-        return String::from("{}");
+        return String::from("0");
     }
 
     let mut result = String::from("{");
@@ -136,8 +134,6 @@ fn write_module(module: &Module, type_lookup: &TypeLookup) -> String {
     let mut post_header: Vec<String> = Vec::new();
     let mut return_block: Vec<String> = Vec::new();
     let mut post_footer: Vec<String> = Vec::new();
-
-    // TODO call Class_Initialize and Class_Terminate if they exist
 
     for block in &module.contents {
         match block {
@@ -239,6 +235,9 @@ fn write_module(module: &Module, type_lookup: &TypeLookup) -> String {
                         name.as_str(),
                         write_function(*is_async, params, body).as_str()
                     ));
+                    if module.is_class && name == "Class_Initialize" {
+                        post_header.push(String::from("Class_Initialize();"));
+                    }
                 }
             },
 
