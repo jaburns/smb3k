@@ -209,41 +209,40 @@ fn write_module(module: &Module, type_lookup: &TypeLookup) -> String {
                 params,
                 body,
                 ..
-            } => match access_level {
-                AccessLevel::Public => {
-                    if *kind == FunctionKind::PropertyGet && params.len() > 0 {
-                        return_block.push(format!(
-                            "get {}() {{ {} }},",
-                            name.as_str(),
-                            write_function_body(body).as_str()
-                        ));
-                    } else {
-                        return_block.push(format!(
-                            "{}: {},",
-                            name.as_str(),
-                            write_function(*is_async, params, body).as_str()
-                        ));
-                    }
-
-                    if !module.is_class {
-                        post_footer.push(format!(
-                            "const {0} = module_{1}.{0};",
-                            name.as_str(),
-                            module.name.as_str()
-                        ));
-                    }
-                }
-                AccessLevel::Private => {
+            } => {
+                if *access_level == AccessLevel::Public && *kind == FunctionKind::PropertyGet
+                    && params.len() == 0
+                {
+                    // This is inaccessible to the class it is defined in. Unsure if this is a problem yet.
+                    return_block.push(format!(
+                        "get {}() {{ {} }},",
+                        name.as_str(),
+                        write_function_body(body).as_str()
+                    ));
+                } else {
                     post_header.push(format!(
                         "const {} = {};",
                         name.as_str(),
                         write_function(*is_async, params, body).as_str()
                     ));
+
                     if module.is_class && name == "Class_Initialize" {
                         post_header.push(String::from("Class_Initialize();"));
                     }
+
+                    if *access_level == AccessLevel::Public {
+                        return_block.push(format!("{},", name.as_str()));
+
+                        if !module.is_class {
+                            post_footer.push(format!(
+                                "const {0} = module_{1}.{0};",
+                                name.as_str(),
+                                module.name.as_str()
+                            ));
+                        }
+                    }
                 }
-            },
+            }
 
             _ => {}
         }
