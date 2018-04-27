@@ -176,17 +176,19 @@ fn function_param_list() -> Parser<'static, u8, Vec<FunctionParam>> {
 }
 
 fn function_decl() -> Parser<'static, u8, TopLevelBlock> {
+    let maybe_async = (seq(b"Async") - space()).opt();
     let access_and_kind = access_level() - space() + function_kind_keyword() - space();
     let name_and_params = word() - space() + function_param_list() - space();
     let maybe_return_type = ((seq(b"As") - space()) * word() - space()).opt();
 
-    let header = (access_and_kind + name_and_params) + maybe_return_type - sym(b'`');
+    let header = ((maybe_async + access_and_kind) + name_and_params) + maybe_return_type - sym(b'`');
     let body_lines = list(statement(), sym(b'`'));
     let matched = header + body_lines - sym(b'`') - end_function();
 
-    matched.map(|((((a, k), (n, p)), r), b)| TopLevelBlock::Function {
+    matched.map(|((((async, (a, k)), (n, p)), r), b)| TopLevelBlock::Function {
         access_level: a.unwrap(),
         kind: k.unwrap(),
+        is_async: async.is_some(),
         name: n,
         params: p,
         return_type: r.unwrap_or(String::new()),

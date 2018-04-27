@@ -4,7 +4,7 @@ module.exports = {
     context: __dirname,
     devtool: 'source-map',
     mode: 'production',
-    entry: './js/index.js',
+    entry: ['babel-polyfill', './js/index.js'],
     output: {
         path: __dirname+'/public',
         filename: 'bundle.js'

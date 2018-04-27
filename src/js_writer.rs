@@ -90,8 +90,13 @@ fn write_function_body(body: &Vec<StatementBlock>) -> String {
     String::new()
 }
 
-fn write_function(params: &Vec<FunctionParam>, body: &Vec<StatementBlock>) -> String {
+fn write_function(is_async: bool, params: &Vec<FunctionParam>, body: &Vec<StatementBlock>) -> String {
     let mut result = String::new();
+
+    if is_async {
+        result.push_str("async ");
+    }
+
     result.push_str("(");
 
     if params.len() > 0 {
@@ -192,6 +197,7 @@ fn write_module(module: &Module, type_lookup: &TypeLookup) -> String {
             TopLevelBlock::Function {
                 access_level,
                 kind,
+                is_async,
                 name,
                 params,
                 body,
@@ -208,7 +214,7 @@ fn write_module(module: &Module, type_lookup: &TypeLookup) -> String {
                         return_block.push(format!(
                             "{}: {},",
                             name.as_str(),
-                            write_function(params, body).as_str()
+                            write_function(*is_async, params, body).as_str()
                         ));
                     }
 
@@ -224,7 +230,7 @@ fn write_module(module: &Module, type_lookup: &TypeLookup) -> String {
                     post_header.push(format!(
                         "const {} = {};",
                         name.as_str(),
-                        write_function(params, body).as_str()
+                        write_function(*is_async, params, body).as_str()
                     ));
                 }
             },

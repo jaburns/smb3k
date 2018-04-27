@@ -79,6 +79,7 @@ pub enum TopLevelBlock {
     Function {
         access_level: AccessLevel,
         kind: FunctionKind,
+        is_async: bool,
         name: String,
         params: Vec<FunctionParam>,
         return_type: String,
