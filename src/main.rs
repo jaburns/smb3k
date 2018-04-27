@@ -6,6 +6,7 @@ mod parser;
 
 use std::fs::*;
 use std::io::prelude::*;
+use std::io::{BufWriter, Write};
 
 use ast::*;
 use js_writer::*;
@@ -27,7 +28,6 @@ fn load_program() -> Vec<Module> {
         let path_str = path.to_str().unwrap();
 
         if path_str.ends_with(".bas") || path_str.ends_with(".cls") {
-            println!("// Loading and parsing module at {}", path_str);
             let module = read_file(path_str);
             result.push(module);
         }
@@ -37,8 +37,22 @@ fn load_program() -> Vec<Module> {
 }
 
 fn main() {
+    println!("\nLoading and parsing VB6 program...");
     let program = load_program();
-    println!("\n// Done parsing, generating JS...");
+
+    println!("Done parsing, generating JS...");
     let js = write_program(&program);
-    println!("\n{}\n// Done!\n", js);
+
+
+    let file = OpenOptions::new()
+        .write(true)
+        .truncate(true)
+        .create(true)
+        .open("js/game.js")
+        .expect("Failed to open output file for writing!");
+
+    let mut f = BufWriter::new(file);
+    f.write_all(js.as_bytes()).expect("Failed to write to output file!");
+
+    println!("Done!\n");
 }

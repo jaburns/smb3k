@@ -5,4 +5,4 @@ node_modules/
 public/
 package-lock.json
 Thumbs.db
-js/generatedGame.js
+js/game.js
