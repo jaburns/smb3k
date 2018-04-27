@@ -93,7 +93,11 @@ fn write_function_body(body: &Vec<StatementBlock>) -> String {
     result
 }
 
-fn write_function(is_async: bool, params: &Vec<FunctionParam>, body: &Vec<StatementBlock>) -> String {
+fn write_function(
+    is_async: bool,
+    params: &Vec<FunctionParam>,
+    body: &Vec<StatementBlock>,
+) -> String {
     let mut result = String::new();
 
     if is_async {

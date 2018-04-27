@@ -51,7 +51,8 @@ fn main() {
         .expect("Failed to open output file for writing!");
 
     let mut f = BufWriter::new(file);
-    f.write_all(js.as_bytes()).expect("Failed to write to output file!");
+    f.write_all(js.as_bytes())
+        .expect("Failed to write to output file!");
 
     println!("Done!\n");
 }
