@@ -219,7 +219,7 @@ End Sub
 
 
 
-Public Sub UpdatePosition()
+Async Public Sub UpdatePosition()
 
     If yPos >= GetLevelHeight + 64 Then
         bAlive = False
@@ -352,7 +352,7 @@ End Sub
 
 
 
-Private Sub HandlePiping()
+Async Private Sub HandlePiping()
 Dim tTypeA As udeLTileType
 Dim tTypeB As udeLTileType
 Dim tTag As udeLTileTag

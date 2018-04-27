@@ -22,7 +22,7 @@ Public frmMain_hWnd As Long
 '
 ' this is where the game starts and ends
 '
-Public Sub __main__()
+Async Public Sub __main__()
     frmMain_hWnd = 1337
 
     KillInput
@@ -65,7 +65,7 @@ End Sub
 '
 ' this is the main loop of the game
 '
-Private Sub MainLoop()
+Async Private Sub MainLoop()
 Dim bHasChangedWorlds As Boolean
 Dim lEscapeCount As Long
 Dim i As Long
@@ -248,7 +248,7 @@ End Sub
 
 
 'is true if returaning to game
-Private Function ShowLoadGameScreen(bFirstRun As Boolean) As Boolean
+Async Private Function ShowLoadGameScreen(bFirstRun As Boolean) As Boolean
 Dim i As Long
 Dim u As Long
 Dim curSel As Long

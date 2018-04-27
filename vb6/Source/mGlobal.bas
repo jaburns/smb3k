@@ -391,7 +391,7 @@ End Sub
 
 
 
-Public Sub ShowBlackTextScreen(sText As String)
+Async Public Sub ShowBlackTextScreen(sText As String)
 Dim i As Long
     GFX.SetFont "Courier New", 16, True, False, False, False
     For i = 100 To 0 Step -4

@@ -43,7 +43,7 @@ Public mapExitToLoadGame As Boolean
 
 
 
-Public Function ShowWorldMap(lWorld As Long, Optional ByVal startNode As Long = -1) As Long
+Async Public Function ShowWorldMap(lWorld As Long, Optional ByVal startNode As Long = -1) As Long
 Dim i As Long
 Dim u As Long
 Dim testTag As Byte
@@ -299,7 +299,7 @@ End Sub
 
 
 
-Private Sub showFadeOut(Optional ByVal insideScene As Boolean = True)
+Async Private Sub showFadeOut(Optional ByVal insideScene As Boolean = True)
 Dim i As Long
     If insideScene Then GFX.EndScene
     If bTimingTime Then
@@ -329,7 +329,7 @@ Dim i As Long
     If insideScene Then GFX.BeginScene 25
 End Sub
 
-Private Sub showFadeIn(Optional ByVal insideScene As Boolean = True)
+Async Private Sub showFadeIn(Optional ByVal insideScene As Boolean = True)
 Dim i As Long
     If insideScene Then GFX.EndScene
     For i = 100 To 0 Step -4
@@ -373,7 +373,7 @@ End Function
 
 
 
-Private Sub showSaveScreen(Optional ByVal insideScene As Boolean = True)
+Async Private Sub showSaveScreen(Optional ByVal insideScene As Boolean = True)
 Dim i As Long
 Dim u As Long
 Dim curSel As Long

@@ -56,7 +56,7 @@ Public layer3sinusoid As Boolean
 Public layer3maximum As Long
 
 
-Public Sub MainGameLoop(sMusic As String, lX As Long, lY As Long, lInTime As Long, startPipe As udeMarioPipeStat)
+Async Public Sub MainGameLoop(sMusic As String, lX As Long, lY As Long, lInTime As Long, startPipe As udeMarioPipeStat)
 
     Set Mario = New ocMario
     Mario.bAlive = True
@@ -302,7 +302,7 @@ End Sub
 '    GFX.DrawSurface surfList.PowerStar, powerStarX, powerStarY, 48, 48, 50, 50
 'End Sub
 
-Private Sub ShowMarioDie()
+Async Private Sub ShowMarioDie()
 Dim offsetY As Single
 Dim ySpeed As Single
 
@@ -335,7 +335,7 @@ End Sub
 
 
 
-Private Sub ShowMarioWin(Optional ByVal bQuickExit As Boolean = False)
+Async Private Sub ShowMarioWin(Optional ByVal bQuickExit As Boolean = False)
 Dim lGrowth As Long
 Dim bDone As Boolean
 Dim sRiseSpeed As Single
@@ -493,7 +493,7 @@ End Sub
 
 
 
-Private Sub showFadeOut(Optional ByVal insideScene As Boolean = True)
+Async Private Sub showFadeOut(Optional ByVal insideScene As Boolean = True)
 Dim i As Long
     If insideScene Then GFX.EndScene
     For i = 0 To 100 Step 4
@@ -510,7 +510,7 @@ Dim i As Long
     If insideScene Then GFX.BeginScene 25
 End Sub
 
-Private Sub showFadeIn(Optional ByVal insideScene As Boolean = True)
+Async Private Sub showFadeIn(Optional ByVal insideScene As Boolean = True)
 Dim i As Long
     If insideScene Then GFX.EndScene
     Mario.UpdatePosition
@@ -529,7 +529,7 @@ End Sub
 
 
 
-Private Sub PauseGame()
+Async Private Sub PauseGame()
 Dim sAngle As Single
 Dim sFactor As Single
 Dim lEscapeCount As Long
