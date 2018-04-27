@@ -268,14 +268,17 @@ pub fn write_program(program: &Vec<Module>) -> String {
 
     let type_lookup = collect_types(program);
 
-    result.push_str("(() => {\n");
-
-    for module in program {
+    for module in program.iter().filter(|x| x.is_class) {
         result.push_str(write_module(module, &type_lookup).as_str());
         result.push_str("\n");
     }
 
-    result.push_str("__main__();\n})();");
+    for module in program.iter().filter(|x| !x.is_class) {
+        result.push_str(write_module(module, &type_lookup).as_str());
+        result.push_str("\n");
+    }
+
+    result.push_str("module.exports = __main__;\n");
 
     result
 }

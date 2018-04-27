@@ -4,7 +4,7 @@ module.exports = {
     context: __dirname,
     devtool: 'source-map',
     mode: 'production',
-    entry: './js/engine.js',
+    entry: './js/index.js',
     output: {
         path: __dirname+'/public',
         filename: 'bundle.js'
@@ -17,5 +17,5 @@ module.exports = {
                 options: {presets: ['babel-preset-env']}
             }
         }]
-    },
+    }
 };

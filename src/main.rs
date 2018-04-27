@@ -43,7 +43,6 @@ fn main() {
     println!("Done parsing, generating JS...");
     let js = write_program(&program);
 
-
     let file = OpenOptions::new()
         .write(true)
         .truncate(true)
