@@ -77,13 +77,10 @@ Dim i As Long
     lSaveTime = 0
     LoadWorldList
     LoadBlankWorldPassInfo
-    
-returnToVeryTop:
-    
+
     If Not ShowLoadGameScreen(True) Then Exit Sub
-    
-returnToTop:
-    
+
+Do
     Do
         If levelReturnValue <> lvrPipe Then
             Do
@@ -166,8 +163,7 @@ returnToTop:
         bGameOver = False
     End If
     
-    If mapExitToLoadGame And ShowLoadGameScreen(False) Then GoTo returnToTop Else Exit Sub
-    GoTo returnToVeryTop
+Loop While mapExitToLoadGame And ShowLoadGameScreen(False)
     
 End Sub
 

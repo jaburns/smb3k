@@ -191,26 +191,27 @@ End With
 End Function
 
 Public Sub LoadControlsFromFile(ByVal sPath As String)
-On Error GoTo errOut
-Dim fFile As Long
-fFile = FreeFile
-Open sPath For Input As fFile
-Close fFile
-Open sPath For Binary Access Read Lock Write As fFile
-Get #fFile, 1, oControlData
-Close fFile
-GoTo endNoErr
-errOut:
-Close fFile
+'On Error GoTo errOut
+'Dim fFile As Long
+'fFile = FreeFile
+'Open sPath For Input As fFile
+'Close fFile
+'Open sPath For Binary Access Read Lock Write As fFile
+'Get #fFile, 1, oControlData
+'Close fFile
+'GoTo endNoErr
+'errOut:
+'Close fFile
 SetDefaultControls
-endNoErr:
+'endNoErr:
 End Sub
 
 Public Sub SaveControlsToFile(ByVal sPath As String)
-Dim fFile As Long
-fFile = FreeFile
-Open sPath For Binary Access Write Lock Read Write As fFile
-Put #fFile, 1, oControlData
-Close fFile
+Dim i As Long
+'Dim fFile As Long
+'fFile = FreeFile
+'Open sPath For Binary Access Write Lock Read Write As fFile
+'Put #fFile, 1, oControlData
+'Close fFile
 End Sub
 
