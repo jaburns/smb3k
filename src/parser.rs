@@ -8,6 +8,120 @@ enum BlockParseResult {
     EOF,
 }
 
+pub fn parse_module(contents: &str) -> Module {
+    let mut trimmed_lines: Vec<String> = contents
+        .lines()
+        .map(|x| without_comments(x).trim())
+        .filter_map(|x| {
+            if x.len() > 0 {
+                Some(String::from(x))
+            } else {
+                None
+            }
+        })
+        .collect();
+
+    trimmed_lines.push(String::from("__EOF__"));
+
+    let tick_seperated_contents = trimmed_lines.join("`");
+    let mut input = DataInput::new(tick_seperated_contents.as_bytes());
+
+    let maybe_block_parse_results = do_parse().parse(&mut input);
+
+    let mut results: Vec<TopLevelBlock> = Vec::new();
+    let mut found_eof = false;
+    for parse_result in maybe_block_parse_results.expect("Failed to parse! Parser result was Err") {
+        match parse_result {
+            BlockParseResult::Block(b) => {
+                results.push(b);
+            }
+            BlockParseResult::ParseFail(s) => {
+                panic!("Failed to parse! Remaining:\n\n{}\n\n", s);
+            }
+            BlockParseResult::EOF => {
+                found_eof = true;
+            }
+        }
+    }
+
+    if !found_eof {
+        panic!("Failed to parse! A parser was likely partially matched.\n\n");
+    }
+
+    Module {
+        name: find_module_name(&results),
+        is_class: is_module_class(&results),
+        contents: results,
+    }
+}
+
+fn without_comments(line: &str) -> &str {
+    match line.find("'") {
+        Some(pos) => &line[..pos],
+        None => line,
+    }
+}
+
+fn is_module_class(blocks: &Vec<TopLevelBlock>) -> bool {
+    blocks
+        .iter()
+        .find(|ref x| match x {
+            TopLevelBlock::ClassMarker => true,
+            _ => false,
+        })
+        .is_some()
+}
+
+fn find_module_name(blocks: &Vec<TopLevelBlock>) -> String {
+    for item in blocks {
+        match item {
+            &TopLevelBlock::Attribute {
+                ref name,
+                ref value,
+            } => {
+                if name == "VB_Name" {
+                    return value.clone();
+                }
+            }
+            _ => {}
+        };
+    }
+
+    panic!("Failed to parse! Module had no name.");
+}
+
+fn do_parse() -> Parser<'static, u8, Vec<BlockParseResult>> {
+    list(top_level_block(), sym(b'`'))
+}
+
+fn top_level_block() -> Parser<'static, u8, BlockParseResult> {
+    let block_matches = option_decl() | attribute_decl() | ignored_header_decl()
+        | class_marker_decl() | function_decl() | type_decl() | enum_decl()
+        | const_decl() | top_field_decl();
+
+    block_matches.map(BlockParseResult::Block) | match_eof()
+        | none_of(b"")
+            .repeat(0..)
+            .convert(String::from_utf8)
+            .map(BlockParseResult::ParseFail)
+}
+
+fn ignored_header_decl() -> Parser<'static, u8, TopLevelBlock> {
+    (seq(b"BEGIN") * none_of(b"E").repeat(0..) * seq(b"END")).map(|_| TopLevelBlock::Empty)
+}
+
+fn class_marker_decl() -> Parser<'static, u8, TopLevelBlock> {
+    seq(b"VERSION 1.0 CLASS").map(|_| TopLevelBlock::ClassMarker)
+}
+
+fn option_decl() -> Parser<'static, u8, TopLevelBlock> {
+    seq(b"Option Explicit").map(|_| TopLevelBlock::Empty)
+}
+
+fn match_eof() -> Parser<'static, u8, BlockParseResult> {
+    seq(b"__EOF__").map(|_| BlockParseResult::EOF)
+}
+
 fn space() -> Parser<'static, u8, ()> {
     one_of(b" \t\r\n").repeat(0..).discard()
 }
@@ -203,124 +317,23 @@ fn end_function() -> Parser<'static, u8, ()> {
     (seq(b"End Sub") | seq(b"End Function") | seq(b"End Property")).discard()
 }
 
-fn ignored_header_decl() -> Parser<'static, u8, TopLevelBlock> {
-    (seq(b"BEGIN") * none_of(b"E").repeat(0..) * seq(b"END")).map(|_| TopLevelBlock::Empty)
-}
-
-fn class_marker_decl() -> Parser<'static, u8, TopLevelBlock> {
-    seq(b"VERSION 1.0 CLASS").map(|_| TopLevelBlock::ClassMarker)
-}
-
-fn option_decl() -> Parser<'static, u8, TopLevelBlock> {
-    seq(b"Option Explicit").map(|_| TopLevelBlock::Empty)
-}
-
 fn statement() -> Parser<'static, u8, StatementBlock> {
-    !end_function()
-        * none_of(b"`")
-            .repeat(0..)
-            .convert(String::from_utf8)
-            .map(|x| StatementBlock::Unknown { source: x })
+    !end_function() * (
+        on_error_statement() | dim_statement() | unknown_statement()
+    )
 }
 
-fn match_eof() -> Parser<'static, u8, BlockParseResult> {
-    seq(b"__EOF__").map(|_| BlockParseResult::EOF)
+fn on_error_statement() -> Parser<'static, u8, StatementBlock> {
+    (seq(b"On Error") - none_of(b"`").repeat(0..)).map(|_| StatementBlock::OnError)
 }
 
-fn top_level_block() -> Parser<'static, u8, BlockParseResult> {
-    let block_matches = option_decl() | attribute_decl() | ignored_header_decl()
-        | class_marker_decl() | function_decl() | type_decl() | enum_decl()
-        | const_decl() | top_field_decl();
-
-    block_matches.map(BlockParseResult::Block) | match_eof()
-        | none_of(b"")
-            .repeat(0..)
-            .convert(String::from_utf8)
-            .map(BlockParseResult::ParseFail)
+fn dim_statement() -> Parser<'static, u8, StatementBlock> {
+    (seq(b"Dim") * space() * var_decl()).map(|v| StatementBlock::Dim { declaration: v })
 }
 
-fn do_parse() -> Parser<'static, u8, Vec<BlockParseResult>> {
-    list(top_level_block(), sym(b'`'))
-}
-
-fn without_comments(line: &str) -> &str {
-    match line.find("'") {
-        Some(pos) => &line[..pos],
-        None => line,
-    }
-}
-
-fn is_module_class(blocks: &Vec<TopLevelBlock>) -> bool {
-    blocks
-        .iter()
-        .find(|ref x| match x {
-            TopLevelBlock::ClassMarker => true,
-            _ => false,
-        })
-        .is_some()
-}
-
-fn find_module_name(blocks: &Vec<TopLevelBlock>) -> String {
-    for item in blocks {
-        match item {
-            &TopLevelBlock::Attribute {
-                ref name,
-                ref value,
-            } => {
-                if name == "VB_Name" {
-                    return value.clone();
-                }
-            }
-            _ => {}
-        };
-    }
-
-    panic!("Failed to parse! Module had no name.");
-}
-
-pub fn parse_module(contents: &str) -> Module {
-    let mut trimmed_lines: Vec<String> = contents
-        .lines()
-        .map(|x| without_comments(x).trim())
-        .filter_map(|x| {
-            if x.len() > 0 {
-                Some(String::from(x))
-            } else {
-                None
-            }
-        })
-        .collect();
-
-    trimmed_lines.push(String::from("__EOF__"));
-
-    let tick_seperated_contents = trimmed_lines.join("`");
-    let mut input = DataInput::new(tick_seperated_contents.as_bytes());
-
-    let maybe_block_parse_results = do_parse().parse(&mut input);
-
-    let mut results: Vec<TopLevelBlock> = Vec::new();
-    let mut found_eof = false;
-    for parse_result in maybe_block_parse_results.expect("Failed to parse! Parser result was Err") {
-        match parse_result {
-            BlockParseResult::Block(b) => {
-                results.push(b);
-            }
-            BlockParseResult::ParseFail(s) => {
-                panic!("Failed to parse! Remaining:\n\n{}\n\n", s);
-            }
-            BlockParseResult::EOF => {
-                found_eof = true;
-            }
-        }
-    }
-
-    if !found_eof {
-        panic!("Failed to parse! A parser was likely partially matched.\n\n");
-    }
-
-    Module {
-        name: find_module_name(&results),
-        is_class: is_module_class(&results),
-        contents: results,
-    }
+fn unknown_statement() -> Parser<'static, u8, StatementBlock> {
+    none_of(b"`")
+        .repeat(0..)
+        .convert(String::from_utf8)
+        .map(|x| StatementBlock::Unknown { source: x })
 }

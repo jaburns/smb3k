@@ -76,11 +76,15 @@ fn join_lines(lines: &Vec<String>) -> String {
         .fold(String::new(), |acc, line| acc + "\n" + line) + "\n"
 }
 
-fn write_function_body(body: &Vec<StatementBlock>) -> String {
+fn write_function_body(body: &Vec<StatementBlock>, type_lookup: &TypeLookup) -> String {
     let mut result = String::new();
 
     for s in body {
         match s {
+            StatementBlock::Dim { declaration } => {
+                result.push_str(write_let(declaration, type_lookup).as_str());
+                result.push_str("\n");
+            }
             StatementBlock::Unknown { source } => {
                 result.push_str("// ");
                 result.push_str(source.as_str());
@@ -97,6 +101,7 @@ fn write_function(
     is_async: bool,
     params: &Vec<FunctionParam>,
     body: &Vec<StatementBlock>,
+    type_lookup: &TypeLookup
 ) -> String {
     let mut result = String::new();
 
@@ -126,7 +131,7 @@ fn write_function(
         }
     }
 
-    result.push_str(write_function_body(body).as_str());
+    result.push_str(write_function_body(body, type_lookup).as_str());
 
     result.push_str("}");
 
@@ -216,13 +221,13 @@ fn write_module(module: &Module, type_lookup: &TypeLookup) -> String {
                     return_block.push(format!(
                         "get {}() {{ {} }},",
                         name.as_str(),
-                        write_function_body(body).as_str()
+                        write_function_body(body, type_lookup).as_str()
                     ));
                 } else {
                     post_header.push(format!(
                         "const {} = {};",
                         name.as_str(),
-                        write_function(*is_async, params, body).as_str()
+                        write_function(*is_async, params, body, type_lookup).as_str()
                     ));
 
                     if module.is_class && name == "Class_Initialize" {
