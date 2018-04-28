@@ -62,13 +62,13 @@ Public Sub HandleBall()
     If ySpeed > 0 Then
         If isTileSolid(CLng(xPos), CLng(yPos) + 8, True) Then
             If TestToDestroyBlock(xPos, yPos + 8) Then DestroyMe
-            yPos = ((yPos \ 32) * 32) + 24
+            yPos = (__intDiv(yPos , 32) * 32) + 24
             ySpeed = -12
         End If
     Else
         If isTileSolid(CLng(xPos), CLng(yPos) - 8) Then
             If TestToDestroyBlock(xPos, yPos - 8) Then DestroyMe
-            yPos = ((yPos \ 32) * 32) + 8
+            yPos = (__intDiv(yPos , 32) * 32) + 8
             If ySpeed < 0 Then ySpeed = -ySpeed
         End If
     End If
@@ -93,9 +93,9 @@ End Sub
 
 Private Function TestToDestroyBlock(sX As Single, sY As Single) As Boolean
     TestToDestroyBlock = False
-    If GetTileEnemy(sX \ 32, sY \ 32) = OBJFIRETILE Then
+    If GetTileEnemy(__intDiv(sX , 32), __intDiv(sY , 32)) = OBJFIRETILE Then
         KillTile CLng(sX), CLng(sY)
-        BreakBrick (sX \ 32) * 32 + 16, (sY \ 32) * 32 + 16
+        BreakBrick __intDiv(sX , 32) * 32 + 16, __intDiv(sY , 32) * 32 + 16
         PlaySound Sounds.BreakBrick
         TestToDestroyBlock = True
     End If

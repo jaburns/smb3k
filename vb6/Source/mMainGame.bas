@@ -449,8 +449,8 @@ Dim i As Long
     
     If Not bDisableTime Then
         timeWidth = ((lTime - (lTimeIncCount / 30)) / lMaxTime) * 640
-        For i = 0 To (timeWidth \ 64)
-            If i = (timeWidth \ 64) Then
+        For i = 0 To __intDiv(timeWidth , 64)
+            If i = __intDiv(timeWidth , 64) Then
                 GFX.DrawSurface surfList.BarIcons, 64, 32, timeWidth Mod 64, 16, i * 64, 0
             Else
                 GFX.DrawSurface surfList.BarIcons, 64, 32, 64, 16, i * 64, 0

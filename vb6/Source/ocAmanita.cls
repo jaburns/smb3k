@@ -89,7 +89,7 @@ Dim yDraw As Single
     
     If Not isReserved Then
         If isTileSolid(CLng(xPos), CLng(yPos), True) Then
-            yPos = ((yPos \ 32) * 32)
+            yPos = (__intDiv(yPos , 32) * 32)
             ySpeed = 0
         End If
     End If

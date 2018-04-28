@@ -72,8 +72,8 @@ Dim tTag As udeLTileTag
     bGoombossOn = False
     
     Mario.SetAlwaysSwimming False, 0
-    For X = 0 To (GetLevelWidth \ 32)
-        For Y = 0 To (GetLevelHeight \ 32)
+    For X = 0 To __intDiv(GetLevelWidth , 32)
+        For Y = 0 To __intDiv(GetLevelHeight , 32)
             tEnemy = GetTileEnemy(X, Y)
             tType = GetTile(X, Y)
             tTag = GetTileTagAtPoint(X * 32, Y * 32)
@@ -459,7 +459,7 @@ Dim i As Long
     hitHiddenBlock = False
     For i = 1 To UBound(zoHiddenTile)
         If Not zoHiddenTile(i).bHit Then
-            If lX \ 32 = zoHiddenTile(i).xPos And lY \ 32 = zoHiddenTile(i).yPos Then
+            If __intDiv(lX , 32) = zoHiddenTile(i).xPos And __intDiv(lY , 32) = zoHiddenTile(i).yPos Then
                 SetTileEnemy lX, lY, NO_ENEMY
                 zoHiddenTile(i).bHit = True
                 hitHiddenBlock = True

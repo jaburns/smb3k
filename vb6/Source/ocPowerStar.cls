@@ -62,12 +62,12 @@ Public Sub HandleStar()
     
     If ySpeed > 0 Then
         If isTileSolid(CLng(xPos), CLng(yPos), True) Then
-            yPos = ((yPos \ 32) * 32)
+            yPos = (__intDiv(yPos , 32) * 32)
             ySpeed = -7
         End If
     Else
         If isTileSolid(CLng(xPos), CLng(yPos) - 32) Then
-            yPos = ((yPos \ 32) * 32) + 32
+            yPos = (__intDiv(yPos , 32) * 32) + 32
             If ySpeed < 0 Then ySpeed = -ySpeed
         End If
     End If

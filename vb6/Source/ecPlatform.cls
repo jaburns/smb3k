@@ -69,7 +69,7 @@ Dim i As Long
         If .yPos >= yPos - lDefaultSpeed And .yPos < yPos + 16 And .ySpeed >= 0 Then
         
             If xSpeed = 0 And ySpeed = 0 And bStopped = False Then
-                tType = GetTileEnemy((xPos + 48) \ 32, (yPos + 16) \ 32)
+                tType = GetTileEnemy(__intDiv((xPos + 48) , 32), __intDiv((yPos + 16) , 32))
                 If tType = OBJPLATFORMLEFT Then
                     xSpeed = -lDefaultSpeed
                 ElseIf tType = OBJPLATFORMUP Then
@@ -108,7 +108,7 @@ Dim tTile As udeLTileEnemy
     If xSpeed Then
         
         If xSpeed > 0 Then sOff = sWidth + lDefaultSpeed Else sOff = -lDefaultSpeed
-        tTile = GetTileEnemy((xPos + sOff) \ 32, (yPos + 16) \ 32)
+        tTile = GetTileEnemy(__intDiv((xPos + sOff) , 32), __intDiv((yPos + 16) , 32))
         Select Case tTile
             Case OBJPLATFORMRIGHT
                 xSpeed = lDefaultSpeed
@@ -133,7 +133,7 @@ Dim tTile As udeLTileEnemy
     
         If ySpeed > 0 Then sOff = 32 + lDefaultSpeed Else sOff = -lDefaultSpeed
         For i = 0 To (sSize + 1)
-            tTile = GetTileEnemy((xPos + 16 + (i * 32)) \ 32, (yPos + sOff) \ 32)
+            tTile = GetTileEnemy(__intDiv((xPos + 16 + (i * 32)) , 32), __intDiv((yPos + sOff) , 32))
             Select Case tTile
                 Case OBJPLATFORMRIGHT
                     xSpeed = lDefaultSpeed

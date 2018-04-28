@@ -303,7 +303,7 @@ Async Public Sub UpdatePosition()
     If Not bSwimming And bTall Then bSwimming = GetTileAtPoint(CLng(xPos), CLng(yPos) - 52) = WATER
     If bAlwaysSwimming And (yPos > lAlwaysSwimmingTop) Then bSwimming = True
 
-    If GetTileEnemy(xPos \ 32, yPos \ 32) = OBJENDFLYING Then lBlueStarTime = 0
+    If GetTileEnemy(__intDiv(xPos , 32), __intDiv(yPos , 32)) = OBJENDFLYING Then lBlueStarTime = 0
     
     If (GetTileAtPoint(CLng(xPos), CLng(yPos) - 4) = VINE Or GetTileAtPoint(CLng(xPos), CLng(yPos) - IIf(mStatus = MarioSmall, 30, 52)) = VINE) And GameKeyDown(Climb) Then
         bClimbing = Not bHandsFull
@@ -382,7 +382,7 @@ Dim tTag As udeLTileTag
                 lPipeValueMax = IIf(mStatus = MarioSmall, 32, 64)
                 lPipeUsed = tTag - 7
                 PlaySound Sounds.Pipe
-                yPos = IIf(mStatus = MarioSmall, 64, 90) + (((CLng(yPos) - IIf(mStatus = MarioSmall, 38, 64)) \ 32) * 32)
+                yPos = IIf(mStatus = MarioSmall, 64, 90) + (__intDiv((CLng(yPos) - IIf(mStatus = MarioSmall, 38, 64)) , 32) * 32)
             End If
         End If
         
@@ -839,7 +839,7 @@ Dim lHeadTop As Long
         If tSolidA Or tSolidB Then
         
             sGravity = 0
-            yPos = (yPos \ 32) * 32
+            yPos = __intDiv(yPos , 32) * 32
             
             tType = GetTileAtPoint(CLng(xPos) - 12, CLng(yPos))
             tTypeB = GetTileAtPoint(CLng(xPos) + 12, CLng(yPos))
@@ -900,7 +900,7 @@ Dim yTest As Long
             sRun = 0
         End If
 
-        xPos = ((CLng(xPos) \ 32) * 32) + 16
+        xPos = (__intDiv(CLng(xPos) , 32) * 32) + 16
         
     End If
     
@@ -924,9 +924,9 @@ Dim yTest As Long
         End If
         
         If bTall Then
-            If isTileSolid(CLng(xPos), CLng(yPos) - 40) Then xPos = xPos - 2 Else xPos = ((CLng(xPos) \ 32) * 32) + 16
+            If isTileSolid(CLng(xPos), CLng(yPos) - 40) Then xPos = xPos - 2 Else xPos = (__intDiv(CLng(xPos) , 32) * 32) + 16
         Else
-            xPos = ((CLng(xPos) \ 32) * 32) + 16
+            xPos = (__intDiv(CLng(xPos) , 32) * 32) + 16
         End If
         
     End If

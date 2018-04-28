@@ -39,7 +39,7 @@ End Sub
 
 
 Public Function activeAtLocation(sXPos As Single, sYPos As Single) As Boolean
-    activeAtLocation = (32 * (sXPos \ 32) = xInit And 32 * (sYPos \ 32) = yInit And bActive And (Not bFalling))
+    activeAtLocation = (32 * __intDiv(sXPos , 32) = xInit And 32 * __intDiv(sYPos , 32) = yInit And bActive And (Not bFalling))
 End Function
 
 

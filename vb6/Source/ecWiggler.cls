@@ -270,7 +270,7 @@ Dim u As Long
     yPos(lBall) = yPos(lBall) + ySpeed(lBall)
     
     If isTileSolid(CLng(xPos(lBall)), CLng(yPos(lBall)), True) Then
-        yPos(lBall) = ((yPos(lBall) \ 32) * 32)
+        yPos(lBall) = (__intDiv(yPos(lBall) , 32) * 32)
         ySpeed(lBall) = 0
         If GetTileAtPoint(CLng(xPos(lBall)), CLng(yPos(lBall))) = DEADLY Then KillMe
     End If

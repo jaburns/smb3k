@@ -197,7 +197,7 @@ Dim i As Long
     yPos = yPos + ySpeed
     
     If isTileSolid(CLng(xPos), CLng(yPos), True) Then
-        yPos = ((yPos \ 32) * 32)
+        yPos = (__intDiv(yPos , 32) * 32)
         ySpeed = 0
         If GetTileAtPoint(CLng(xPos), CLng(yPos)) = DEADLY Then KillMe
     End If

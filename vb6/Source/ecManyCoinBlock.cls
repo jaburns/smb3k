@@ -35,18 +35,18 @@ End Sub
 
 
 Public Function activeAtLocation(sXPos As Single, sYPos As Single) As Boolean
-    activeAtLocation = (32 * (sXPos \ 32) = xPos And 32 * (sYPos \ 32) = yPos)
+    activeAtLocation = (32 * __intDiv(sXPos , 32) = xPos And 32 * __intDiv(sYPos , 32) = yPos)
 End Function
 
 
 'returns true if its being hit
 Public Function hitMe(lXPos As Long, lYPos As Long) As Boolean
     hitMe = False
-    If (32 * (lXPos \ 32) = xPos And 32 * (lYPos \ 32) = yPos) Then
+    If (32 * __intDiv(lXPos , 32) = xPos And 32 * __intDiv(lYPos , 32) = yPos) Then
         hitMe = True
         If bDead Then Exit Function
         If lTimeCount = 0 Then lTimeCount = 1
-        MakeLittleCoin ((lXPos \ 32) * 32) + 16, (lYPos \ 32) * 32
+        MakeLittleCoin (__intDiv(lXPos , 32) * 32) + 16, __intDiv(lYPos , 32) * 32
         PlaySound Sounds.Coin
         lBounceCount = 1
         bBounceUp = True

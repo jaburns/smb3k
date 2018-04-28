@@ -53,11 +53,11 @@ Dim tTile As udeLTileType
     yPos = yPos + ySpeed
     
     If isTileSolid(CLng(xPos), CLng(yPos), True) Then
-        yPos = ((yPos \ 32) * 32)
+        yPos = (__intDiv(yPos , 32) * 32)
         ySpeed = 0
     End If
     If isTileSolid(CLng(xPos), CLng(yPos) - 32) Then
-        yPos = ((yPos \ 32) * 32) + 32
+        yPos = (__intDiv(yPos , 32) * 32) + 32
         ySpeed = 0
     End If
     

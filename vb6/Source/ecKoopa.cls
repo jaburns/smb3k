@@ -410,7 +410,7 @@ Dim maxYSpeed As Long
             If xSpeed > 0 Then xSpeed = curSpeed
             If xSpeed < 0 Then xSpeed = -curSpeed
         End If
-        yPos = ((yPos \ 32) * 32)
+        yPos = (__intDiv(yPos , 32) * 32)
         If kStyle = KOOPA_BOUNCER And bShell Then
             ySpeed = -10
             lBounceFrame = 2
@@ -434,7 +434,7 @@ Dim maxYSpeed As Long
         If bShell And hitHiddenBlock(CLng(xPos), yPos - 32) Then PlaySound Sounds.Bump
         If isTileSolid(CLng(xPos), CLng(yPos) - IIf(bShell Or kStyle = KOOPA_BEETLE Or kStyle = KOOPA_BOUNCER, 32, 54)) Then
             If bShell Then HitSpecialBlock CLng(xPos), yPos - 32, xSpeed >= 0
-            yPos = ((yPos \ 32) * 32) + 32
+            yPos = (__intDiv(yPos , 32) * 32) + 32
             ySpeed = Abs(ySpeed)
             If GetTileAtPoint(CLng(xPos), CLng(yPos) - IIf(bShell Or kStyle = KOOPA_BEETLE Or kStyle = KOOPA_BOUNCER, 32, 54)) = DEADLY Then KillMe
         End If

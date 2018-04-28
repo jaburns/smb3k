@@ -118,10 +118,10 @@ Private Sub MoveMe()
     
     If isTileSolid(xPos + 15, yPos - 16) Then
         xSpeed = 0
-        xPos = ((xPos \ 32) * 32) + 16
+        xPos = (__intDiv(xPos , 32) * 32) + 16
     ElseIf isTileSolid(xPos - 15, yPos - 16) Then
         xSpeed = 0
-        xPos = ((xPos \ 32) * 32) + 16
+        xPos = (__intDiv(xPos , 32) * 32) + 16
     End If
     
     ySpeed = ySpeed + 0.4
@@ -129,13 +129,13 @@ Private Sub MoveMe()
     yPos = yPos + ySpeed
     
     If isTileSolid(CLng(xPos), CLng(yPos), True) Then
-        yPos = ((yPos \ 32) * 32)
+        yPos = (__intDiv(yPos , 32) * 32)
         ySpeed = 0
         xSpeed = 0
     End If
     
     If ySpeed < 0 And isTileSolid(CLng(xPos), CLng(yPos) - 32) Then
-        yPos = ((yPos \ 32) * 32) + 32
+        yPos = (__intDiv(yPos , 32) * 32) + 32
         ySpeed = Abs(ySpeed)
     End If
         

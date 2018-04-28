@@ -78,7 +78,7 @@ End Property
 Public Property Get EntryTag(ID As Long) As Integer '0-4
     If ID < 1 Or ID > UBound(oNodes) Then Exit Property
     If oNodes(ID).zentryPoint = 0 Then Exit Property
-    EntryTag = ((oNodes(ID).zentryPoint - 1) \ 5) + 1
+    EntryTag = __intDiv((oNodes(ID).zentryPoint - 1) , 5) + 1
 End Property
 Public Property Get warpExitWorld(ID As Long) As Byte
     If ID < 1 Or ID > UBound(oNodes) Then Exit Property

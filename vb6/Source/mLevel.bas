@@ -83,7 +83,7 @@ Dim bYScroll As Boolean
     Else
         bgX1 = (xScreen Mod (640 * 2)) / 2
         bgX2 = (xScreen Mod (640 * 4)) / 4
-        StartX = xScreen \ 32
+        StartX = __intDiv(xScreen , 32)
         bXScroll = True
     End If
 
@@ -96,7 +96,7 @@ Dim bYScroll As Boolean
         If yScreen > GetLevelWidth - 480 Then yScreen = GetLevelWidth - 480
         StartY = (GetLevelHeight / 32) - 15
     Else
-        StartY = yScreen \ 32
+        StartY = __intDiv(yScreen , 32)
         bYScroll = True
     End If
     
@@ -165,27 +165,27 @@ End Function
 
 Public Sub SetTile(X As Long, Y As Long, ByVal xSrc As Long, ByVal ySrc As Long, Optional bOffset As Boolean = False)
     If bOffset Then
-        xSrc = xSrc + curLevel.xSrc(X \ 32, Y \ 32)
-        ySrc = ySrc + curLevel.ySrc(X \ 32, Y \ 32)
+        xSrc = xSrc + curLevel.xSrc(__intDiv(X , 32), __intDiv(Y , 32))
+        ySrc = ySrc + curLevel.ySrc(__intDiv(X , 32), __intDiv(Y , 32))
     End If
-    curLevel.SetTile X \ 32, Y \ 32, xSrc, ySrc
+    curLevel.SetTile __intDiv(X , 32), __intDiv(Y , 32), xSrc, ySrc
 End Sub
 Public Sub SetTileTag(X As Long, Y As Long, tag As udeLTileTag)
-    curLevel.SetTileTag X \ 32, Y \ 32, tag
+    curLevel.SetTileTag __intDiv(X , 32), __intDiv(Y , 32), tag
 End Sub
 Public Sub SetTileEnemy(X As Long, Y As Long, tEnemy As udeLTileEnemy)
-    curLevel.SetTileEnemy X \ 32, Y \ 32, tEnemy
+    curLevel.SetTileEnemy __intDiv(X , 32), __intDiv(Y , 32), tEnemy
 End Sub
 
 Public Function GetTileTagAtPoint(X As Long, Y As Long) As udeLTileTag
-    GetTileTagAtPoint = curLevel.TileTag(X \ 32, Y \ 32)
+    GetTileTagAtPoint = curLevel.TileTag(__intDiv(X , 32), __intDiv(Y , 32))
 End Function
 Public Function GetTileEnemy(X As Long, Y As Long) As udeLTileEnemy
     GetTileEnemy = curLevel.TileEnemy(X, Y)
 End Function
 
 Public Sub KillTile(X As Long, Y As Long)
-    curLevel.EraseTile X \ 32, Y \ 32
+    curLevel.EraseTile __intDiv(X , 32), __intDiv(Y , 32)
 End Sub
 
 Public Function GetLevelWidth() As Long
@@ -214,19 +214,19 @@ End Function
 
 
 Public Function GetTileXSrcPoint(xIn As Long, yIn As Long) As Long
-GetTileXSrcPoint = curLevel.xSrc(xIn \ 32, yIn \ 32)
+GetTileXSrcPoint = curLevel.xSrc(__intDiv(xIn , 32), __intDiv(yIn , 32))
 End Function
 Public Function GetTileYSrcPoint(xIn As Long, yIn As Long) As Long
-GetTileYSrcPoint = curLevel.ySrc(xIn \ 32, yIn \ 32)
+GetTileYSrcPoint = curLevel.ySrc(__intDiv(xIn , 32), __intDiv(yIn , 32))
 End Function
 
 
 
 Public Function GetTileAtPoint(X As Long, Y As Long) As udeLTileType
-    GetTileAtPoint = GetTile(X \ 32, Y \ 32)
+    GetTileAtPoint = GetTile(__intDiv(X , 32), __intDiv(Y , 32))
 End Function
 Public Function TileExistsAtPoint(X As Long, Y As Long) As Boolean
-    TileExistsAtPoint = curLevel.IsTile(X \ 32, Y \ 32)
+    TileExistsAtPoint = curLevel.IsTile(__intDiv(X , 32), __intDiv(Y , 32))
 End Function
 
 
@@ -286,12 +286,12 @@ Dim tTag As udeLTileTag
         If tTag = 0 Then
             If tType = COINBLOCK Then
                 SetTile lXPos, lYPos, 1, 0, True
-                MakeLittleCoin ((lXPos \ 32) * 32) + 16, (lYPos \ 32) * 32
+                MakeLittleCoin (__intDiv(lXPos , 32) * 32) + 16, __intDiv(lYPos , 32) * 32
                 gameCoins = gameCoins + 1
             ElseIf Not bNoBreak Then
                 KillTile lXPos, lYPos
                 PlaySound Sounds.BreakBrick
-                BreakBrick ((lXPos \ 32) * 32) + 16, ((lYPos \ 32) * 32) + 16
+                BreakBrick (__intDiv(lXPos , 32) * 32) + 16, (__intDiv(lYPos , 32) * 32) + 16
             End If
         Else
             SetTile lXPos, lYPos, 1, 0, True
@@ -300,41 +300,41 @@ Dim tTag As udeLTileTag
                     Mario.bHasWon = True
                 Case FLOWER
                     If Mario.mStatus = MarioSmall Then
-                        MakeMushroom ((lXPos \ 32) * 32) + 16, (lYPos \ 32) * 32, bHitFromLeft, 0
+                        MakeMushroom (__intDiv(lXPos , 32) * 32) + 16, __intDiv(lYPos , 32) * 32, bHitFromLeft, 0
                     Else
-                        MakeFlower ((lXPos \ 32) * 32) + 16, (lYPos \ 32) * 32
+                        MakeFlower (__intDiv(lXPos , 32) * 32) + 16, __intDiv(lYPos , 32) * 32
                     End If
                 Case PowerStar
-                    MakeStar ((lXPos \ 32) * 32) + 16, (lYPos \ 32) * 32, bHitFromLeft
+                    MakeStar (__intDiv(lXPos , 32) * 32) + 16, __intDiv(lYPos , 32) * 32, bHitFromLeft
                 Case MOONBOOT
                     If Mario.mStatus = MarioSmall Then
-                        MakeMushroom ((lXPos \ 32) * 32) + 16, (lYPos \ 32) * 32, bHitFromLeft, 0
+                        MakeMushroom (__intDiv(lXPos , 32) * 32) + 16, __intDiv(lYPos , 32) * 32, bHitFromLeft, 0
                     Else
-                        MakeMoonboot ((lXPos \ 32) * 32) + 16, (lYPos \ 32) * 32, bHitFromLeft
+                        MakeMoonboot (__intDiv(lXPos , 32) * 32) + 16, __intDiv(lYPos , 32) * 32, bHitFromLeft
                     End If
                 Case POWERHAMMER
                     If Mario.mStatus = MarioSmall Then
-                        MakeMushroom ((lXPos \ 32) * 32) + 16, (lYPos \ 32) * 32, bHitFromLeft, 0
+                        MakeMushroom (__intDiv(lXPos , 32) * 32) + 16, __intDiv(lYPos , 32) * 32, bHitFromLeft, 0
                     Else
-                        MakeHammerPickup ((lXPos \ 32) * 32) + 16, (lYPos \ 32) * 32
+                        MakeHammerPickup (__intDiv(lXPos , 32) * 32) + 16, __intDiv(lYPos , 32) * 32
                     End If
                 Case HASWINGCAP
                     'If Mario.mStatus = MarioSmall Then
-                    '    MakeMushroom ((lXPos \ 32) * 32) + 16, (lYPos \ 32) * 32, bHitFromLeft, 0, -5
+                    '    MakeMushroom (__intDiv(lXPos , 32) * 32) + 16, __intDiv(lYPos , 32) * 32, bHitFromLeft, 0, -5
                     'Else
-                        MakeBlueStar ((lXPos \ 32) * 32) + 16, (lYPos \ 32) * 32
+                        MakeBlueStar (__intDiv(lXPos , 32) * 32) + 16, __intDiv(lYPos , 32) * 32
                     'End If
                 Case BEANSTALK
-                    MakeViney ((lXPos \ 32) * 32) + 16, (lYPos \ 32) * 32
+                    MakeViney (__intDiv(lXPos , 32) * 32) + 16, __intDiv(lYPos , 32) * 32
                 Case BRICKCOIN
-                    MakeLittleCoin ((lXPos \ 32) * 32) + 16, (lYPos \ 32) * 32
+                    MakeLittleCoin (__intDiv(lXPos , 32) * 32) + 16, __intDiv(lYPos , 32) * 32
                     gameCoins = gameCoins + 1
                 Case HAS1UP
-                    MakeMushroom ((lXPos \ 32) * 32) + 16, (lYPos \ 32) * 32, bHitFromLeft, 1
+                    MakeMushroom (__intDiv(lXPos , 32) * 32) + 16, __intDiv(lYPos , 32) * 32, bHitFromLeft, 1
                 Case HAS1DOWN
-                    MakeMushroom ((lXPos \ 32) * 32) + 16, (lYPos \ 32) * 32, bHitFromLeft, -1
+                    MakeMushroom (__intDiv(lXPos , 32) * 32) + 16, __intDiv(lYPos , 32) * 32, bHitFromLeft, -1
                 Case ONLYSHROOMS
-                    MakeMushroom ((lXPos \ 32) * 32) + 16, (lYPos \ 32) * 32, bHitFromLeft, 0
+                    MakeMushroom (__intDiv(lXPos , 32) * 32) + 16, __intDiv(lYPos , 32) * 32, bHitFromLeft, 0
             End Select
         End If
     
@@ -375,9 +375,9 @@ Dim testTile As udeLTileType
 Dim testEnemy As udeLTileEnemy
 Dim testTag As udeLTileTag
     isTileSolid = False
-    testEnemy = GetTileEnemy(lX \ 32, lY \ 32)
+    testEnemy = GetTileEnemy(__intDiv(lX , 32), __intDiv(lY , 32))
     If testEnemy = OBJHIDETILE Then Exit Function
-    testTile = GetTile(lX \ 32, lY \ 32)
+    testTile = GetTile(__intDiv(lX , 32), __intDiv(lY , 32))
     isTileSolid = (testTile = SOLID Or testTile = BOUNCY Or testTile = BRICK Or testTile = COINBLOCK Or testTile = DEADLY Or testTile = INJURETILE Or testTile = ICE)
     If Not isTileSolid Then
         isTileSolid = inManyCoinBlock(CSng(lX), CSng(lY))

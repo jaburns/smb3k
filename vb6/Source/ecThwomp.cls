@@ -62,7 +62,7 @@ Public Sub HandleMe()
             ySpeed = ySpeed + 0.45
             yPos = yPos + ySpeed
             If getTileSolid(CLng(xPos - 16), CLng(yPos)) = trSolid Or getTileSolid(CLng(xPos + 16), CLng(yPos)) = trSolid Then
-                yPos = ((yPos \ 32) * 32)
+                yPos = (__intDiv(yPos , 32) * 32)
                 ySpeed = 0
                 myStat = thpRising
                 PlaySound Sounds.Thwomp

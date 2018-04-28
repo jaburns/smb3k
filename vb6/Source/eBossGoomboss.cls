@@ -173,7 +173,7 @@ Dim i As Long
     End If
             
     If lHurtCount Then 
-        xSrc = IIf(lHurtCount \ 2, 384, 0) 
+        xSrc = IIf(__intDiv(lHurtCount , 2), 384, 0)
     Else 
         If lSpitCount Then xSrc = 256 Else xSrc = IIf(bFrameOn, 0, 128)
     End If
