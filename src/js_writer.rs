@@ -152,6 +152,16 @@ fn write_statement_line(line: &StatementLine, type_lookup: &TypeLookup) -> Strin
             result.push_str(translate_expression(target).as_str());
             result.push_str(";");
         }
+        StatementLine::BeginSelect(expr) => {
+            result.push_str("switch (");
+            result.push_str(translate_expression(expr).as_str());
+            result.push_str(") { case \"__NOP\":");
+        }
+        StatementLine::CaseLabel(expr) => {
+            result.push_str("break; case ");
+            result.push_str(translate_expression(expr).as_str());
+            result.push_str(":");
+        }
         StatementLine::EndBlock => {
             result.push_str("}");
         }

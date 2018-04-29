@@ -321,7 +321,7 @@ fn statement() -> Parser<'static, u8, StatementLine> {
     let matched = on_error_statement() | dim_statement() | assignment_statement()
         | label_statement() | single_line_if_statement() | begin_if_block()
         | else_if_line() | else_line() | begin_with_block() | end_block()
-        | unknown_statement();
+        | begin_select_block() | case_label_line() | unknown_statement();
 
     !end_function() * matched
 }
@@ -403,8 +403,18 @@ fn begin_with_block() -> Parser<'static, u8, StatementLine> {
     matched.map(|x| StatementLine::BeginWith(Expression { body: x }))
 }
 
+fn begin_select_block() -> Parser<'static, u8, StatementLine> {
+    let matched = seq(b"Select Case") * space() * rest_of_the_line();
+    matched.map(|x| StatementLine::BeginSelect(Expression { body: x }))
+}
+
+fn case_label_line() -> Parser<'static, u8, StatementLine> {
+    let matched = seq(b"Case") * space() * rest_of_the_line();
+    matched.map(|x| StatementLine::CaseLabel(Expression { body: x }))
+}
+
 fn end_block() -> Parser<'static, u8, StatementLine> {
-    (seq(b"End If") | seq(b"End With")).map(|_| StatementLine::EndBlock)
+    (seq(b"End If") | seq(b"End With") | seq(b"End Select")).map(|_| StatementLine::EndBlock)
 }
 
 fn call_sub_statement() -> Parser<'static, u8, StatementLine> {

@@ -107,6 +107,11 @@ pub enum DoLoopKind {
 pub enum StatementLine {
     Dim(VarDeclaration),
 
+    Set {
+        target_name: String,
+        type_name: Option<String>,
+    },
+
     ReDim {
         preserve: bool,
         target_name: String,
