@@ -532,6 +532,9 @@ fn collect_types(program: &Vec<Module>) -> TypeLookup {
 fn collect_async_funcs(program: &Vec<Module>) -> Vec<String> {
     let mut result = Vec::new();
 
+    result.push(String::from("DoEvents"));
+    result.push(String::from("EndScene"));
+
     for module in program {
         for block in &module.contents {
             if let TopLevelBlock::Function { name, is_async, .. } = block {

@@ -78,15 +78,16 @@ Dim i As Long
     LoadWorldList
     LoadBlankWorldPassInfo
 
-    If Not ShowLoadGameScreen(True) Then Exit Sub
-
+    ShowLoadGameScreen True
+    If Not ShowLoadGameScreen__result Then Exit Sub
 Do
     Do
         If levelReturnValue <> lvrPipe Then
             Do
                 bHasChangedWorlds = False
                 mapExitToLoadGame = False
-                curPlayLevel = ShowWorldMap(curWorld, IIf(levelReturnValue = lvrPipeOut, nextMapNode, -1)) '-1 means same one
+                ShowWorldMap curWorld, IIf(levelReturnValue = lvrPipeOut, nextMapNode, -1) '-1 means same one
+                curPlayLevel = ShowWorldMap__result
                 If mapExitToLoadGame Then Exit Do
                 If curPlayLevel = -1 Then
                     If mapExitToNewWorld > 0 Then
@@ -162,8 +163,10 @@ Do
         End With
         bGameOver = False
     End If
+
+    If Not mapExitToLoadGame Then ShowLoadGameScreen False
     
-Loop While mapExitToLoadGame And ShowLoadGameScreen(False)
+Loop While mapExitToLoadGame And ShowLoadGameScreen__result
     
 End Sub
 
@@ -242,9 +245,10 @@ End Sub
 
 
 
+Private ShowLoadGameScreen__result As Boolean
 
 'is true if returaning to game
-Async Private Function ShowLoadGameScreen(bFirstRun As Boolean) As Boolean
+Async Private Sub ShowLoadGameScreen(bFirstRun As Boolean)
 Dim i As Long
 Dim u As Long
 Dim curSel As Long
@@ -254,7 +258,7 @@ Dim lKeyDown As Long
     Music.LoadFile App.Path & "\Mods\" & sWorldSetName & "\Menu.mid"
     Music.PlayMusic
     GFX.SetFont "Courier New", 8, True, False, False, False
-    ShowLoadGameScreen = True
+    ShowLoadGameScreen__result = True
     lKeyDown = 0
     curSel = IIf(bFirstRun, 0, 6)
     selMax = IIf(bFirstRun, 6, 7)
@@ -342,7 +346,7 @@ Dim lKeyDown As Long
                 curSel = -1
                 Exit Do
             ElseIf curSel = 7 Then
-                ShowLoadGameScreen = False
+                ShowLoadGameScreen__result = False
                 Exit Do
             End If
         ElseIf GameKeyDown(Quit) Then
@@ -351,7 +355,7 @@ Dim lKeyDown As Long
         End If
         
     Loop While True
-    If bFirstRun Then ShowLoadGameScreen = (curSel <> -1)
+    If bFirstRun Then ShowLoadGameScreen__result = (curSel <> -1)
     
     Music.StopMusic
 

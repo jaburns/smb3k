@@ -42,8 +42,9 @@ Public mapExitWarpID As Long
 Public mapExitToLoadGame As Boolean
 
 
+Public ShowWorldMap__result As Long
 
-Async Public Function ShowWorldMap(lWorld As Long, Optional ByVal startNode As Long = -1) As Long
+Async Public Sub ShowWorldMap(lWorld As Long, Optional ByVal startNode As Long = -1)
 Dim i As Long
 Dim u As Long
 Dim testTag As Byte
@@ -193,14 +194,14 @@ Dim testTag As Byte
                 ElseIf testTag > 20 And testTag <= 40 Then
                     mapExitToNewWorld = nodeMap.warpExitWorld(curNode)
                     mapExitWarpID = testTag - 20
-                    ShowWorldMap = 0
+                    ShowWorldMap__result = 0
                     PlaySound Sounds.Pipe
                     drawMap
                     DrawBonusMeter
                     GFX.EndScene
                     Exit Do
                 ElseIf testTag > 40 And testTag <= 110 Then
-                    ShowWorldMap = testTag - 40
+                    ShowWorldMap__result = testTag - 40
                     bTimingTime = GameKeyDown(Shoot)
                     PlaySound IIf(bTimingTime, Sounds.PowLoop, Sounds.EnterLevel)
                     drawMap
@@ -237,11 +238,11 @@ Dim testTag As Byte
     
     MusicStopMusic
     Set nodeMap = Nothing
-    ShowWorldMap = ShowWorldMap - 1
+    ShowWorldMap__result = ShowWorldMap__result - 1
     
-    If ShowWorldMap >= 0 Then ShowBlackTextScreen oCurWorldData.LevelData(ShowWorldMap).LevelName
+    If ShowWorldMap__result >= 0 Then ShowBlackTextScreen oCurWorldData.LevelData(ShowWorldMap__result).LevelName
     
-End Function
+End Sub
 
 
 
