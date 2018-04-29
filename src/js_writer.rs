@@ -162,6 +162,20 @@ fn write_statement_line(line: &StatementLine, type_lookup: &TypeLookup) -> Strin
             result.push_str(translate_expression(expr).as_str());
             result.push_str(":");
         }
+        StatementLine::Set { target_name, type_name } => {
+            result.push_str(fix_name_for_with_block(target_name).as_str());
+            result.push_str(" = ");
+            match type_name {
+                Some(t) => {
+                    result.push_str("new_");
+                    result.push_str(t);
+                    result.push_str("();");
+                }
+                None => {
+                    result.push_str("null;");
+                }
+            }
+        }
         StatementLine::EndBlock => {
             result.push_str("}");
         }

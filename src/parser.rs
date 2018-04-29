@@ -318,7 +318,7 @@ fn end_function() -> Parser<'static, u8, ()> {
 }
 
 fn statement() -> Parser<'static, u8, StatementLine> {
-    let matched = on_error_statement() | dim_statement() | assignment_statement()
+    let matched = on_error_statement() | dim_statement() | assignment_statement() | set_statement()
         | label_statement() | single_line_if_statement() | begin_if_block()
         | else_if_line() | else_line() | begin_with_block() | end_block()
         | begin_select_block() | case_label_line() | unknown_statement();
@@ -350,6 +350,23 @@ fn assignment_statement() -> Parser<'static, u8, StatementLine> {
     matched.map(|(to, exp)| StatementLine::Assignment {
         to_name: to,
         value: Expression { body: exp },
+    })
+}
+
+fn set_statement_start() -> Parser<'static, u8, String> {
+    seq(b"Set") * space() * word() - space() - sym(b'=') - space()
+}
+
+fn set_statement() -> Parser<'static, u8, StatementLine> {
+    let set_new = set_statement_start() - seq(b"New") - space() + word() - space();
+    let set_nothing = set_statement_start() - seq(b"Nothing") - space();
+
+    set_new.map(|(v, t)| StatementLine::Set {
+        target_name: v,
+        type_name: Some(t),
+    }) | set_nothing.map(|v| StatementLine::Set {
+        target_name: v,
+        type_name: None,
     })
 }
 
