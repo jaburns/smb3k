@@ -295,14 +295,15 @@ End Sub
 
 
 Public Function fileExist(sPath As String) As Boolean
-On Error GoTo errNoFile
-Dim fFile As Long
-fFile = FreeFile
-fileExist = False
-Open sPath For Input As fFile
 fileExist = True
-errNoFile:
-Close fFile
+' On Error GoTo errNoFile
+' Dim fFile As Long
+' fFile = FreeFile
+' fileExist = False
+' Open sPath For Input As fFile
+' fileExist = True
+' errNoFile:
+' Close fFile
 End Function
 
 

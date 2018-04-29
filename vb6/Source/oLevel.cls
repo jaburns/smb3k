@@ -240,12 +240,13 @@ End Sub
 ' function used to determine if a file exists
 '
 Private Function fileExist(sPath As String) As Boolean
-On Error Resume Next
-Dim lFile As Long
-lFile = FreeFile
-Open sPath For Input As lFile
-Close lFile
-fileExist = (Err.Number = 0)
-Err.Clear
+fileExist = True
+' On Error Resume Next
+' Dim lFile As Long
+' lFile = FreeFile
+' Open sPath For Input As lFile
+' Close lFile
+' fileExist = (Err.Number = 0)
+' Err.Clear
 End Function
 

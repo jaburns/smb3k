@@ -161,7 +161,9 @@ fn write_statement_line(line: &StatementLine, type_lookup: &TypeLookup, async_fu
                 };
                 result.push_str(",");
             }
-            result.pop();
+            if args.len() > 0 {
+                result.pop();
+            }
             result.push_str(");");
         }
         StatementLine::SingleLineIf {

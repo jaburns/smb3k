@@ -154,7 +154,7 @@ fn space() -> Parser<'static, u8, ()> {
 }
 
 fn word() -> Parser<'static, u8, String> {
-    none_of(b" \t\r\n`()")
+    none_of(b" \t\r\n`():")
         .repeat(1..)
         .convert(String::from_utf8)
 }
@@ -562,15 +562,23 @@ fn call_sub_statement() -> Parser<'static, u8, StatementLine> {
 
     matched.map(|(n, a)| StatementLine::CallSub {
         name: Expression { body: n },
-        args: a.into_iter()
-            .map(|x| {
-                if x.len() < 1 {
-                    None
-                } else {
-                    Some(Expression { body: x })
-                }
-            })
-            .collect(),
+        args: {
+            let args: Vec<_> = a.into_iter()
+                .map(|x| {
+                    if x.len() < 1 {
+                        None
+                    } else {
+                        Some(Expression { body: x })
+                    }
+                })
+                .collect();
+
+            if args.len() == 1 && args[0].is_none() {
+                Vec::new()
+            } else {
+                args
+            }
+        }
     })
 }
 
