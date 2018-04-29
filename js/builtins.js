@@ -1,3 +1,8 @@
+window.False = false;
+window.True = true;
+window.vbGreen = "#0f0";
+window.vbBlue = "#00f";
+
 window.new_DXMouse = () => {
     return {};
 };
@@ -22,10 +27,9 @@ window.new_DXMusic = () => {
     return {};
 };
 
-window.False = false;
-window.True = true;
-window.vbGreen = "#0f0";
-window.vbBlue = "#00f";
+window.__fileLoader = require('./fileLoader');
+
+window.__intDiv = (a, b) => Math.floor(a / b) >> 0;
 
 window.__makeArray = (lowerIndex, count, makeElem) => {
     let arr = [];
