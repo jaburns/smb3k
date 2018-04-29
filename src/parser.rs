@@ -576,7 +576,7 @@ fn call_sub_statement() -> Parser<'static, u8, StatementLine> {
 
 fn file_operation() -> Parser<'static, u8, StatementLine> {
     ((seq(b"Open ") | seq(b"Close ") | seq(b"Get ") | seq(b"Put ") | seq(b"Line ")) * rest_of_the_line())
-        .map(|_| StatementLine::FileOperation)
+        .map(|_| StatementLine::Empty)
 }
 
 fn rest_of_the_line() -> Parser<'static, u8, String> {

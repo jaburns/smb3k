@@ -155,7 +155,6 @@ pub enum StatementLine {
     CaseLabel(Expression),
 
     EndBlock,
-    FileOperation,
 
     ExitSub,
     ExitFunction,
