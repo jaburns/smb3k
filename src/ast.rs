@@ -83,7 +83,7 @@ pub enum TopLevelBlock {
         name: String,
         params: Vec<FunctionParam>,
         return_type: String,
-        body: Vec<StatementBlock>,
+        body: Vec<StatementLine>,
     },
 
     Empty,
@@ -97,26 +97,25 @@ pub struct Expression {
 #[allow(dead_code)]
 #[derive(PartialEq, Eq, Debug)]
 pub enum DoLoopKind {
+    None,
     While,
     Until,
 }
 
 #[allow(dead_code)]
 #[derive(Debug)]
-pub enum StatementBlock {
-    Dim {
-        declaration: VarDeclaration,
-    },
+pub enum StatementLine {
+    Dim(VarDeclaration),
 
     ReDim {
         preserve: bool,
         target_name: String,
-        new_size: Expression, // int
+        new_size: Expression,
     },
 
     Assignment {
         to_name: String,
-        value: Expression, // typeof(lhs)
+        value: Expression,
     },
 
     CallSub {
@@ -124,35 +123,37 @@ pub enum StatementBlock {
         args: Vec<Expression>,
     },
 
-    IfBlock {
-        condition: Expression, // bool
-        main_body: Vec<StatementBlock>,
-        else_body: Vec<StatementBlock>,
+    SingleLineIf {
+        condition: Expression,
+        if_body: Box<StatementLine>,
+        else_body: Box<StatementLine>,
     },
 
-    WithBlock {
-        target_name: String,
-        body: Vec<StatementBlock>,
-    },
+    BeginIf(Expression),
+    ElseIf(Expression),
+    Else,
 
-    ForLoop {
+    BeginWith(Expression),
+
+    BeginFor {
         index: String,
-        lower_bound: Expression, // int
-        upper_bound: Expression, // int
+        lower_bound: Expression,
+        upper_bound: Expression,
         step: i32,
-        body: Vec<StatementBlock>,
     },
 
-    DoLoop {
-        condition: Expression, // bool
+    BeginDo {
         kind: DoLoopKind,
-        eval_at_top: bool,
-        body: Vec<StatementBlock>,
+        condition: Expression,
     },
 
+    BeginSelect(Expression),
+    CaseLabel(Expression),
+
+    EndBlock,
     FileOperation,
 
-    Unknown(Expression),
+    Unknown(String),
 
     Empty,
 }

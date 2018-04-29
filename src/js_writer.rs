@@ -77,29 +77,100 @@ fn join_lines(lines: &Vec<String>) -> String {
 }
 
 fn translate_expression(expression: &Expression) -> String {
-    expression.body.clone()
+    let mut ret = str::replace(expression.body.as_str(), " And ", " && ");
+    ret = str::replace(ret.as_str(), " Or ", " || ");
+    ret = str::replace(ret.as_str(), " = ", " == ");
+    ret = str::replace(ret.as_str(), " <> ", " != ");
+    ret = str::replace(ret.as_str(), "Not ", "! ");
+    ret = str::replace(ret.as_str(), " .", " __with.");
+    ret = str::replace(ret.as_str(), "(.", " (__with.");
+    ret = str::replace(ret.as_str(), " Mod ", " % ");
+    ret = str::replace(ret.as_str(), " & ", " + ");
+    ret = str::replace(ret.as_str(), "\\", "/");
+
+    if ret.chars().next().unwrap() == '.' {
+        String::from("__with") + ret.as_str()
+    } else {
+        ret
+    }
 }
 
-fn write_function_body(body: &Vec<StatementBlock>, type_lookup: &TypeLookup) -> String {
+fn fix_name_for_with_block(name: &str) -> String {
+    let first = name.chars().next().unwrap();
+
+    if first == '.' {
+        String::from("__with") + name
+    } else {
+        String::from(name)
+    }
+}
+
+fn write_statement_line(line: &StatementLine, type_lookup: &TypeLookup) -> String {
+    let mut result = String::new();
+
+    match line {
+        StatementLine::Dim(declaration) => {
+            result.push_str(write_let(declaration, type_lookup).as_str());
+        }
+        StatementLine::Assignment { to_name, value } => {
+            result.push_str(fix_name_for_with_block(to_name).as_str());
+            result.push_str(" = ");
+            result.push_str(translate_expression(value).as_str());
+            result.push_str(";");
+        }
+        StatementLine::CallSub { name, args } => {
+            result.push_str(format!("{}();", name).as_str());
+        }
+        StatementLine::SingleLineIf {
+            condition,
+            if_body,
+            else_body,
+        } => {
+            result.push_str("if (");
+            result.push_str(translate_expression(condition).as_str());
+            result.push_str(") {");
+            result.push_str(write_statement_line(if_body, type_lookup).as_str());
+            result.push_str("} else {");
+            result.push_str(write_statement_line(else_body, type_lookup).as_str());
+            result.push_str("}");
+        }
+        StatementLine::BeginIf(condition) => {
+            result.push_str("if (");
+            result.push_str(translate_expression(condition).as_str());
+            result.push_str(") {");
+        }
+        StatementLine::ElseIf(condition) => {
+            result.push_str("} else if (");
+            result.push_str(translate_expression(condition).as_str());
+            result.push_str(") {");
+        }
+        StatementLine::Else => {
+            result.push_str("} else {");
+        }
+        StatementLine::BeginWith(target) => {
+            result.push_str("{const __with=");
+            result.push_str(translate_expression(target).as_str());
+            result.push_str(";");
+        }
+        StatementLine::EndBlock => {
+            result.push_str("}");
+        }
+        StatementLine::Unknown(source) => {
+            result.push_str("/*");
+            result.push_str(source.as_str());
+            result.push_str("*/");
+        }
+        _ => {}
+    }
+
+    result
+}
+
+fn write_function_body(body: &Vec<StatementLine>, type_lookup: &TypeLookup) -> String {
     let mut result = String::new();
 
     for s in body {
-        match s {
-            StatementBlock::Dim { declaration } => {
-                result.push_str(write_let(declaration, type_lookup).as_str());
-            }
-            StatementBlock::Assignment { to_name, value } => {
-                result.push_str(to_name);
-                result.push_str(" = ");
-                result.push_str(translate_expression(value).as_str());
-                result.push_str(";");
-            }
-            StatementBlock::Unknown(Expression { body }) => {
-                result.push_str("// ");
-                result.push_str(body.as_str());
-            }
-            _ => {}
-        }
+        result.push_str(write_statement_line(s, type_lookup).as_str());
         result.push_str("\n");
     }
 
@@ -109,7 +180,7 @@ fn write_function_body(body: &Vec<StatementBlock>, type_lookup: &TypeLookup) -> 
 fn write_function(
     is_async: bool,
     params: &Vec<FunctionParam>,
-    body: &Vec<StatementBlock>,
+    body: &Vec<StatementLine>,
     type_lookup: &TypeLookup,
 ) -> String {
     let mut result = String::new();

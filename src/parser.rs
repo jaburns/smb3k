@@ -317,40 +317,111 @@ fn end_function() -> Parser<'static, u8, ()> {
     (seq(b"End Sub") | seq(b"End Function") | seq(b"End Property")).discard()
 }
 
-fn statement() -> Parser<'static, u8, StatementBlock> {
+fn statement() -> Parser<'static, u8, StatementLine> {
     let matched = on_error_statement() | dim_statement() | assignment_statement()
-        | label_statement() | unknown_statement();
+        | label_statement() | single_line_if_statement() | begin_if_block()
+        | else_if_line() | else_line() | begin_with_block() | end_block()
+        | unknown_statement();
 
     !end_function() * matched
 }
 
-fn on_error_statement() -> Parser<'static, u8, StatementBlock> {
-    (seq(b"On Error") - none_of(b"`").repeat(0..)).map(|_| StatementBlock::Empty)
+fn parse_single_statement(line: &str) -> StatementLine {
+    let mut input = DataInput::new(line.as_bytes());
+    statement()
+        .parse(&mut input)
+        .expect("Failed to parse statement!")
 }
 
-fn label_statement() -> Parser<'static, u8, StatementBlock> {
-    (word() * sym(b':')).map(|_| StatementBlock::Empty)
+fn on_error_statement() -> Parser<'static, u8, StatementLine> {
+    (seq(b"On Error") - none_of(b"`").repeat(0..)).map(|_| StatementLine::Empty)
 }
 
-fn dim_statement() -> Parser<'static, u8, StatementBlock> {
-    (seq(b"Dim") * space() * var_decl()).map(|v| StatementBlock::Dim { declaration: v })
+fn label_statement() -> Parser<'static, u8, StatementLine> {
+    (word() * sym(b':')).map(|_| StatementLine::Empty)
 }
 
-fn assignment_statement() -> Parser<'static, u8, StatementBlock> {
-    let matched = word() - space() - sym(b'=') - space() + expression();
-    matched.map(|(to, exp)| StatementBlock::Assignment {
+fn dim_statement() -> Parser<'static, u8, StatementLine> {
+    (seq(b"Dim") * space() * var_decl()).map(|v| StatementLine::Dim(v))
+}
+
+fn assignment_statement() -> Parser<'static, u8, StatementLine> {
+    let matched = word() - space() - sym(b'=') - space() + rest_of_the_line();
+    matched.map(|(to, exp)| StatementLine::Assignment {
         to_name: to,
-        value: exp,
+        value: Expression { body: exp },
     })
 }
 
-fn expression() -> Parser<'static, u8, Expression> {
-    none_of(b"`")
-        .repeat(0..)
-        .convert(String::from_utf8)
-        .map(|x| Expression { body: x })
+fn join(with: &str, lines: &Vec<String>) -> String {
+    let mut result = lines
+        .iter()
+        .fold(String::new(), |acc, line| acc + line + with);
+
+    let len = result.len();
+    result.truncate(len - with.len());
+    result
 }
 
-fn unknown_statement() -> Parser<'static, u8, StatementBlock> {
-    expression().map(|x| StatementBlock::Unknown(x))
+fn if_then() -> Parser<'static, u8, String> {
+    let chunk = none_of(b" ").repeat(1..).convert(String::from_utf8);
+    let spaced_expr = list(!seq(b"Then") * chunk, sym(b' '));
+    (seq(b"If") * space() * spaced_expr - space() - seq(b"Then")).map(|x| join(" ", &x))
+}
+
+fn single_line_if_statement() -> Parser<'static, u8, StatementLine> {
+    let matched = if_then() - sym(b' ') + rest_of_the_line();
+
+    matched.map(|(c, rest)| match rest.find(" Else ") {
+        Some(pos) => StatementLine::SingleLineIf {
+            condition: Expression { body: c },
+            if_body: Box::new(parse_single_statement(&rest[..pos])),
+            else_body: Box::new(parse_single_statement(&rest[(pos + 6)..])),
+        },
+        None => StatementLine::SingleLineIf {
+            condition: Expression { body: c },
+            if_body: Box::new(parse_single_statement(&rest)),
+            else_body: Box::new(StatementLine::Empty),
+        },
+    })
+}
+
+fn begin_if_block() -> Parser<'static, u8, StatementLine> {
+    if_then().map(|c| StatementLine::BeginIf(Expression { body: c }))
+}
+
+fn else_if_line() -> Parser<'static, u8, StatementLine> {
+    (seq(b"Else") * if_then()).map(|c| StatementLine::ElseIf(Expression { body: c }))
+}
+
+fn else_line() -> Parser<'static, u8, StatementLine> {
+    seq(b"Else").map(|_| StatementLine::Else)
+}
+
+fn begin_with_block() -> Parser<'static, u8, StatementLine> {
+    let matched = seq(b"With") * space() * rest_of_the_line();
+    matched.map(|x| StatementLine::BeginWith(Expression { body: x }))
+}
+
+fn end_block() -> Parser<'static, u8, StatementLine> {
+    (seq(b"End If") | seq(b"End With")).map(|_| StatementLine::EndBlock)
+}
+
+fn call_sub_statement() -> Parser<'static, u8, StatementLine> {
+    let arg = none_of(b"`,").repeat(0..).convert(String::from_utf8) - space();
+    let args = list(arg, sym(b',') - space());
+    let matched = word() - space() + args;
+
+    matched.map(|(n, a)| StatementLine::CallSub {
+        name: n,
+        args: a.into_iter().map(|x| Expression { body: x }).collect(),
+    })
+}
+
+fn rest_of_the_line() -> Parser<'static, u8, String> {
+    none_of(b"`").repeat(0..).convert(String::from_utf8)
+}
+
+fn unknown_statement() -> Parser<'static, u8, StatementLine> {
+    rest_of_the_line().map(|x| StatementLine::Unknown(x))
 }
