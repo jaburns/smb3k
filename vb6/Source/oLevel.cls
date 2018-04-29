@@ -172,51 +172,53 @@ End Sub
 
 
 Public Sub LoadFromFile(sPath As String)
-Dim lFile As Long
-lFile = FreeFile
-Dim xx As Long
-Dim yy As Long
-Dim byt_ As Byte
-Dim int_ As Integer
-    
-    If Not fileExist(sPath) Then Exit Sub
-    Open sPath For Binary Access Read Lock Write As lFile
-    With zoLevel
-        
-        Get #lFile, 1, byt_
-        .bSideWarp = byt_ = 255
-        Get #lFile, , int_
-        .iStartX = int_
-        Get #lFile, , int_
-        .iStartY = int_
-        Get #lFile, , int_
-        .iWidth = int_
-        Get #lFile, , int_
-        .iHeight = int_
-        Get #lFile, , int_
-        .iTime = int_
-        
-        ReDim .Column(.iWidth)
-        
-        For xx = 0 To zoLevel.iWidth
-            ReDim .Column(xx).Row(.iHeight)
-            For yy = 0 To zoLevel.iHeight
-                Get #lFile, , byt_
-                .Column(xx).Row(yy).notEmpty = IIf(byt_ = 255, True, False)
-                Get #lFile, , byt_
-                .Column(xx).Row(yy).xSrc = byt_
-                Get #lFile, , byt_
-                .Column(xx).Row(yy).ySrc = byt_
-                Get #lFile, , byt_
-                .Column(xx).Row(yy).tag = CLng(byt_)
-                Get #lFile, , byt_
-                .Column(xx).Row(yy).TileEnemy = CLng(byt_)
-            Next yy
-        Next xx
-    
-    End With
-    Close lFile
+__fileLoader.LevelLoadFromFile zoLevel, sPath
 
+' Dim lFile As Long
+' lFile = FreeFile
+' Dim xx As Long
+' Dim yy As Long
+' Dim byt_ As Byte
+' Dim int_ As Integer
+'     
+'     If Not fileExist(sPath) Then Exit Sub
+'     Open sPath For Binary Access Read Lock Write As lFile
+'     With zoLevel
+'         
+'         Get #lFile, 1, byt_
+'         .bSideWarp = byt_ = 255
+'         Get #lFile, , int_
+'         .iStartX = int_
+'         Get #lFile, , int_
+'         .iStartY = int_
+'         Get #lFile, , int_
+'         .iWidth = int_
+'         Get #lFile, , int_
+'         .iHeight = int_
+'         Get #lFile, , int_
+'         .iTime = int_
+'         
+'         ReDim .Column(.iWidth)
+'         
+'         For xx = 0 To zoLevel.iWidth
+'             ReDim .Column(xx).Row(.iHeight)
+'             For yy = 0 To zoLevel.iHeight
+'                 Get #lFile, , byt_
+'                 .Column(xx).Row(yy).notEmpty = IIf(byt_ = 255, True, False)
+'                 Get #lFile, , byt_
+'                 .Column(xx).Row(yy).xSrc = byt_
+'                 Get #lFile, , byt_
+'                 .Column(xx).Row(yy).ySrc = byt_
+'                 Get #lFile, , byt_
+'                 .Column(xx).Row(yy).tag = CLng(byt_)
+'                 Get #lFile, , byt_
+'                 .Column(xx).Row(yy).TileEnemy = CLng(byt_)
+'             Next yy
+'         Next xx
+'     
+'     End With
+'     Close lFile
+' 
 End Sub
 
 Public Sub Resize(lWidth As Long, lHeight As Long)

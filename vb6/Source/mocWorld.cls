@@ -199,52 +199,54 @@ End Function
 
 
 Public Sub loadMap(sPath As String)
-Dim fFile As Long
-fFile = FreeFile
-Dim tByte As Byte
-Dim tInt As Integer
-Dim i As Long
-
-    Open sPath For Input As fFile
-    Close fFile
-    Open sPath For Binary Access Read Lock Write As fFile
-        Get fFile, 1, tByte
-        ReDim oNodes(tByte)
-        For i = 1 To UBound(oNodes)
-        With oNodes(i)
-            Get fFile, , tInt
-            .zxPos = tInt
-            Get fFile, , tInt
-            .zyPos = tInt
-            Get fFile, , tByte
-            .zupNode = tByte
-            Get fFile, , tByte
-            .zdownNode = tByte
-            Get fFile, , tByte
-            .zleftNode = tByte
-            Get fFile, , tByte
-            .zrightNode = tByte
-            Get fFile, , tByte
-            If tByte >= 128 Then
-                tByte = tByte - 128
-                .zpassThrough = True
-            End If
-            If tByte > 0 Then
-                tByte = tByte - 1
-                .znodeTag = tByte
-            End If
-            Get fFile, , tByte
-            .znodeImage = tByte
-            Get fFile, , tByte
-            .zentryPoint = tByte
-            Get fFile, , tByte
-            .zexitWorld = tByte
-        End With
-        Next i
-    Close fFile
-
-errOut:
-Close fFile
+__fileLoader.loadMap oNodes, sPath
+'
+'Dim fFile As Long
+'fFile = FreeFile
+'Dim tByte As Byte
+'Dim tInt As Integer
+'Dim i As Long
+'
+'    Open sPath For Input As fFile
+'    Close fFile
+'    Open sPath For Binary Access Read Lock Write As fFile
+'        Get fFile, 1, tByte
+'        ReDim oNodes(tByte)
+'        For i = 1 To UBound(oNodes)
+'        With oNodes(i)
+'            Get fFile, , tInt
+'            .zxPos = tInt
+'            Get fFile, , tInt
+'            .zyPos = tInt
+'            Get fFile, , tByte
+'            .zupNode = tByte
+'            Get fFile, , tByte
+'            .zdownNode = tByte
+'            Get fFile, , tByte
+'            .zleftNode = tByte
+'            Get fFile, , tByte
+'            .zrightNode = tByte
+'            Get fFile, , tByte
+'            If tByte >= 128 Then
+'                tByte = tByte - 128
+'                .zpassThrough = True
+'            End If
+'            If tByte > 0 Then
+'                tByte = tByte - 1
+'                .znodeTag = tByte
+'            End If
+'            Get fFile, , tByte
+'            .znodeImage = tByte
+'            Get fFile, , tByte
+'            .zentryPoint = tByte
+'            Get fFile, , tByte
+'            .zexitWorld = tByte
+'        End With
+'        Next i
+'    Close fFile
+'
+'errOut:
+'Close fFile
 End Sub
 
 

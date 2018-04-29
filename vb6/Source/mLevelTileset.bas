@@ -113,36 +113,38 @@ End Type
 
 
 Public Sub LoadLevelTileset(oTileset As udtLTileSetData, sPath As String)
-Dim lFile As Long
-lFile = FreeFile
-Dim xx As Long
-Dim yy As Long
-Dim byt_ As Byte
-    
-    Open sPath For Input As lFile
-    Close lFile
-    Open sPath For Binary Access Read Lock Write As lFile
-    With oTileset
-    
-        Get #lFile, 1, byt_
-        .bWidth = byt_
-        Get #lFile, , byt_
-        .bHeight = byt_
-        
-        ReDim .Column(.bWidth)
-        
-        For xx = 0 To .bWidth
-            ReDim Preserve .Column(xx).Row(.bHeight)
-            For yy = 0 To .bHeight
-                Get #lFile, , byt_
-                .Column(xx).Row(yy) = CLng(byt_)
-            Next yy
-        Next xx
-    
-    End With
-    
-    Close lFile
-    
+__fileLoader.LoadLevelTileset oTileSet, sPath
+'
+'Dim lFile As Long
+'lFile = FreeFile
+'Dim xx As Long
+'Dim yy As Long
+'Dim byt_ As Byte
+'    
+'    Open sPath For Input As lFile
+'    Close lFile
+'    Open sPath For Binary Access Read Lock Write As lFile
+'    With oTileset
+'    
+'        Get #lFile, 1, byt_
+'        .bWidth = byt_
+'        Get #lFile, , byt_
+'        .bHeight = byt_
+'        
+'        ReDim .Column(.bWidth)
+'        
+'        For xx = 0 To .bWidth
+'            ReDim Preserve .Column(xx).Row(.bHeight)
+'            For yy = 0 To .bHeight
+'                Get #lFile, , byt_
+'                .Column(xx).Row(yy) = CLng(byt_)
+'            Next yy
+'        Next xx
+'    
+'    End With
+'    
+'    Close lFile
+'    
 End Sub
 
 Public Sub SaveLevelTileset(oTileset As udtLTileSetData, sPath As String)

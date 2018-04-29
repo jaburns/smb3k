@@ -45,14 +45,15 @@ End Sub
 
 
 Public Sub LoadEnemySkinFile(sPath As String)
-On Error GoTo errOut
-Dim fFile As Long
-Dim i As Long
-fFile = FreeFile
-Open sPath For Input As fFile
-Close fFile
-Open sPath For Binary Access Read Lock Write As fFile
-Get fFile, 1, oEnemySkin
-errOut:
-Close fFile
+oEnemySkin = __fileLoader.LoadEnemySkinFile(sPath)
+' On Error GoTo errOut
+' Dim fFile As Long
+' Dim i As Long
+' fFile = FreeFile
+' Open sPath For Input As fFile
+' Close fFile
+' Open sPath For Binary Access Read Lock Write As fFile
+' Get fFile, 1, oEnemySkin
+' errOut:
+' Close fFile
 End Sub

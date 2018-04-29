@@ -270,26 +270,27 @@ Public Sub LoadEnemySurfaces()
 End Sub
 
 Public Sub LoadWorldList()
-Dim fFile As Long
-fFile = FreeFile
-Dim i As Long
-Dim sTemp As String
-    i = 0
-    ReDim sWorldList(0)
-    Open App.Path & "\Mods\" & sWorldSetName & "\Worlds.inf" For Input As fFile
-    Do
-        Line Input #fFile, sTemp
-        sTemp = Trim$(sTemp)
-        If sTemp = "." Then Exit Do
-        ReDim Preserve sWorldList(i)
-        sWorldList(i) = sTemp
-        i = i + 1
-    Loop While True
-    Close fFile
-    ReDim oWorldPassData.bWorldPassed(UBound(sWorldList))
-    For i = 0 To UBound(oWorldPassData.bWorldPassed)
-        ReDim oWorldPassData.bWorldPassed(i).bLevelPassed(0)
-    Next i
+__fileLoader.LoadWorldList sWorldList
+'Dim fFile As Long
+'fFile = FreeFile
+'Dim i As Long
+'Dim sTemp As String
+'    i = 0
+'    ReDim sWorldList(0)
+'    Open App.Path & "\Mods\" & sWorldSetName & "\Worlds.inf" For Input As fFile
+'    Do
+'        Line Input #fFile, sTemp
+'        sTemp = Trim$(sTemp)
+'        If sTemp = "." Then Exit Do
+'        ReDim Preserve sWorldList(i)
+'        sWorldList(i) = sTemp
+'        i = i + 1
+'    Loop While True
+'    Close fFile
+'    ReDim oWorldPassData.bWorldPassed(UBound(sWorldList))
+'    For i = 0 To UBound(oWorldPassData.bWorldPassed)
+'        ReDim oWorldPassData.bWorldPassed(i).bLevelPassed(0)
+'    Next i
 End Sub
 
 
@@ -356,19 +357,22 @@ End Function
 
 
 Public Sub LoadSavedGame()
-Dim fFile As Long
-Dim tempSaveGame As udtSaveGameData
-If Not fileExist(App.Path & "\Mods\" & sWorldSetName & "\SavedGames.3ks") Then
-    For fFile = 1 To 5
-        oSaveGameData.gameSlot(fFile).sSaveString = "[EMPTY]"
-    Next fFile
-Exit Sub
-End If
-    fFile = FreeFile
-    Open App.Path & "\Mods\" & sWorldSetName & "\SavedGames.3ks" For Binary Access Read Lock Write As fFile
-    Get fFile, 1, oSaveGameData
-    Close fFile
+oSaveGameData = __fileLoader.LoadSavedGame()
+'
+'Dim fFile As Long
+'Dim tempSaveGame As udtSaveGameData
+'If Not fileExist(App.Path & "\Mods\" & sWorldSetName & "\SavedGames.3ks") Then
+'    For fFile = 1 To 5
+'        oSaveGameData.gameSlot(fFile).sSaveString = "[EMPTY]"
+'    Next fFile
+'Exit Sub
+'End If
+'    fFile = FreeFile
+'    Open App.Path & "\Mods\" & sWorldSetName & "\SavedGames.3ks" For Binary Access Read Lock Write As fFile
+'    Get fFile, 1, oSaveGameData
+'    Close fFile
 End Sub
+
 Public Sub SaveGameData()
 Dim fFile As Long
 fFile = FreeFile
