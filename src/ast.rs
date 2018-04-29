@@ -158,6 +158,10 @@ pub enum StatementLine {
     EndBlock,
     FileOperation,
 
+    ExitSub,
+    ExitFunction,
+    ExitLoop,
+
     Unknown(String),
 
     Empty,

@@ -320,6 +320,7 @@ fn end_function() -> Parser<'static, u8, ()> {
 fn statement() -> Parser<'static, u8, StatementLine> {
     let matched = on_error_statement() | dim_statement() | assignment_statement() | set_statement()
         | label_statement() | single_line_if_statement() | begin_if_block()
+        | exit_sub_statement() | exit_function_statement() | exit_loop_statement()
         | else_if_line() | else_line() | begin_with_block() | end_block()
         | begin_select_block() | case_label_line() | unknown_statement();
 
@@ -432,6 +433,18 @@ fn case_label_line() -> Parser<'static, u8, StatementLine> {
 
 fn end_block() -> Parser<'static, u8, StatementLine> {
     (seq(b"End If") | seq(b"End With") | seq(b"End Select")).map(|_| StatementLine::EndBlock)
+}
+
+fn exit_sub_statement() -> Parser<'static, u8, StatementLine> {
+    seq(b"Exit Sub").map(|_| StatementLine::ExitSub)
+}
+
+fn exit_function_statement() -> Parser<'static, u8, StatementLine> {
+    (seq(b"Exit Function") | seq(b"Exit Property")).map(|_| StatementLine::ExitFunction)
+}
+
+fn exit_loop_statement() -> Parser<'static, u8, StatementLine> {
+    (seq(b"Exit For") | seq(b"Exit Do") | seq(b"Exit While")).map(|_| StatementLine::ExitLoop)
 }
 
 fn call_sub_statement() -> Parser<'static, u8, StatementLine> {

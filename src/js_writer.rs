@@ -162,7 +162,10 @@ fn write_statement_line(line: &StatementLine, type_lookup: &TypeLookup) -> Strin
             result.push_str(translate_expression(expr).as_str());
             result.push_str(":");
         }
-        StatementLine::Set { target_name, type_name } => {
+        StatementLine::Set {
+            target_name,
+            type_name,
+        } => {
             result.push_str(fix_name_for_with_block(target_name).as_str());
             result.push_str(" = ");
             match type_name {
@@ -178,6 +181,15 @@ fn write_statement_line(line: &StatementLine, type_lookup: &TypeLookup) -> Strin
         }
         StatementLine::EndBlock => {
             result.push_str("}");
+        }
+        StatementLine::ExitSub => {
+            result.push_str("return;");
+        }
+        StatementLine::ExitFunction => {
+            result.push_str("return __retVal();");
+        }
+        StatementLine::ExitLoop => {
+            result.push_str("break;");
         }
         StatementLine::Unknown(source) => {
             result.push_str("/*");
@@ -201,10 +213,24 @@ fn write_function_body(body: &Vec<StatementLine>, type_lookup: &TypeLookup) -> S
     result
 }
 
+fn write_function_return_header(name: &str, return_type: &str, type_lookup: &TypeLookup) -> String {
+    format!(
+        "let {0} = {1}; const __retVal = () => {0};\n", 
+        name,
+        write_default_value(&VarKind::Standard, return_type, type_lookup)
+    )
+}
+
+fn write_function_return_footer() -> String {
+    String::from("return __retVal();\n")
+}
+
 fn write_function(
     is_async: bool,
+    name: &str,
     params: &Vec<FunctionParam>,
     body: &Vec<StatementLine>,
+    return_type: Option<&str>,
     type_lookup: &TypeLookup,
 ) -> String {
     let mut result = String::new();
@@ -235,7 +261,15 @@ fn write_function(
         }
     }
 
+    if let Some(ret) = return_type {
+        result.push_str(write_function_return_header(name, ret, type_lookup).as_str());
+    } 
+
     result.push_str(write_function_body(body, type_lookup).as_str());
+
+    if return_type.is_some() {
+        result.push_str(write_function_return_footer().as_str());
+    }
 
     result.push_str("}");
 
@@ -317,21 +351,29 @@ fn write_module(module: &Module, type_lookup: &TypeLookup) -> String {
                 name,
                 params,
                 body,
-                ..
+                return_type
             } => {
                 if *access_level == AccessLevel::Public && *kind == FunctionKind::PropertyGet
                     && params.len() == 0
                 {
                     return_block.push(format!(
-                        "get {}() {{ {} }},",
+                        "get {}() {{ {} {} {} }},",
                         name.as_str(),
-                        write_function_body(body, type_lookup).as_str()
+                        write_function_return_header(name.as_str(), return_type.as_str(), type_lookup),
+                        write_function_body(body, type_lookup).as_str(),
+                        write_function_return_footer()
                     ));
                 } else {
+                    let ret_type = if kind == &FunctionKind::Function {
+                        Some(return_type.as_str())
+                    } else {
+                        None
+                    };
+
                     post_header.push(format!(
                         "const {} = {};",
                         name.as_str(),
-                        write_function(*is_async, params, body, type_lookup).as_str()
+                        write_function(*is_async, name.as_str(), params, body, ret_type, type_lookup).as_str()
                     ));
 
                     if module.is_class && name == "Class_Initialize" {
