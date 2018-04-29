@@ -353,6 +353,7 @@ fn statement() -> Parser<'static, u8, StatementLine> {
         | redim_statement() | label_statement() | single_line_if_statement() | begin_if_block()
         | else_if_line() | else_line() | begin_with_block() | end_block()
         | exit_sub_statement() | exit_function_statement() | exit_loop_statement()
+        | begin_do_block() | end_do_block()
         | begin_for_block() | for_next_statement() | begin_select_block()
         | case_label_line() | unknown_statement();
 
@@ -494,6 +495,34 @@ fn begin_for_block() -> Parser<'static, u8, StatementLine> {
 
 fn for_next_statement() -> Parser<'static, u8, StatementLine> {
     (seq(b"Next") - rest_of_the_line()).map(|_| StatementLine::EndBlock)
+}
+
+fn do_loop_condition(prefix: &'static [u8], end: bool) -> Parser<'static, u8, StatementLine> {
+    let do_while = (seq(prefix) * seq(b" While") * space() * rest_of_the_line()).map(move |c| StatementLine::DoLoop {
+        kind: DoLoopKind::While,
+        condition: Expression { body: c },
+        is_end: end && true,
+    });
+    let do_until = (seq(prefix) * seq(b" Until") * space() * rest_of_the_line()).map(move |c| StatementLine::DoLoop {
+        kind: DoLoopKind::Until,
+        condition: Expression { body: c },
+        is_end: end,
+    });
+    let do_forever = (seq(prefix) * (!none_of(b"`"))).map(move |_| StatementLine::DoLoop {
+        kind: DoLoopKind::None,
+        condition: Expression { body: String::from("") },
+        is_end: end,
+    });
+
+    do_while | do_until | do_forever
+}
+
+fn begin_do_block() -> Parser<'static, u8, StatementLine> {
+    do_loop_condition(b"Do", false)
+}
+
+fn end_do_block() -> Parser<'static, u8, StatementLine> {
+    do_loop_condition(b"Loop", true)
 }
 
 fn begin_select_block() -> Parser<'static, u8, StatementLine> {

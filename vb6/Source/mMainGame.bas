@@ -329,7 +329,7 @@ Dim ySpeed As Single
         
     GFX.EndScene
     If ((CSng(Mario.yOnScreen) - 64) + offsetY > 480) And Not SoundPlaying(Sounds.Death) Then Exit Do
-    Loop
+    Loop While True
 
 End Sub
 

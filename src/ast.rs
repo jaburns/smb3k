@@ -145,21 +145,17 @@ pub enum StatementLine {
         step: String,
     },
 
-    BeginDo {
+    DoLoop {
         kind: DoLoopKind,
         condition: Expression,
-    },
-
-    EndDo {
-        kind: DoLoopKind,
-        condition: Expression,
+        is_end: bool,
     },
 
     BeginSelect(Expression),
     CaseLabel(Expression),
 
     EndBlock,
-    FileOperation,
+    FileOperation(String),
 
     ExitSub,
     ExitFunction,

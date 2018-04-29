@@ -196,6 +196,21 @@ fn write_statement_line(line: &StatementLine, type_lookup: &TypeLookup) -> Strin
             result.push_str(step);
             result.push_str(")) {");
         }
+        StatementLine::DoLoop { kind, condition, is_end } => {
+            if *is_end {
+                match kind {
+                    DoLoopKind::None => result.push_str("}"),
+                    DoLoopKind::While => result.push_str(format!("}} while ({});", translate_expression(condition)).as_str()),
+                    DoLoopKind::Until => result.push_str(format!("}} while (!({}));", translate_expression(condition)).as_str()),
+                }
+            } else {
+                match kind {
+                    DoLoopKind::None => result.push_str("do {"),
+                    DoLoopKind::While => result.push_str(format!("while ({}) {{", translate_expression(condition)).as_str()),
+                    DoLoopKind::Until => result.push_str(format!("while (!({})) {{", translate_expression(condition)).as_str()),
+                }
+            }
+        }
         StatementLine::BeginSelect(expr) => {
             result.push_str("switch (");
             result.push_str(translate_expression(expr).as_str());
@@ -405,7 +420,7 @@ fn write_module(module: &Module, type_lookup: &TypeLookup) -> String {
                         write_function_return_footer()
                     ));
                 } else {
-                    let ret_type = if kind == &FunctionKind::Function {
+                    let ret_type = if kind == &FunctionKind::Function || kind == &FunctionKind::PropertyGet {
                         Some(return_type.as_str())
                     } else {
                         None

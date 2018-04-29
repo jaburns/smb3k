@@ -137,7 +137,7 @@ Do
         
         If levelReturnValue = lvrQuit Or bGameOver Then Exit Do
         
-    Loop
+    Loop While True
     
     If bGameOver Then
         With GFX
@@ -350,7 +350,7 @@ Dim lKeyDown As Long
             Exit Do
         End If
         
-    Loop
+    Loop While True
     If bFirstRun Then ShowLoadGameScreen = (curSel <> -1)
     
     Music.StopMusic

@@ -228,7 +228,7 @@ Dim testTag As Byte
         DrawBonusMeter
         
     GFX.EndScene
-    Loop
+    Loop While True
     
     showFadeOut False
     
@@ -462,7 +462,7 @@ Dim bSavedGameLoaded As Boolean
         
         If GameKeyDown(Quit) Then Exit Do
         
-    Loop
+    Loop While True
     
     
     For i = 100 To 0 Step -4

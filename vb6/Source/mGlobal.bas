@@ -284,7 +284,7 @@ Dim sTemp As String
         ReDim Preserve sWorldList(i)
         sWorldList(i) = sTemp
         i = i + 1
-    Loop
+    Loop While True
     Close fFile
     ReDim oWorldPassData.bWorldPassed(UBound(sWorldList))
     For i = 0 To UBound(oWorldPassData.bWorldPassed)
