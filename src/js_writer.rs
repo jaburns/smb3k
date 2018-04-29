@@ -125,7 +125,11 @@ fn write_statement_line(line: &StatementLine, type_lookup: &TypeLookup) -> Strin
         StatementLine::Dim(declaration) => {
             result.push_str(write_let(declaration, type_lookup).as_str());
         }
-        StatementLine::ReDim { preserve, target_name, new_size } => {
+        StatementLine::ReDim {
+            preserve,
+            target_name,
+            new_size,
+        } => {
             result.push_str(translate_expression(target_name).as_str());
             result.push_str("(null,null,{");
             if *preserve {
@@ -136,10 +140,21 @@ fn write_statement_line(line: &StatementLine, type_lookup: &TypeLookup) -> Strin
             result.push_str(")});");
         }
         StatementLine::Assignment { to_name, value } => {
-            result.push_str(write_assignment(to_name, translate_expression(value).as_str()).as_str());
+            result
+                .push_str(write_assignment(to_name, translate_expression(value).as_str()).as_str());
         }
         StatementLine::CallSub { name, args } => {
-            result.push_str(format!("{}();", name).as_str());
+            result.push_str(translate_expression(name).as_str());
+            result.push_str("(");
+            for arg in args {
+                match arg {
+                    Some(a) => result.push_str(translate_expression(a).as_str()),
+                    None => result.push_str("(void(0))"),
+                };
+                result.push_str(",");
+            }
+            result.pop();
+            result.push_str(");");
         }
         StatementLine::SingleLineIf {
             condition,
@@ -196,18 +211,30 @@ fn write_statement_line(line: &StatementLine, type_lookup: &TypeLookup) -> Strin
             result.push_str(step);
             result.push_str(")) {");
         }
-        StatementLine::DoLoop { kind, condition, is_end } => {
+        StatementLine::DoLoop {
+            kind,
+            condition,
+            is_end,
+        } => {
             if *is_end {
                 match kind {
                     DoLoopKind::None => result.push_str("}"),
-                    DoLoopKind::While => result.push_str(format!("}} while ({});", translate_expression(condition)).as_str()),
-                    DoLoopKind::Until => result.push_str(format!("}} while (!({}));", translate_expression(condition)).as_str()),
+                    DoLoopKind::While => result.push_str(
+                        format!("}} while ({});", translate_expression(condition)).as_str(),
+                    ),
+                    DoLoopKind::Until => result.push_str(
+                        format!("}} while (!({}));", translate_expression(condition)).as_str(),
+                    ),
                 }
             } else {
                 match kind {
                     DoLoopKind::None => result.push_str("do {"),
-                    DoLoopKind::While => result.push_str(format!("while ({}) {{", translate_expression(condition)).as_str()),
-                    DoLoopKind::Until => result.push_str(format!("while (!({})) {{", translate_expression(condition)).as_str()),
+                    DoLoopKind::While => result.push_str(
+                        format!("while ({}) {{", translate_expression(condition)).as_str(),
+                    ),
+                    DoLoopKind::Until => result.push_str(
+                        format!("while (!({})) {{", translate_expression(condition)).as_str(),
+                    ),
                 }
             }
         }
@@ -227,7 +254,7 @@ fn write_statement_line(line: &StatementLine, type_lookup: &TypeLookup) -> Strin
         } => {
             let value = match type_name {
                 Some(t) => format!("new_{}()", t),
-                None => String::from("null")
+                None => String::from("null"),
             };
             result.push_str(write_assignment(target_name, value.as_str()).as_str());
         }
@@ -420,11 +447,12 @@ fn write_module(module: &Module, type_lookup: &TypeLookup) -> String {
                         write_function_return_footer()
                     ));
                 } else {
-                    let ret_type = if kind == &FunctionKind::Function || kind == &FunctionKind::PropertyGet {
-                        Some(return_type.as_str())
-                    } else {
-                        None
-                    };
+                    let ret_type =
+                        if kind == &FunctionKind::Function || kind == &FunctionKind::PropertyGet {
+                            Some(return_type.as_str())
+                        } else {
+                            None
+                        };
 
                     post_header.push(format!(
                         "const {} = {};",

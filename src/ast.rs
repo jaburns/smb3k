@@ -122,8 +122,8 @@ pub enum StatementLine {
     },
 
     CallSub {
-        name: String,
-        args: Vec<Expression>,
+        name: Expression,
+        args: Vec<Option<Expression>>,
     },
 
     SingleLineIf {
@@ -155,7 +155,7 @@ pub enum StatementLine {
     CaseLabel(Expression),
 
     EndBlock,
-    FileOperation(String),
+    FileOperation,
 
     ExitSub,
     ExitFunction,

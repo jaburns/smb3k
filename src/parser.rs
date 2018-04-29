@@ -78,7 +78,7 @@ pub fn separate_array_access(expr: &str) -> (String, String) {
 
     (
         String::from(&s[..split_index]),
-        String::from(&s[(split_index + 1)..])
+        String::from(&s[(split_index + 1)..]),
     )
 }
 
@@ -350,12 +350,13 @@ fn end_function() -> Parser<'static, u8, ()> {
 
 fn statement() -> Parser<'static, u8, StatementLine> {
     let matched = on_error_statement() | dim_statement() | assignment_statement() | set_statement()
-        | redim_statement() | label_statement() | single_line_if_statement() | begin_if_block()
-        | else_if_line() | else_line() | begin_with_block() | end_block()
-        | exit_sub_statement() | exit_function_statement() | exit_loop_statement()
-        | begin_do_block() | end_do_block()
+        | redim_statement() | label_statement() | single_line_if_statement()
+        | begin_if_block() | else_if_line() | else_line() | begin_with_block()
+        | end_block() | exit_sub_statement() | exit_function_statement()
+        | exit_loop_statement() | begin_do_block() | end_do_block()
         | begin_for_block() | for_next_statement() | begin_select_block()
-        | case_label_line() | unknown_statement();
+        | case_label_line() | file_operation() | call_sub_statement()
+        | unknown_statement();
 
     !end_function() * matched
 }
@@ -379,7 +380,7 @@ fn redim_statement() -> Parser<'static, u8, StatementLine> {
         StatementLine::ReDim {
             preserve: p.is_some(),
             target_name: Expression { body: t },
-            new_size: Expression { body: s }
+            new_size: Expression { body: s },
         }
     })
 }
@@ -468,11 +469,8 @@ fn begin_with_block() -> Parser<'static, u8, StatementLine> {
 
 fn for_separate_ubound_and_step(expr: &str) -> (String, String) {
     match expr.find(" Step ") {
-        Some(i) => (
-            String::from(&expr[..i]), 
-            String::from(&expr[(i + 6)..])
-        ),
-        None => (String::from(expr), String::from("1"))
+        Some(i) => (String::from(&expr[..i]), String::from(&expr[(i + 6)..])),
+        None => (String::from(expr), String::from("1")),
     }
 }
 
@@ -488,7 +486,7 @@ fn begin_for_block() -> Parser<'static, u8, StatementLine> {
             index: i,
             lower_bound: Expression { body: l },
             upper_bound: Expression { body: u },
-            step: s
+            step: s,
         }
     })
 }
@@ -498,19 +496,25 @@ fn for_next_statement() -> Parser<'static, u8, StatementLine> {
 }
 
 fn do_loop_condition(prefix: &'static [u8], end: bool) -> Parser<'static, u8, StatementLine> {
-    let do_while = (seq(prefix) * seq(b" While") * space() * rest_of_the_line()).map(move |c| StatementLine::DoLoop {
-        kind: DoLoopKind::While,
-        condition: Expression { body: c },
-        is_end: end && true,
+    let do_while = (seq(prefix) * seq(b" While") * space() * rest_of_the_line()).map(move |c| {
+        StatementLine::DoLoop {
+            kind: DoLoopKind::While,
+            condition: Expression { body: c },
+            is_end: end && true,
+        }
     });
-    let do_until = (seq(prefix) * seq(b" Until") * space() * rest_of_the_line()).map(move |c| StatementLine::DoLoop {
-        kind: DoLoopKind::Until,
-        condition: Expression { body: c },
-        is_end: end,
+    let do_until = (seq(prefix) * seq(b" Until") * space() * rest_of_the_line()).map(move |c| {
+        StatementLine::DoLoop {
+            kind: DoLoopKind::Until,
+            condition: Expression { body: c },
+            is_end: end,
+        }
     });
     let do_forever = (seq(prefix) * (!none_of(b"`"))).map(move |_| StatementLine::DoLoop {
         kind: DoLoopKind::None,
-        condition: Expression { body: String::from("") },
+        condition: Expression {
+            body: String::from(""),
+        },
         is_end: end,
     });
 
@@ -554,12 +558,25 @@ fn exit_loop_statement() -> Parser<'static, u8, StatementLine> {
 fn call_sub_statement() -> Parser<'static, u8, StatementLine> {
     let arg = none_of(b"`,").repeat(0..).convert(String::from_utf8) - space();
     let args = list(arg, sym(b',') - space());
-    let matched = word() - space() + args;
+    let matched = not_space() - space() + args;
 
     matched.map(|(n, a)| StatementLine::CallSub {
-        name: n,
-        args: a.into_iter().map(|x| Expression { body: x }).collect(),
+        name: Expression { body: n },
+        args: a.into_iter()
+            .map(|x| {
+                if x.len() < 1 {
+                    None
+                } else {
+                    Some(Expression { body: x })
+                }
+            })
+            .collect(),
     })
+}
+
+fn file_operation() -> Parser<'static, u8, StatementLine> {
+    ((seq(b"Open ") | seq(b"Close ") | seq(b"Get ") | seq(b"Put ") | seq(b"Line ")) * rest_of_the_line())
+        .map(|_| StatementLine::FileOperation)
 }
 
 fn rest_of_the_line() -> Parser<'static, u8, String> {

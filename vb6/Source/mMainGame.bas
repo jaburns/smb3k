@@ -323,7 +323,7 @@ Dim ySpeed As Single
         GFX.DrawSurface surfList.Mario, Mario.xSrc, Mario.ySrc, 32, Mario.SrcHeight, CSng(Mario.xOnScreen) - 16, (CSng(Mario.yOnScreen) - Mario.SrcHeight) + offsetY
         If lTime <= 0 And Not bDisableTime Then
             GFX.SetFont "Impact", 24, True, True, False, False
-            GFX.DrawText "TIME UP!", 240, 180, &HFF
+            GFX.DrawText "TIME UP!", 240, 180, 0xFF
         End If
         DrawBar
         

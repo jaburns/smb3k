@@ -294,7 +294,7 @@ End Sub
 
 
 Public Function fileExist(sPath As String) As Boolean
-On Local Error GoTo errNoFile
+On Error GoTo errNoFile
 Dim fFile As Long
 fFile = FreeFile
 fileExist = False
