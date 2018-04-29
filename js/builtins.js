@@ -3,29 +3,14 @@ window.True = true;
 window.vbGreen = "#0f0";
 window.vbBlue = "#00f";
 
-window.new_DXMouse = () => {
-    return {};
-};
+window.new_DXMouse = require('./dxmouse');
+window.new_DXGraphics = require('./dxgraphics');
+window.new_DXKeyboard = require('./dxkeyboard');
+window.new_DXJoystick = require('./dxjoystick');
+window.new_DXSound = require('./dxsound');
+window.new_DXMusic = require('./dxmusic');
 
-window.new_DXGraphics = () => {
-    return {};
-};
-
-window.new_DXKeyboard = () => {
-    return {};
-};
-
-window.new_DXJoystick = () => {
-    return {};
-};
-
-window.new_DXSound = () => {
-    return {};
-};
-
-window.new_DXMusic = () => {
-    return {};
-};
+window.App = { Path: "" };
 
 window.__fileLoader = require('./fileLoader');
 
