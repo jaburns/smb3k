@@ -2,7 +2,8 @@
   "private": true,
   "scripts": {
     "start": "node js/server.js",
-    "build": "webpack"
+    "build": "webpack",
+    "format": "js-beautify -r js/game.js"
   },
   "devDependencies": {
     "babel-core": "^6.26.2",
@@ -10,6 +11,7 @@
     "babel-polyfill": "^6.26.0",
     "babel-preset-env": "^1.6.1",
     "express": "^4.16.3",
+    "js-beautify": "^1.7.5",
     "webpack": "^4.6.0",
     "webpack-cli": "^2.0.15"
   }
