@@ -118,7 +118,7 @@ fn write_assignment(target: &Expression, value: &str) -> String {
     result
 }
 
-fn write_statement_line(line: &StatementLine, type_lookup: &TypeLookup) -> String {
+fn write_statement_line(line: &StatementLine, type_lookup: &TypeLookup, async_funcs: &Vec<String>) -> String {
     let mut result = String::new();
 
     match line {
@@ -144,7 +144,15 @@ fn write_statement_line(line: &StatementLine, type_lookup: &TypeLookup) -> Strin
                 .push_str(write_assignment(to_name, translate_expression(value).as_str()).as_str());
         }
         StatementLine::CallSub { name, args } => {
-            result.push_str(translate_expression(name).as_str());
+            let fixed_name = translate_expression(name);
+            for af in async_funcs {
+                if fixed_name.find(af).is_some() {
+                    result.push_str("await ");
+                    break;
+                }
+            }
+
+            result.push_str(fixed_name.as_str());
             result.push_str("(");
             for arg in args {
                 match arg {
@@ -164,9 +172,9 @@ fn write_statement_line(line: &StatementLine, type_lookup: &TypeLookup) -> Strin
             result.push_str("if (");
             result.push_str(translate_expression(condition).as_str());
             result.push_str(") {");
-            result.push_str(write_statement_line(if_body, type_lookup).as_str());
+            result.push_str(write_statement_line(if_body, type_lookup, async_funcs).as_str());
             result.push_str("} else {");
-            result.push_str(write_statement_line(else_body, type_lookup).as_str());
+            result.push_str(write_statement_line(else_body, type_lookup, async_funcs).as_str());
             result.push_str("}");
         }
         StatementLine::BeginIf(condition) => {
@@ -281,11 +289,11 @@ fn write_statement_line(line: &StatementLine, type_lookup: &TypeLookup) -> Strin
     result
 }
 
-fn write_function_body(body: &Vec<StatementLine>, type_lookup: &TypeLookup) -> String {
+fn write_function_body(body: &Vec<StatementLine>, type_lookup: &TypeLookup, async_funcs: &Vec<String>) -> String {
     let mut result = String::new();
 
     for s in body {
-        result.push_str(write_statement_line(s, type_lookup).as_str());
+        result.push_str(write_statement_line(s, type_lookup, async_funcs).as_str());
         result.push_str("\n");
     }
 
@@ -311,6 +319,7 @@ fn write_function(
     body: &Vec<StatementLine>,
     return_type: Option<&str>,
     type_lookup: &TypeLookup,
+    async_funcs: &Vec<String>,
 ) -> String {
     let mut result = String::new();
 
@@ -344,7 +353,7 @@ fn write_function(
         result.push_str(write_function_return_header(name, ret, type_lookup).as_str());
     }
 
-    result.push_str(write_function_body(body, type_lookup).as_str());
+    result.push_str(write_function_body(body, type_lookup, async_funcs).as_str());
 
     if return_type.is_some() {
         result.push_str(write_function_return_footer().as_str());
@@ -355,7 +364,7 @@ fn write_function(
     result
 }
 
-fn write_module(module: &Module, type_lookup: &TypeLookup) -> String {
+fn write_module(module: &Module, type_lookup: &TypeLookup, async_funcs: &Vec<String>) -> String {
     let mut pre_header: Vec<String> = Vec::new();
     let mut post_header: Vec<String> = Vec::new();
     let mut return_block: Vec<String> = Vec::new();
@@ -443,7 +452,7 @@ fn write_module(module: &Module, type_lookup: &TypeLookup) -> String {
                             return_type.as_str(),
                             type_lookup
                         ),
-                        write_function_body(body, type_lookup).as_str(),
+                        write_function_body(body, type_lookup, async_funcs).as_str(),
                         write_function_return_footer()
                     ));
                 } else {
@@ -463,7 +472,8 @@ fn write_module(module: &Module, type_lookup: &TypeLookup) -> String {
                             params,
                             body,
                             ret_type,
-                            type_lookup
+                            type_lookup,
+                            async_funcs
                         ).as_str()
                     ));
 
@@ -519,18 +529,35 @@ fn collect_types(program: &Vec<Module>) -> TypeLookup {
     result
 }
 
+fn collect_async_funcs(program: &Vec<Module>) -> Vec<String> {
+    let mut result = Vec::new();
+
+    for module in program {
+        for block in &module.contents {
+            if let TopLevelBlock::Function { name, is_async, .. } = block {
+                if *is_async {
+                    result.push(name.clone());
+                }
+            }
+        }
+    }
+
+    result
+}
+
 pub fn write_program(program: &Vec<Module>) -> String {
     let mut result = String::new();
 
     let type_lookup = collect_types(program);
+    let async_func_names = collect_async_funcs(program);
 
     for module in program.iter().filter(|x| x.is_class) {
-        result.push_str(write_module(module, &type_lookup).as_str());
+        result.push_str(write_module(module, &type_lookup, &async_func_names).as_str());
         result.push_str("\n");
     }
 
     for module in program.iter().filter(|x| !x.is_class) {
-        result.push_str(write_module(module, &type_lookup).as_str());
+        result.push_str(write_module(module, &type_lookup, &async_func_names).as_str());
         result.push_str("\n");
     }
 
