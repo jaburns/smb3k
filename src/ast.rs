@@ -94,7 +94,6 @@ pub struct Expression {
     pub body: String,
 }
 
-#[allow(dead_code)]
 #[derive(PartialEq, Eq, Debug)]
 pub enum DoLoopKind {
     None,
@@ -102,24 +101,23 @@ pub enum DoLoopKind {
     Until,
 }
 
-#[allow(dead_code)]
 #[derive(Debug)]
 pub enum StatementLine {
     Dim(VarDeclaration),
 
     Set {
-        target_name: String,
+        target_name: Expression,
         type_name: Option<String>,
     },
 
     ReDim {
         preserve: bool,
-        target_name: String,
+        target_name: Expression,
         new_size: Expression,
     },
 
     Assignment {
-        to_name: String,
+        to_name: Expression,
         value: Expression,
     },
 
@@ -144,10 +142,15 @@ pub enum StatementLine {
         index: String,
         lower_bound: Expression,
         upper_bound: Expression,
-        step: i32,
+        step: String,
     },
 
     BeginDo {
+        kind: DoLoopKind,
+        condition: Expression,
+    },
+
+    EndDo {
         kind: DoLoopKind,
         condition: Expression,
     },

@@ -55,6 +55,33 @@ pub fn parse_module(contents: &str) -> Module {
     }
 }
 
+pub fn separate_array_access(expr: &str) -> (String, String) {
+    let mut s = String::from(expr);
+    s.pop();
+
+    let mut paren_count = 0;
+    let mut split_index = 0;
+    for i in (0..s.len()).rev() {
+        let c = s.chars().nth(i).unwrap();
+        if c == ')' {
+            paren_count += 1;
+        }
+        if c == '(' {
+            if paren_count == 0 {
+                split_index = i;
+                break;
+            } else {
+                paren_count -= 1;
+            }
+        }
+    }
+
+    (
+        String::from(&s[..split_index]),
+        String::from(&s[(split_index + 1)..])
+    )
+}
+
 fn without_comments(line: &str) -> &str {
     match line.find("'") {
         Some(pos) => &line[..pos],
@@ -130,6 +157,10 @@ fn word() -> Parser<'static, u8, String> {
     none_of(b" \t\r\n`()")
         .repeat(1..)
         .convert(String::from_utf8)
+}
+
+fn not_space() -> Parser<'static, u8, String> {
+    none_of(b" `").repeat(1..).convert(String::from_utf8)
 }
 
 fn string() -> Parser<'static, u8, String> {
@@ -319,10 +350,11 @@ fn end_function() -> Parser<'static, u8, ()> {
 
 fn statement() -> Parser<'static, u8, StatementLine> {
     let matched = on_error_statement() | dim_statement() | assignment_statement() | set_statement()
-        | label_statement() | single_line_if_statement() | begin_if_block()
-        | exit_sub_statement() | exit_function_statement() | exit_loop_statement()
+        | redim_statement() | label_statement() | single_line_if_statement() | begin_if_block()
         | else_if_line() | else_line() | begin_with_block() | end_block()
-        | begin_select_block() | case_label_line() | unknown_statement();
+        | exit_sub_statement() | exit_function_statement() | exit_loop_statement()
+        | begin_for_block() | for_next_statement() | begin_select_block()
+        | case_label_line() | unknown_statement();
 
     !end_function() * matched
 }
@@ -338,6 +370,19 @@ fn on_error_statement() -> Parser<'static, u8, StatementLine> {
     (seq(b"On Error") - none_of(b"`").repeat(0..)).map(|_| StatementLine::Empty)
 }
 
+fn redim_statement() -> Parser<'static, u8, StatementLine> {
+    let matched = seq(b"ReDim") * space() * (seq(b"Preserve") - space()).opt() + rest_of_the_line();
+    matched.map(|(p, ts)| {
+        let (t, s) = separate_array_access(ts.as_str());
+
+        StatementLine::ReDim {
+            preserve: p.is_some(),
+            target_name: Expression { body: t },
+            new_size: Expression { body: s }
+        }
+    })
+}
+
 fn label_statement() -> Parser<'static, u8, StatementLine> {
     (word() * sym(b':')).map(|_| StatementLine::Empty)
 }
@@ -347,15 +392,15 @@ fn dim_statement() -> Parser<'static, u8, StatementLine> {
 }
 
 fn assignment_statement() -> Parser<'static, u8, StatementLine> {
-    let matched = word() - space() - sym(b'=') - space() + rest_of_the_line();
+    let matched = not_space() - space() - sym(b'=') - space() + rest_of_the_line();
     matched.map(|(to, exp)| StatementLine::Assignment {
-        to_name: to,
+        to_name: Expression { body: to },
         value: Expression { body: exp },
     })
 }
 
 fn set_statement_start() -> Parser<'static, u8, String> {
-    seq(b"Set") * space() * word() - space() - sym(b'=') - space()
+    seq(b"Set") * space() * not_space() - space() - sym(b'=') - space()
 }
 
 fn set_statement() -> Parser<'static, u8, StatementLine> {
@@ -363,10 +408,10 @@ fn set_statement() -> Parser<'static, u8, StatementLine> {
     let set_nothing = set_statement_start() - seq(b"Nothing") - space();
 
     set_new.map(|(v, t)| StatementLine::Set {
-        target_name: v,
+        target_name: Expression { body: v },
         type_name: Some(t),
     }) | set_nothing.map(|v| StatementLine::Set {
-        target_name: v,
+        target_name: Expression { body: v },
         type_name: None,
     })
 }
@@ -382,8 +427,7 @@ fn join(with: &str, lines: &Vec<String>) -> String {
 }
 
 fn if_then() -> Parser<'static, u8, String> {
-    let chunk = none_of(b" ").repeat(1..).convert(String::from_utf8);
-    let spaced_expr = list(!seq(b"Then") * chunk, sym(b' '));
+    let spaced_expr = list(!seq(b"Then") * not_space(), sym(b' '));
     (seq(b"If") * space() * spaced_expr - space() - seq(b"Then")).map(|x| join(" ", &x))
 }
 
@@ -419,6 +463,37 @@ fn else_line() -> Parser<'static, u8, StatementLine> {
 fn begin_with_block() -> Parser<'static, u8, StatementLine> {
     let matched = seq(b"With") * space() * rest_of_the_line();
     matched.map(|x| StatementLine::BeginWith(Expression { body: x }))
+}
+
+fn for_separate_ubound_and_step(expr: &str) -> (String, String) {
+    match expr.find(" Step ") {
+        Some(i) => (
+            String::from(&expr[..i]), 
+            String::from(&expr[(i + 6)..])
+        ),
+        None => (String::from(expr), String::from("1"))
+    }
+}
+
+fn begin_for_block() -> Parser<'static, u8, StatementLine> {
+    let iter_name = seq(b"For") * space() * word() - space() - sym(b'=') - space();
+    let lower = list(!seq(b"To") * not_space(), sym(b' ')).map(|x| join(" ", &x));
+    let range = lower - space() - seq(b"To") - space() + rest_of_the_line();
+    let matched = iter_name + range;
+
+    matched.map(|(i, (l, us))| {
+        let (u, s) = for_separate_ubound_and_step(us.as_str());
+        StatementLine::BeginFor {
+            index: i,
+            lower_bound: Expression { body: l },
+            upper_bound: Expression { body: u },
+            step: s
+        }
+    })
+}
+
+fn for_next_statement() -> Parser<'static, u8, StatementLine> {
+    (seq(b"Next") - rest_of_the_line()).map(|_| StatementLine::EndBlock)
 }
 
 fn begin_select_block() -> Parser<'static, u8, StatementLine> {

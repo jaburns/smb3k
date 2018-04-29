@@ -1,4 +1,5 @@
 use ast::*;
+use parser::separate_array_access;
 
 use std::collections::HashMap;
 
@@ -95,14 +96,26 @@ fn translate_expression(expression: &Expression) -> String {
     }
 }
 
-fn fix_name_for_with_block(name: &str) -> String {
-    let first = name.chars().next().unwrap();
+fn write_assignment(target: &Expression, value: &str) -> String {
+    let mut result = String::new();
+    let fixed_targ = translate_expression(target);
 
-    if first == '.' {
-        String::from("__with") + name
+    if fixed_targ.ends_with(')') {
+        let (array_targ, array_index) = separate_array_access(fixed_targ.as_str());
+        result.push_str(array_targ.as_str());
+        result.push_str("(");
+        result.push_str(array_index.as_str());
+        result.push_str(",");
+        result.push_str(value);
+        result.push_str(");");
     } else {
-        String::from(name)
+        result.push_str(fixed_targ.as_str());
+        result.push_str(" = ");
+        result.push_str(value);
+        result.push_str(";");
     }
+
+    result
 }
 
 fn write_statement_line(line: &StatementLine, type_lookup: &TypeLookup) -> String {
@@ -112,11 +125,18 @@ fn write_statement_line(line: &StatementLine, type_lookup: &TypeLookup) -> Strin
         StatementLine::Dim(declaration) => {
             result.push_str(write_let(declaration, type_lookup).as_str());
         }
+        StatementLine::ReDim { preserve, target_name, new_size } => {
+            result.push_str(translate_expression(target_name).as_str());
+            result.push_str("(null,null,{");
+            if *preserve {
+                result.push_str("preserve:true,");
+            }
+            result.push_str("count:(");
+            result.push_str(translate_expression(new_size).as_str());
+            result.push_str(")});");
+        }
         StatementLine::Assignment { to_name, value } => {
-            result.push_str(fix_name_for_with_block(to_name).as_str());
-            result.push_str(" = ");
-            result.push_str(translate_expression(value).as_str());
-            result.push_str(";");
+            result.push_str(write_assignment(to_name, translate_expression(value).as_str()).as_str());
         }
         StatementLine::CallSub { name, args } => {
             result.push_str(format!("{}();", name).as_str());
@@ -152,6 +172,30 @@ fn write_statement_line(line: &StatementLine, type_lookup: &TypeLookup) -> Strin
             result.push_str(translate_expression(target).as_str());
             result.push_str(";");
         }
+        StatementLine::BeginFor {
+            index,
+            lower_bound,
+            upper_bound,
+            step,
+        } => {
+            result.push_str("for (let ");
+            result.push_str(index);
+            result.push_str(" = (");
+            result.push_str(translate_expression(lower_bound).as_str());
+            result.push_str("); ");
+            result.push_str(index);
+            if step.chars().next().unwrap() == '-' {
+                result.push_str(" >= (");
+            } else {
+                result.push_str(" <= (");
+            }
+            result.push_str(translate_expression(upper_bound).as_str());
+            result.push_str("); ");
+            result.push_str(index);
+            result.push_str(" += (");
+            result.push_str(step);
+            result.push_str(")) {");
+        }
         StatementLine::BeginSelect(expr) => {
             result.push_str("switch (");
             result.push_str(translate_expression(expr).as_str());
@@ -166,18 +210,11 @@ fn write_statement_line(line: &StatementLine, type_lookup: &TypeLookup) -> Strin
             target_name,
             type_name,
         } => {
-            result.push_str(fix_name_for_with_block(target_name).as_str());
-            result.push_str(" = ");
-            match type_name {
-                Some(t) => {
-                    result.push_str("new_");
-                    result.push_str(t);
-                    result.push_str("();");
-                }
-                None => {
-                    result.push_str("null;");
-                }
-            }
+            let value = match type_name {
+                Some(t) => format!("new_{}()", t),
+                None => String::from("null")
+            };
+            result.push_str(write_assignment(target_name, value.as_str()).as_str());
         }
         StatementLine::EndBlock => {
             result.push_str("}");
@@ -215,7 +252,7 @@ fn write_function_body(body: &Vec<StatementLine>, type_lookup: &TypeLookup) -> S
 
 fn write_function_return_header(name: &str, return_type: &str, type_lookup: &TypeLookup) -> String {
     format!(
-        "let {0} = {1}; const __retVal = () => {0};\n", 
+        "let {0} = {1}; const __retVal = () => {0};\n",
         name,
         write_default_value(&VarKind::Standard, return_type, type_lookup)
     )
@@ -263,7 +300,7 @@ fn write_function(
 
     if let Some(ret) = return_type {
         result.push_str(write_function_return_header(name, ret, type_lookup).as_str());
-    } 
+    }
 
     result.push_str(write_function_body(body, type_lookup).as_str());
 
@@ -351,7 +388,7 @@ fn write_module(module: &Module, type_lookup: &TypeLookup) -> String {
                 name,
                 params,
                 body,
-                return_type
+                return_type,
             } => {
                 if *access_level == AccessLevel::Public && *kind == FunctionKind::PropertyGet
                     && params.len() == 0
@@ -359,7 +396,11 @@ fn write_module(module: &Module, type_lookup: &TypeLookup) -> String {
                     return_block.push(format!(
                         "get {}() {{ {} {} {} }},",
                         name.as_str(),
-                        write_function_return_header(name.as_str(), return_type.as_str(), type_lookup),
+                        write_function_return_header(
+                            name.as_str(),
+                            return_type.as_str(),
+                            type_lookup
+                        ),
                         write_function_body(body, type_lookup).as_str(),
                         write_function_return_footer()
                     ));
@@ -373,7 +414,14 @@ fn write_module(module: &Module, type_lookup: &TypeLookup) -> String {
                     post_header.push(format!(
                         "const {} = {};",
                         name.as_str(),
-                        write_function(*is_async, name.as_str(), params, body, ret_type, type_lookup).as_str()
+                        write_function(
+                            *is_async,
+                            name.as_str(),
+                            params,
+                            body,
+                            ret_type,
+                            type_lookup
+                        ).as_str()
                     ));
 
                     if module.is_class && name == "Class_Initialize" {
