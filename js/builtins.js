@@ -3,16 +3,24 @@ window.True = true;
 window.vbGreen = "#0f0";
 window.vbBlue = "#00f";
 
-window.new_DXMouse = require('./dxmouse');
-window.new_DXGraphics = require('./dxgraphics');
-window.new_DXKeyboard = require('./dxkeyboard');
-window.new_DXJoystick = require('./dxjoystick');
-window.new_DXSound = require('./dxsound');
-window.new_DXMusic = require('./dxmusic');
+window.new_DXGraphics = require('./engine/graphics');
+window.new_DXKeyboard = require('./engine/keyboard');
+window.new_DXJoystick = require('./engine/joystick');
+window.new_DXSound = require('./engine/sound');
+window.new_DXMusic = require('./engine/music');
 
 window.App = { Path: "" };
+window.CSng = x => x;
+window.CLng = x => x >> 0;
+window.CStr = x => x.toString();
+window.Trim$ = x => x.toString().trim();
+window.Abs = Math.abs;
+window.Sin = Math.sin;
+window.Cos = Math.cos;
 
 window.__fileLoader = require('./fileLoader');
+
+window.DoEvents = async () => new Promise(resolve => setTimeout(resolve, 10));
 
 window.__intDiv = (a, b) => Math.floor(a / b) >> 0;
 
