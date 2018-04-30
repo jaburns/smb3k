@@ -1,18 +1,20 @@
-window.False = false;
-window.True = true;
-window.vbGreen = "#0f0";
-window.vbBlue = "#00f";
-
 window.new_DXGraphics = require('./engine/graphics');
 window.new_DXKeyboard = require('./engine/keyboard');
 window.new_DXJoystick = require('./engine/joystick');
 window.new_DXSound = require('./engine/sound');
 window.new_DXMusic = require('./engine/music');
+
 window.__fileLoader = require('./fileLoader');
+window.False = false;
+window.True = true;
+window.vbGreen = "#0f0";
+window.vbBlue = "#00f";
+window.vbWhite = "#fff";
 
 window.App = { Path: "" };
 window.CSng = x => x;
 window.CLng = x => x >> 0;
+window.CInt = x => x >> 0;
 window.CStr = x => x.toString();
 window.Trim$ = x => x.toString().trim();
 window.IIf = (a, b, c) => (a ? b : c);
@@ -44,11 +46,9 @@ window.__makeArray = (lbound, ubound, makeElem) => {
             const new_arr = [];
 
             for (let i = 0; i <= redim.ubound; i++) {
-                if (redim.preserve && i < arr.length) {
-                    new_arr.push(arr[i])
-                } else {
-                    new_arr.push(makeElem());
-                }
+                new_arr.push(redim.preserve && i < arr.length 
+                    ? arr[i]
+                    : makeElem());
             }
 
             arr = new_arr;

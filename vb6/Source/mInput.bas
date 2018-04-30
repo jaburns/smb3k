@@ -46,21 +46,12 @@ Public Enum GameKeys
     QuitFromPauseKey
 End Enum
 
-Public Function SaveSlotKeyDown(ByVal i As Long) As Boolean
-SaveSlotKeyDown = False
-    If i = 0 Then
-        SaveSlotKeyDown = oKeyboard.IsDown(11)
-    ElseIf i < 10 Then
-        SaveSlotKeyDown = oKeyboard.IsDown(CByte(i + 1))
-    End If
-End Function
-
 Public Sub InitInput(lhWnd As Long)
-    LoadControlsFromFile App.Path & "\Controls.3kc"
     Set oKeyboard = New DXKeyboard
     Set oJoystick = New DXJoystick
     oKeyboard.Initialize lhWnd
     oJoystick.Initialize lhWnd
+    LoadControlsFromFile App.Path & "\Controls.3kc"
 End Sub
 
 Public Sub UpdateInput()
@@ -157,12 +148,12 @@ End Function
 
 Public Sub SetDefaultControls()
     With oControlData.btnKeyboard
-        .btnJump = 44 'oKeyboard.Key_Z
-        .btnRun = 42 'oKeyboard.Key_LSHIFT
-        .btnShoot = 57 'oKeyboard.Key_SPACE
-        .btnRelease = 45 'oKeyboard.Key_X
-        .btnLeaveLevel = 14 'oKeyboard.Key_BACKSPACE
-        .btnPause = 25 'oKeyboard.Key_P
+        .btnJump = oKeyboard.Key_Z
+        .btnRun = oKeyboard.Key_LSHIFT
+        .btnShoot = oKeyboard.Key_SPACE
+        .btnRelease = oKeyboard.Key_X
+        .btnLeaveLevel = oKeyboard.Key_BACKSPACE
+        .btnPause = oKeyboard.Key_P
     End With
     With oControlData.btnJoystick
         .btnJump = 1
@@ -173,11 +164,11 @@ Public Sub SetDefaultControls()
         .btnPause = 6
     End With
     With oControlData
-        .btnLeft = 203 'oKeyboard.Key_LEFT
-        .btnRight = 205 'oKeyboard.Key_RIGHT
-        .btnDuck = 208 'oKeyboard.Key_DOWN
-        .btnClimb = 200 'oKeyboard.Key_UP
-        .btnQuit = 1 'oKeyboard.Key_ESCAPE
+        .btnLeft = oKeyboard.Key_LEFT
+        .btnRight = oKeyboard.Key_RIGHT
+        .btnDuck = oKeyboard.Key_DOWN
+        .btnClimb = oKeyboard.Key_UP
+        .btnQuit = oKeyboard.Key_ESCAPE
         .joyXSens = 2500
         .joyYSens = 3500
     End With

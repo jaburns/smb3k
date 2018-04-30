@@ -357,14 +357,14 @@ End Function
 
 
 Public Sub LoadSavedGame()
-__fileLoader.LoadSavedGame oSaveGameData
-'
+ConsoleLog "Skipping load of saved game data load. Setting all save files to empty."
+' __fileLoader.LoadSavedGame oSaveGameData
 'Dim fFile As Long
 'Dim tempSaveGame As udtSaveGameData
 'If Not fileExist(App.Path & "\Mods\" & sWorldSetName & "\SavedGames.3ks") Then
-'    For fFile = 1 To 5
-'        oSaveGameData.gameSlot(fFile).sSaveString = "[EMPTY]"
-'    Next fFile
+    For fFile = 1 To 5
+        oSaveGameData.gameSlot(fFile).sSaveString = "[EMPTY]"
+    Next fFile
 'Exit Sub
 'End If
 '    fFile = FreeFile

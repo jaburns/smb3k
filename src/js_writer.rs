@@ -422,20 +422,30 @@ fn write_module(module: &Module, type_lookup: &TypeLookup, async_funcs: &Vec<Str
             TopLevelBlock::Enum {
                 access_level,
                 values,
-                ..
+                name,
             } => {
+                let mut block = format!("const {} = {{\n", name);
                 let mut val: i32 = 0;
 
                 for (name, custom_val) in values {
                     val = custom_val.unwrap_or(val);
                     let code = format!("const {} = {};", name.as_str(), val);
-                    val += 1;
 
                     match access_level {
                         AccessLevel::Public => pre_header.push(code),
                         AccessLevel::Private => post_header.push(code),
                     };
+
+                    block.push_str(format!("{}: {},\n", name, val).as_str());
+
+                    val += 1;
                 }
+
+                block.push_str("};");
+                match access_level {
+                    AccessLevel::Public => pre_header.push(block),
+                    AccessLevel::Private => post_header.push(block),
+                };
             }
 
             TopLevelBlock::Function {
@@ -483,10 +493,6 @@ fn write_module(module: &Module, type_lookup: &TypeLookup, async_funcs: &Vec<Str
                         ).as_str()
                     ));
 
-                    if module.is_class && name == "Class_Initialize" {
-                        post_header.push(String::from("Class_Initialize();"));
-                    }
-
                     if *access_level == AccessLevel::Public {
                         return_block.push(format!("{},", name.as_str()));
 
@@ -512,6 +518,9 @@ fn write_module(module: &Module, type_lookup: &TypeLookup, async_funcs: &Vec<Str
     result.push_str(join_lines(&pre_header).as_str());
     result.push_str(write_module_header(module).as_str());
     result.push_str(join_lines(&post_header).as_str());
+    if module.is_class {
+        result.push_str("if (typeof Class_Initialize !== 'undefined') Class_Initialize();\n");
+    }
     result.push_str("\nreturn {");
     result.push_str(join_lines(&return_block).as_str());
     result.push_str("};\n");
