@@ -380,7 +380,7 @@ fn redim_statement() -> Parser<'static, u8, StatementLine> {
         StatementLine::ReDim {
             preserve: p.is_some(),
             target_name: Expression { body: t },
-            new_size: Expression { body: s },
+            new_ubound: Expression { body: s },
         }
     })
 }

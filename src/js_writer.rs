@@ -19,11 +19,11 @@ fn write_default_value(decl_kind: &VarKind, type_name: &str, type_lookup: &TypeL
         VarKind::RangeArray(lower, upper) => format!(
             "__makeArray({}, {}, ()=>({}))",
             lower,
-            (upper - lower + 1),
+            upper,
             write_default_value(&VarKind::Standard, type_name, type_lookup)
         ),
         VarKind::DynamicArray => format!(
-            "__makeArray(1, 0, ()=>({}))",
+            "__makeArray(0, 0, ()=>({}))",
             write_default_value(&VarKind::Standard, type_name, type_lookup)
         ),
         VarKind::Standard => match type_name {
@@ -132,15 +132,15 @@ fn write_statement_line(line: &StatementLine, type_lookup: &TypeLookup, async_fu
         StatementLine::ReDim {
             preserve,
             target_name,
-            new_size,
+            new_ubound,
         } => {
             result.push_str(translate_expression(target_name).as_str());
             result.push_str("(null,null,{");
             if *preserve {
                 result.push_str("preserve:true,");
             }
-            result.push_str("count:(");
-            result.push_str(translate_expression(new_size).as_str());
+            result.push_str("ubound:(");
+            result.push_str(translate_expression(new_ubound).as_str());
             result.push_str(")});");
         }
         StatementLine::Assignment { to_name, value } => {

@@ -113,7 +113,7 @@ pub enum StatementLine {
     ReDim {
         preserve: bool,
         target_name: Expression,
-        new_size: Expression,
+        new_ubound: Expression,
     },
 
     Assignment {

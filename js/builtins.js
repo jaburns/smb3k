@@ -15,6 +15,7 @@ window.CSng = x => x;
 window.CLng = x => x >> 0;
 window.CStr = x => x.toString();
 window.Trim$ = x => x.toString().trim();
+window.IIf = (a, b, c) => (a ? b : c);
 window.Abs = Math.abs;
 window.Sin = Math.sin;
 window.Cos = Math.cos;
@@ -25,23 +26,24 @@ window.Strings = {
 window.Len = x => x.toString().length;
 window.UBound = arr => arr(null, null, null, true);
 window.DoEvents = async () => new Promise(resolve => setTimeout(resolve, 10));
+window.ConsoleLog = console.log.bind(console);
 
 window.__intDiv = (a, b) => Math.floor(a / b) >> 0;
 
-window.__makeArray = (lowerIndex, count, makeElem) => {
+window.__makeArray = (lbound, ubound, makeElem) => {
     let arr = [];
-    for (let i = 0; i < count; i++) {
+    for (let i = lbound; i <= ubound; i++) {
         arr.push(makeElem());
     }
 
     return (lookup, write, redim, getUbound) => {
         if (getUbound === true) {
-            return lowerIndex + arr.length - 1;
+            return lbound + arr.length - 1;
         }
         else if (typeof redim === 'object') {
             const new_arr = [];
 
-            for (let i = 0; i < redim.count; i++) {
+            for (let i = 0; i <= redim.ubound; i++) {
                 if (redim.preserve && i < arr.length) {
                     new_arr.push(arr[i])
                 } else {
@@ -52,10 +54,10 @@ window.__makeArray = (lowerIndex, count, makeElem) => {
             arr = new_arr;
         } 
         else if (typeof write !== 'undefined') {
-            arr[lookup - lowerIndex] = write;
+            arr[lookup - lbound] = write;
         } 
         else {
-            return arr[lookup - lowerIndex];
+            return arr[lookup - lbound];
         }
     };
 };

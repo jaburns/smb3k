@@ -3,6 +3,7 @@
   "scripts": {
     "start": "node js/server.js",
     "build": "webpack",
+    "watch": "webpack --watch",
     "format": "js-beautify -r js/game.js"
   },
   "devDependencies": {

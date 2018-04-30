@@ -269,7 +269,7 @@ Async Public Sub LoadEnemySurfaces()
 End Sub
 
 Public Sub LoadWorldList()
-__fileLoader.LoadWorldList sWorldList
+    __fileLoader.LoadWorldList sWorldList
 'Dim fFile As Long
 'fFile = FreeFile
 'Dim i As Long
@@ -286,10 +286,10 @@ __fileLoader.LoadWorldList sWorldList
 '        i = i + 1
 '    Loop While True
 '    Close fFile
-'    ReDim oWorldPassData.bWorldPassed(UBound(sWorldList))
-'    For i = 0 To UBound(oWorldPassData.bWorldPassed)
-'        ReDim oWorldPassData.bWorldPassed(i).bLevelPassed(0)
-'    Next i
+    ReDim oWorldPassData.bWorldPassed(UBound(sWorldList))
+    For i = 0 To UBound(oWorldPassData.bWorldPassed)
+        ReDim oWorldPassData.bWorldPassed(i).bLevelPassed(0)
+    Next i
 End Sub
 
 
