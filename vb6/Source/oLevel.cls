@@ -171,7 +171,7 @@ Dim int_ As Integer
 End Sub
 
 
-Public Sub LoadFromFile(sPath As String)
+Async Public Sub LoadFromFile(sPath As String)
 __fileLoader.LevelLoadFromFile zoLevel, sPath
 
 ' Dim lFile As Long

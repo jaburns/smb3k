@@ -112,7 +112,7 @@ Public Type udtLTileSetData
 End Type
 
 
-Public Sub LoadLevelTileset(oTileset As udtLTileSetData, sPath As String)
+Async Public Sub LoadLevelTileset(oTileset As udtLTileSetData, sPath As String)
 __fileLoader.LoadLevelTileset oTileSet, sPath
 '
 'Dim lFile As Long

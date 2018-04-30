@@ -198,7 +198,7 @@ End Function
 
 
 
-Public Sub loadMap(sPath As String)
+Async Public Sub loadMap(sPath As String)
 __fileLoader.loadMap oNodes, sPath
 '
 'Dim fFile As Long

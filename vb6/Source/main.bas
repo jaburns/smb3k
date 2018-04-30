@@ -24,6 +24,7 @@ Public frmMain_hWnd As Long
 '
 Async Public Sub __main__()
     frmMain_hWnd = 1337
+    sWorldSetName = "Main"
 
     KillInput
     InitInput frmMain_hWnd

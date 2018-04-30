@@ -1,5 +1,10 @@
 const sleep = async ms => new Promise(resolve => setTimeout(resolve, ms));
 
+const fixImagePath = path =>
+    window.location.protocol + "//" + window.location.host + "/assets" + path
+        .replace("bmp", "png")
+        .replace("gif", "png");
+
 module.exports = () => {
     let _frameTime = 0;
 
@@ -33,8 +38,9 @@ module.exports = () => {
             // TODO implement
         },
 
-        CreateSurface: (path, colorKey, isD3D, notBitmap, reload) => {
-            // TODO implement
+        CreateSurface: async (path, colorKey, isD3D, notBitmap, reload) => {
+            console.log("Graphics::CreateSurface", fixImagePath(path));
+            return Math.random();
         },
 
         DestroySurface: (id) => {/*nop*/}

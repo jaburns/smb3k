@@ -103,9 +103,8 @@ errOut:
 End Function
 
 
-Public Function cwdLoadWorldData(sPath As String) As Boolean
+Async Public Sub cwdLoadWorldData(sPath As String)
 __fileLoader.cwdLoadWorldData oCurWorldData, sPath
-cwdLoadWorldData = True
 ' 
 ' On Error GoTo errOut
 ' 'Dim oTMP as udtWorldData, i As Long, u As Long
@@ -138,4 +137,4 @@ cwdLoadWorldData = True
 '     cwdLoadWorldData = True
 ' errOut:
 '     Close fFile
-End Function
+End Sub

@@ -40,7 +40,7 @@ Public Sub SetLevelTime(lTime As Long, Optional ByVal resetMaxTime As Boolean = 
 End Sub
 
 
-Public Sub LoadLevel(sPath As String, sTilesetPath As String)
+Async Public Sub LoadLevel(sPath As String, sTilesetPath As String)
     bgX1 = 0
     bgX2 = 0
     curLevel.LoadFromFile sPath

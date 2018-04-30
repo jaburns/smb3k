@@ -22,6 +22,7 @@ window.Strings = {
     Left$: (str, count) => str.substr(0, count),
     Right$: (str, count) => str.substr(str.length - count, count)
 };
+window.Len = x => x.toString().length;
 window.UBound = arr => arr(null, null, null, true);
 window.DoEvents = async () => new Promise(resolve => setTimeout(resolve, 10));
 

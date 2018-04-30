@@ -6,10 +6,25 @@ module.exports = {
         worldList(1, "FungiForest");
     },
 
-    LoadSavedGame: savedData => {},
-    LoadEnemySkinFile: (enemySkin, path) => {},
-    LoadLevelTileset: (tileSet, path) => {},
-    loadMap: (nodes, path) => {},
-    cwdLoadWorldData: (data, path) => {},
+    LoadSavedGame: savedData => {
+        // TODO implement
+    },
+
+    LoadEnemySkinFile: async (enemySkin, path) => {
+        // TODO implement
+    },
+
+    LoadLevelTileset: async (tileSet, path) => {
+        // TODO implement
+    },
+
+    loadMap: async (nodes, path) => {
+        // TODO implement
+    },
+
+    cwdLoadWorldData: async (data, path) => {
+        // TODO implement
+    },
+
     LoadLevelFromFile: (level, path) => {},
 };

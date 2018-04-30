@@ -118,6 +118,10 @@ fn write_assignment(target: &Expression, value: &str) -> String {
     result
 }
 
+fn make_gfx_create_surface_async(line: &str) -> String {
+    line.replace("GFX.CreateSurface", "await GFX.CreateSurface")
+}
+
 fn write_statement_line(line: &StatementLine, type_lookup: &TypeLookup, async_funcs: &Vec<String>) -> String {
     let mut result = String::new();
 
@@ -288,7 +292,7 @@ fn write_statement_line(line: &StatementLine, type_lookup: &TypeLookup, async_fu
         _ => {}
     }
 
-    result
+    make_gfx_create_surface_async(result.as_str())
 }
 
 fn write_function_body(body: &Vec<StatementLine>, type_lookup: &TypeLookup, async_funcs: &Vec<String>) -> String {
@@ -536,6 +540,11 @@ fn collect_async_funcs(program: &Vec<Module>) -> Vec<String> {
 
     result.push(String::from("DoEvents"));
     result.push(String::from("EndScene"));
+    result.push(String::from("__fileLoader.LoadEnemySkinFile"));
+    result.push(String::from("__fileLoader.LoadLevelTileset"));
+    result.push(String::from("__fileLoader.loadMap"));
+    result.push(String::from("__fileLoader.cwdLoadWorldData"));
+    result.push(String::from("__fileLoader.LevelLoadFromFile"));
 
     for module in program {
         for block in &module.contents {

@@ -24,7 +24,6 @@ Public Const PI As Double = 3.14159265358979
 'the main gfx engine
 Public GFX As New DXGraphics
 
-Public sMarioSkin As String
 
 'current game data
 Public sWorldSetName As String
@@ -177,7 +176,7 @@ Public Sub Mouse_Show()
 End Sub
 
 
-Public Sub LoadBlankWorldPassInfo()
+Async Public Sub LoadBlankWorldPassInfo()
 Dim i As Long
     ReDim sWorldNameList(UBound(sWorldList))
     For i = 0 To UBound(sWorldList)
@@ -193,7 +192,7 @@ End Sub
 '
 '  This subs loads all the surfaces for the game from files
 '
-Public Sub InitSurfaces()
+Async Public Sub InitSurfaces()
     
     surfList.Mario = GFX.CreateSurface(GetSkinPath("Standard.bmp"), 0, False)
     surfList.MarioWings = GFX.CreateSurface(GetSkinPath("Wings.bmp"), 0, False)
@@ -212,11 +211,11 @@ Public Sub InitSurfaces()
     
 End Sub
 Private Function GetSkinPath(sBitmapName As String)
-    If Not fileExist(App.Path & "\Skins\" & sMarioSkin & "\" & sBitmapName) Then GetSkinPath = App.Path & "\Skins\Default\" & sBitmapName Else GetSkinPath = App.Path & "\Skins\" & sMarioSkin & "\" & sBitmapName
+    GetSkinPath = App.Path & "\Skins\Default\" & sBitmapName 
 End Function
 
 
-Public Sub LoadEnemySurfaces()
+Async Public Sub LoadEnemySurfaces()
     With surfList.EnemyList
         If .Goomba <> 0 Then GFX.DestroySurface .Goomba
         .Goomba = GFX.CreateSurface(App.Path & "\Data\Enemies\" & oEnemySkin.Goomba, 0, False)
