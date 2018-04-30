@@ -30,8 +30,6 @@ Async Public Sub __main__()
 
     'init everything
     GFX.Initialize frmMain_hWnd, 640, 480, 16
-    Set oMouse = New DXMouse
-    oMouse.Initialize frmMain_hWnd, 0, 0, 640, 480, 1
     InitSurfaces
     LoadSounds
     InitObjects
@@ -54,7 +52,6 @@ Async Public Sub __main__()
     Set Music = Nothing
     Set Mario = Nothing
     Set GFX = Nothing
-    Set oMouse = Nothing
     frmFrontEnd.ReShow
     
 errOut:

@@ -25,7 +25,6 @@ Public oControlData As udtControlData
 
 Private oKeyboard As DXKeyboard
 Private oJoystick As DXJoystick
-Public oMouse As DXMouse
 
 Public Enum GameKeys
     Left
