@@ -8,6 +8,7 @@ window.new_DXKeyboard = require('./engine/keyboard');
 window.new_DXJoystick = require('./engine/joystick');
 window.new_DXSound = require('./engine/sound');
 window.new_DXMusic = require('./engine/music');
+window.__fileLoader = require('./fileLoader');
 
 window.App = { Path: "" };
 window.CSng = x => x;
@@ -22,9 +23,6 @@ window.Strings = {
     Right$: (str, count) => str.substr(str.length - count, count)
 };
 window.UBound = arr => arr(null, null, null, true);
-
-window.__fileLoader = require('./fileLoader');
-
 window.DoEvents = async () => new Promise(resolve => setTimeout(resolve, 10));
 
 window.__intDiv = (a, b) => Math.floor(a / b) >> 0;
