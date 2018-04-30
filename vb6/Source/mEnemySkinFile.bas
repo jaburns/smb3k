@@ -45,7 +45,7 @@ End Sub
 
 
 Public Sub LoadEnemySkinFile(sPath As String)
-oEnemySkin = __fileLoader.LoadEnemySkinFile(sPath)
+__fileLoader.LoadEnemySkinFile oEnemySkin, sPath
 ' On Error GoTo errOut
 ' Dim fFile As Long
 ' Dim i As Long

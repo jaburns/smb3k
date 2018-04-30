@@ -358,7 +358,7 @@ End Function
 
 
 Public Sub LoadSavedGame()
-oSaveGameData = __fileLoader.LoadSavedGame()
+__fileLoader.LoadSavedGame oSaveGameData
 '
 'Dim fFile As Long
 'Dim tempSaveGame As udtSaveGameData

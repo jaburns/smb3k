@@ -17,6 +17,11 @@ window.Trim$ = x => x.toString().trim();
 window.Abs = Math.abs;
 window.Sin = Math.sin;
 window.Cos = Math.cos;
+window.Strings = { 
+    Left$: (str, count) => str.substr(0, count),
+    Right$: (str, count) => str.substr(str.length - count, count)
+};
+window.UBound = arr => arr(null, null, null, true);
 
 window.__fileLoader = require('./fileLoader');
 
@@ -30,8 +35,11 @@ window.__makeArray = (lowerIndex, count, makeElem) => {
         arr.push(makeElem());
     }
 
-    return (lookup, write, redim) => {
-        if (typeof redim === 'object') {
+    return (lookup, write, redim, getUbound) => {
+        if (getUbound === true) {
+            return lowerIndex + arr.length - 1;
+        }
+        else if (typeof redim === 'object') {
             const new_arr = [];
 
             for (let i = 0; i < redim.count; i++) {
