@@ -74,6 +74,9 @@ module.exports = () => {
             if (typeof alpha !== 'undefined') _ctx.globalAlpha = 1;
         },
 
+        GetSurfaceWidth: id => _loadedSurfaces[id].width,
+        GetSurfaceHeight: id => _loadedSurfaces[id].height,
+
         CreateSurface: async (path, colorKey, isD3D, notBitmap, reload) => {
             let url = pathToURL(path);
             log("Graphics::CreateSurface", pathToURL(path));

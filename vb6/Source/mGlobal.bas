@@ -386,7 +386,7 @@ Public Sub DetermineLevelPassedCount()
 Dim i As Long
 Dim u As Long
     lLevelPassedCount = 0
-    For i = 0 To UBound(oWorldPassData.bWorldPassed())
+    For i = 0 To UBound(oWorldPassData.bWorldPassed)
         For u = 0 To UBound(oWorldPassData.bWorldPassed(i).bLevelPassed)
             If oWorldPassData.bWorldPassed(i).bLevelPassed(u) Then lLevelPassedCount = lLevelPassedCount + 1
         Next u

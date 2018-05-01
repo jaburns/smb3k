@@ -73,9 +73,8 @@ Dim testTag As Byte
     surfList.WorldMap = GFX.CreateSurface(App.Path & "\Mods\" & sWorldSetName & "\" & sWorldList(lWorld) & "\Worldmap.gif", 1, False, True)
     If surfList.WorldImages <> 0 Then GFX.DestroySurface surfList.WorldImages
     surfList.WorldImages = GFX.CreateSurface(App.Path & "\Mods\" & sWorldSetName & "\" & sWorldList(lWorld) & "\MapObjects.bmp", 0, False, False)
-    frmMain_picLoadSize.Picture = LoadPicture(App.Path & "\Mods\" & sWorldSetName & "\" & sWorldList(lWorld) & "\Worldmap.gif")
-    mapWidth = frmMain_picLoadSize.width
-    mapHeight = frmMain_picLoadSize.height
+    mapWidth = GFX.GetSurfaceWidth(surfList.WorldMap);
+    mapHeight = GFX.GetSurfaceHeight(surfList.WorldMap);
     
     'position mario if hes just entering the world
     If startNode < -10 And startNode >= -20 Then
@@ -96,7 +95,26 @@ Dim testTag As Byte
     MusicPlayMusic
     
     showFadeIn False
+    ShowWorldMapLoop
+    showFadeOut False
     
+    mapLevelEntryMode = nodeMap.EntryMode(curNode)
+    mapLevelEntryTag = nodeMap.EntryTag(curNode)
+    
+    MusicStopMusic
+    Set nodeMap = Nothing
+    ShowWorldMap__result = ShowWorldMap__result - 1
+    
+    If ShowWorldMap__result >= 0 Then ShowBlackTextScreen oCurWorldData.LevelData(ShowWorldMap__result).LevelName
+    
+End Sub
+
+
+Async Public Sub ShowWorldMapLoop()
+Dim i As Long
+Dim u As Long
+Dim testTag As Byte
+
     Do
     GFX.BeginScene 25
     
@@ -178,6 +196,7 @@ Dim testTag As Byte
                 dirMario = dDown
                 getSpeeds
             ElseIf GameKeyDown(Jump) Then
+                ConsoleLog "Trying to enter pipe"
                 testTag = nodeMap.NodeTag(curNode)
                 If testTag > 0 And testTag < 21 Then
                     For i = 1 To nodeMap.nodeCount
@@ -199,7 +218,7 @@ Dim testTag As Byte
                     drawMap
                     DrawBonusMeter
                     GFX.EndScene
-                    Exit Do
+                    Exit Sub
                 ElseIf testTag > 40 And testTag <= 110 Then
                     ShowWorldMap__result = testTag - 40
                     bTimingTime = GameKeyDown(Shoot)
@@ -207,7 +226,7 @@ Dim testTag As Byte
                     drawMap
                     DrawBonusMeter
                     GFX.EndScene
-                    Exit Do
+                    Exit Sub
                 ElseIf testTag = 111 Then
                     showSaveScreen
                 End If
@@ -215,7 +234,7 @@ Dim testTag As Byte
                 mapExitToLoadGame = True
                 levelReturnValue = lvrAbort
                 GFX.EndScene
-                Exit Do
+                Exit Sub
             End If
             Next u
             
@@ -230,20 +249,8 @@ Dim testTag As Byte
         
     GFX.EndScene
     Loop While True
-    
-    showFadeOut False
-    
-    mapLevelEntryMode = nodeMap.EntryMode(curNode)
-    mapLevelEntryTag = nodeMap.EntryTag(curNode)
-    
-    MusicStopMusic
-    Set nodeMap = Nothing
-    ShowWorldMap__result = ShowWorldMap__result - 1
-    
-    If ShowWorldMap__result >= 0 Then ShowBlackTextScreen oCurWorldData.LevelData(ShowWorldMap__result).LevelName
-    
-End Sub
 
+End Sub
 
 
 

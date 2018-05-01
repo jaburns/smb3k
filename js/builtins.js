@@ -7,6 +7,7 @@ window.new_DXMusic = require('./engine/music');
 window.__fileLoader = require('./fileLoader');
 window.False = false;
 window.True = true;
+window.vbRed = "#f00";
 window.vbGreen = "#0f0";
 window.vbBlue = "#00f";
 window.vbWhite = "#fff";
@@ -21,13 +22,15 @@ window.IIf = (a, b, c) => (a ? b : c);
 window.Abs = Math.abs;
 window.Sin = Math.sin;
 window.Cos = Math.cos;
+window.Mid$ = (s, a, b) => s.substr(a - 1, b);
 window.Strings = { 
     Left$: (str, count) => str.substr(0, count),
     Right$: (str, count) => str.substr(str.length - count, count)
 };
+Math.Sqr = Math.sqrt;
 window.Len = x => x.toString().length;
 window.UBound = arr => arr(null, null, null, true);
-window.DoEvents = async () => new Promise(resolve => setTimeout(resolve, 10));
+window.DoEvents = async () => new Promise(resolve => setTimeout(resolve, 50));
 window.ConsoleLog = console.log.bind(console);
 
 window.__intDiv = (a, b) => Math.floor(a / b) >> 0;

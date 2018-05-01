@@ -113,7 +113,7 @@ End Type
 
 
 Async Public Sub LoadLevelTileset(oTileset As udtLTileSetData, sPath As String)
-__fileLoader.LoadLevelTileset oTileSet, sPath
+__fileLoader.LoadLevelTileset oTileset, sPath
 '
 'Dim lFile As Long
 'lFile = FreeFile

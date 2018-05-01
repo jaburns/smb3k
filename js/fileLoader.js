@@ -63,7 +63,31 @@ module.exports = {
     loadMap: async (nodes, path) => {
         const url = pathToURL(path);
         console.log("FileLoader::loadMap", url);
-        // TODO implement
+        const bytes = await loadBinaryFile(url);
+
+        const nodeUbound = chompByte(bytes);
+        nodes(null, null, {ubound: nodeUbound});
+        for (let i = 1; i <= nodeUbound; i++) {
+            nodes(i).zxPos = chompShort(bytes);
+            nodes(i).zyPos = chompShort(bytes);
+            nodes(i).zupNode = chompByte(bytes);
+            nodes(i).zdownNode = chompByte(bytes);
+            nodes(i).zleftNode = chompByte(bytes);
+            nodes(i).zrightNode = chompByte(bytes);
+            let x = chompByte(bytes);
+            if (x >= 128) {
+                x -= 128;
+                nodes(i).zpassThrough = true;
+            }
+            if (x > 0) {
+                x -= 1;
+                nodes(i).znodeTag = x;
+            }
+            nodes(i).znodeImage = chompByte(bytes);
+            nodes(i).zentryPoint = chompByte(bytes);
+            nodes(i).zexitWorld = chompByte(bytes);
+            console.log(nodes(i));
+        }
     },
 
     cwdLoadWorldData: async (data, path) => {
@@ -105,7 +129,7 @@ module.exports = {
         }
     },
 
-    LoadLevelFromFile: (level, path) => {
+    LevelLoadFromFile: (level, path) => {
         const url = pathToURL(path);
         console.log("FileLoader::LoadLevelFromFile", url);
         // TODO implement
