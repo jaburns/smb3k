@@ -210,7 +210,7 @@ Dim tTile As udeLTileType
         If (xSpeed < 0.3 And xSpeed > 0) Or (xSpeed > -0.3 And xSpeed < 0) Then xSpeed = 0
     End If
     
-    If GetLevelSideWarp Then
+    If GetLevelSideWarp() Then
         If xPos <= -1 Then xPos = GetLevelWidth()
         If xPos >= GetLevelWidth() + 1 Then xPos = 0
     Else

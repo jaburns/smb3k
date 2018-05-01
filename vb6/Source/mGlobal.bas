@@ -58,6 +58,8 @@ Public oSaveGameData As udtSaveGameData
 Public lLevelPassedCount As Long
 Public blBossesPassed As udeBossPassList
 
+
+
 Public DebugModeEnabled As Boolean
 
 
@@ -357,7 +359,7 @@ End Function
 
 
 Public Sub LoadSavedGame()
-ConsoleLog "Skipping load of saved game data load. Setting all save files to empty."
+ConsoleLog "Skipping load of saved game data. Setting all save files to empty."
 ' __fileLoader.LoadSavedGame oSaveGameData
 'Dim fFile As Long
 'Dim tempSaveGame As udtSaveGameData
@@ -375,9 +377,11 @@ End Sub
 
 Public Sub SaveGameData()
 Dim fFile As Long
-fFile = FreeFile
-Open App.Path & "\Mods\" & sWorldSetName & "\SavedGames.3ks" For Binary Access Write Lock Read Write As fFile
-Put fFile, 1, oSaveGameData
+ConsoleLog "Skipping save of saved game data."
+' __fileLoader.LoadSavedGame oSaveGameData
+'fFile = FreeFile
+'Open App.Path & "\Mods\" & sWorldSetName & "\SavedGames.3ks" For Binary Access Write Lock Read Write As fFile
+'Put fFile, 1, oSaveGameData
 Close fFile
 End Sub
 

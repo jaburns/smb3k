@@ -334,11 +334,7 @@ Async Public Sub UpdatePosition()
     If lPowTime Then
         If Not SoundPlaying(Sounds.PowLoop) Then
             lPowTime = lPowTime - 1
-            PlaySound Sounds.PowLoop
-        End If
-        If lPowTime = 0 Then
-            LevelBlockSwitch
-            EndSound Sounds.PowLoop
+            If lPowTime = 0 Then LevelBlockSwitch Else PlaySound Sounds.PowLoop
         End If
     End If
     
@@ -592,14 +588,14 @@ Private Sub HandlePowerups()
                 If Not SoundPlaying(Sounds.Floating) And (sGravity - sJump) > 0 Then PlaySound Sounds.Floating
             Case MarioFlower
                 If lLastFire = 0 Then
-                    If MarioThrowFire(xPos + (-32 * bMarioFaceRight) - 16, yPos - 32, bMarioFaceRight) Then
+                    If MarioThrowFire(xPos + (32 * IIf(bMarioFaceRight, 1, 0)) - 16, yPos - 32, bMarioFaceRight) Then
                         lLastFire = FIRING_FREQ
                         PlaySound Sounds.Fireball
                     End If
                 End If
             Case MarioHammer
                 If lLastFire = 0 Then
-                    If MarioThrowHammer(xPos + (-32 * bMarioFaceRight) - 16, yPos - 32, sRun) Then
+                    If MarioThrowHammer(xPos + (32 * IIf(bMarioFaceRight, 1, 0)) - 16, yPos - 32, sRun) Then
                         lLastFire = FIRING_FREQ
                         PlaySound Sounds.Fireball
                     End If
@@ -867,7 +863,7 @@ Dim bColl As Boolean
 Dim yTest As Long
 
     'keep the player on the screen or warp him accross
-    If GetLevelSideWarp Then
+    If GetLevelSideWarp() Then
         If xPos <= -9 Then xPos = GetLevelWidth() + 8
         If xPos >= GetLevelWidth() + 9 Then xPos = -8
     Else

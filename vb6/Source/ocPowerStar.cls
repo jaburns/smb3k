@@ -37,7 +37,7 @@ Public Sub HandleStar()
         Exit Sub
     End If
     
-    If GetLevelSideWarp Then
+    If GetLevelSideWarp() Then
         If xPos <= -1 Then xPos = GetLevelWidth()
         If xPos >= GetLevelWidth() + 1 Then xPos = 0
     Else

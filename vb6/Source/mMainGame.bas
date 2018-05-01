@@ -86,7 +86,7 @@ Async Public Sub MainGameLoop(sMusic As String, lX As Long, lY As Long, lInTime 
     
     If startPipe <> mpNothing Then Mario.makeExitPipe startPipe
 
-    lTime = DecrementTime
+    lTime = DecrementTime()
     
     CenterLevelMarioX
     CenterLevelMarioY
@@ -140,7 +140,7 @@ Async Public Sub MainGameLoop(sMusic As String, lX As Long, lY As Long, lInTime 
             
             If Not bDisableTime Then
                 lTickTimeCount = lTickTimeCount + 1
-                lTime = DecrementTime
+                lTime = DecrementTime()
                 If lTime <= 0 Then
                     Mario.bAlive = False
                     Mario.xSrc = 256      'deATH frame
@@ -446,6 +446,8 @@ Private Sub DrawBar()
 Dim sBonus As String
 Dim timeWidth As Single
 Dim i As Long
+
+    ConsoleLog "HELLO1"
     
     If Not bDisableTime Then
         timeWidth = ((lTime - (lTimeIncCount / 30)) / lMaxTime) * 640
@@ -456,7 +458,7 @@ Dim i As Long
                 GFX.DrawSurface surfList.BarIcons, 64, 32, 64, 16, i * 64, 0
             End If
         Next i
-        GFX.DrawSurface surfList.Objects, 0, 192, 16, 16, ((i - 1) * 64) + (timeWidth Mod 64) - 8, 0, , , timeFireAngle, 75
+        GFX.DrawSurface surfList.Objects, 0, 192, 16, 16, (__intDiv(timeWidth , 64) * 64) + (timeWidth Mod 64) - 8, 0, , , timeFireAngle, 75
     End If
     DrawBonusMeter
     

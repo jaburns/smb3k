@@ -29,7 +29,7 @@ Dim tTile As udeLTileType
 
     If Not bActive Then Exit Sub
     
-    If GetLevelSideWarp Then
+    If GetLevelSideWarp() Then
         If xPos <= -1 Then xPos = GetLevelWidth()
         If xPos >= GetLevelWidth() + 1 Then xPos = 0
     Else

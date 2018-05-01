@@ -228,7 +228,7 @@ Dim tTile As udeLTileType
 
     If Not bDying Then xPos(lBall) = xPos(lBall) + xSpeed(lBall)
     
-    If GetLevelSideWarp Then
+    If GetLevelSideWarp() Then
         If xPos(lBall) <= -1 Then xPos(lBall) = GetLevelWidth()
         If xPos(lBall) >= GetLevelWidth() + 1 Then xPos(lBall) = 0
     Else

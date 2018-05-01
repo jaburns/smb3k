@@ -22,14 +22,11 @@ module.exports = () => {
 
         PlaySound: (id, loop) => {
             _soundElems[id].play();
+            _soundElems[id].currentTime = 0;
         },
 
-        StopSound: (id, pause) => {
-            // TODO implement
-        },
+        StopSound: () => {},
 
-        StillPlaying: id => {
-            // TODO implement
-        },
+        StillPlaying: id => !_soundElems[id].ended,
     };
 };

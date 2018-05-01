@@ -120,7 +120,8 @@ Dim testTag As Byte
     
         UpdateInput
         If GameKeyDown(QuitFromPauseKey) Then DebugModeEnabled = False
-        If DebugKeysPressed Then DebugModeEnabled = True
+'       If DebugKeysPressed() Then DebugModeEnabled = True
+DebugModeEnabled = True
         If GameKeyDown(DebugA) Then showSaveScreen True
         'If GameKeyDown(DebugA) And DebugModeEnabled Then If gameMarioStat < 4 Then gameMarioStat = gameMarioStat + 1 Else gameMarioStat = 0
     
