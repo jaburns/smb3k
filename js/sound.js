@@ -1,14 +1,27 @@
+import { pathToURL } from './utils';
+
+export const loadSoundElem = (url, collection) => {
+    const elem = new Audio(url);
+    collection.push(elem);
+    return collection.length - 1;
+};
+
 module.exports = () => {
+    const _soundElems = [];
+
     return {
-        Initialize: hWnd => {/*nop*/},
+        Initialize: hWnd => {
+            console.log("Sound::Initialize");
+        },
 
         LoadSound: (path, channel, bits) => {
             console.log("Sound::LoadSound", path);
-            // TODO implement
+            const url = pathToURL(path);
+            return loadSoundElem(url, _soundElems);
         },
 
         PlaySound: (id, loop) => {
-            // TODO implement
+            _soundElems[id].play();
         },
 
         StopSound: (id, pause) => {
