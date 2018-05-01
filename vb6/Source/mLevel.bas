@@ -1,7 +1,7 @@
 Attribute VB_Name = "mLevel"
 Option Explicit
 
-Private curLevel As New oLevel
+Private curOLevel As New oLevel
 Private curTiles As udtLTileSetData
 
 Private Const ANIM_SPEED As Long = 10  'lower the quicker
@@ -28,14 +28,14 @@ Public Function DecrementTime() As Long
     lTimeIncCount = lTimeIncCount + 1
     If lTimeIncCount = 30 Then
         lTimeIncCount = 0
-        curLevel.SetTime curLevel.Time - 1
+        curOLevel.SetTime curOLevel.Time - 1
     End If
-    DecrementTime = curLevel.Time
+    DecrementTime = curOLevel.Time
 
 End Function
 
 Public Sub SetLevelTime(lTime As Long, Optional ByVal resetMaxTime As Boolean = False)
-    curLevel.SetTime lTime
+    curOLevel.SetTime lTime
     If resetMaxTime Then lMaxTime = lTime
 End Sub
 
@@ -43,7 +43,7 @@ End Sub
 Async Public Sub LoadLevel(sPath As String, sTilesetPath As String)
     bgX1 = 0
     bgX2 = 0
-    curLevel.LoadFromFile sPath
+    curOLevel.LoadFromFile sPath
     LoadLevelTileset curTiles, sTilesetPath
     sEndWheelAngle = 0
     sEndWheelSpeed = 10
@@ -118,7 +118,7 @@ Dim tmpType As udeLTileType
     lEndBlockY = -1
 
     'draw the effin map
-    With curLevel
+    With curOLevel
     For xx = 0 To 20
     
         If bXScroll Then xdraw = (xx * 32) - (xScreen Mod 32) Else xdraw = xx * 32
@@ -153,51 +153,51 @@ Dim tmpType As udeLTileType
 End Sub
 
 Public Function GetLevelSideWarp() As Boolean
-    GetLevelSideWarp = curLevel.SideWarp
+    GetLevelSideWarp = curOLevel.SideWarp
 End Function
 Public Function GetLevelStartX() As Long
-    GetLevelStartX = (curLevel.StartX * 32) + 16
+    GetLevelStartX = (curOLevel.StartX * 32) + 16
 End Function
 Public Function GetLevelStartY() As Long
-    GetLevelStartY = (curLevel.StartY * 32) + 32
+    GetLevelStartY = (curOLevel.StartY * 32) + 32
 End Function
 
 
 Public Sub SetTile(X As Long, Y As Long, ByVal xSrc As Long, ByVal ySrc As Long, Optional bOffset As Boolean = False)
     If bOffset Then
-        xSrc = xSrc + curLevel.xSrc(__intDiv(X , 32), __intDiv(Y , 32))
-        ySrc = ySrc + curLevel.ySrc(__intDiv(X , 32), __intDiv(Y , 32))
+        xSrc = xSrc + curOLevel.xSrc(__intDiv(X , 32), __intDiv(Y , 32))
+        ySrc = ySrc + curOLevel.ySrc(__intDiv(X , 32), __intDiv(Y , 32))
     End If
-    curLevel.SetTile __intDiv(X , 32), __intDiv(Y , 32), xSrc, ySrc
+    curOLevel.SetTile __intDiv(X , 32), __intDiv(Y , 32), xSrc, ySrc
 End Sub
 Public Sub SetTileTag(X As Long, Y As Long, tag As udeLTileTag)
-    curLevel.SetTileTag __intDiv(X , 32), __intDiv(Y , 32), tag
+    curOLevel.SetTileTag __intDiv(X , 32), __intDiv(Y , 32), tag
 End Sub
 Public Sub SetTileEnemy(X As Long, Y As Long, tEnemy As udeLTileEnemy)
-    curLevel.SetTileEnemy __intDiv(X , 32), __intDiv(Y , 32), tEnemy
+    curOLevel.SetTileEnemy __intDiv(X , 32), __intDiv(Y , 32), tEnemy
 End Sub
 
 Public Function GetTileTagAtPoint(X As Long, Y As Long) As udeLTileTag
-    GetTileTagAtPoint = curLevel.TileTag(__intDiv(X , 32), __intDiv(Y , 32))
+    GetTileTagAtPoint = curOLevel.TileTag(__intDiv(X , 32), __intDiv(Y , 32))
 End Function
 Public Function GetTileEnemy(X As Long, Y As Long) As udeLTileEnemy
-    GetTileEnemy = curLevel.TileEnemy(X, Y)
+    GetTileEnemy = curOLevel.TileEnemy(X, Y)
 End Function
 
 Public Sub KillTile(X As Long, Y As Long)
-    curLevel.EraseTile __intDiv(X , 32), __intDiv(Y , 32)
+    curOLevel.EraseTile __intDiv(X , 32), __intDiv(Y , 32)
 End Sub
 
 Public Function GetLevelWidth() As Long
-    GetLevelWidth = (curLevel.width + 1) * 32
+    GetLevelWidth = (curOLevel.width + 1) * 32
 End Function
 Public Function GetLevelHeight() As Long
-    GetLevelHeight = (curLevel.height + 1) * 32
+    GetLevelHeight = (curOLevel.height + 1) * 32
 End Function
 
 Public Function GetTileAnim(X As Long, Y As Long) As Boolean
-    If curLevel.IsTile(X, Y) Then
-        GetTileAnim = GetLevelTileAnimated(curTiles, curLevel.xSrc(X, Y), curLevel.ySrc(X, Y))
+    If curOLevel.IsTile(X, Y) Then
+        GetTileAnim = GetLevelTileAnimated(curTiles, curOLevel.xSrc(X, Y), curOLevel.ySrc(X, Y))
     Else
         GetTileAnim = False
     End If
@@ -205,8 +205,8 @@ End Function
 
 
 Public Function GetTile(X As Long, Y As Long) As udeLTileType
-    If curLevel.IsTile(X, Y) Then
-        GetTile = GetLevelTileType(curTiles, curLevel.xSrc(X, Y), curLevel.ySrc(X, Y))
+    If curOLevel.IsTile(X, Y) Then
+        GetTile = GetLevelTileType(curTiles, curOLevel.xSrc(X, Y), curOLevel.ySrc(X, Y))
     Else
         GetTile = Background
     End If
@@ -214,10 +214,10 @@ End Function
 
 
 Public Function GetTileXSrcPoint(xIn As Long, yIn As Long) As Long
-GetTileXSrcPoint = curLevel.xSrc(__intDiv(xIn , 32), __intDiv(yIn , 32))
+GetTileXSrcPoint = curOLevel.xSrc(__intDiv(xIn , 32), __intDiv(yIn , 32))
 End Function
 Public Function GetTileYSrcPoint(xIn As Long, yIn As Long) As Long
-GetTileYSrcPoint = curLevel.ySrc(__intDiv(xIn , 32), __intDiv(yIn , 32))
+GetTileYSrcPoint = curOLevel.ySrc(__intDiv(xIn , 32), __intDiv(yIn , 32))
 End Function
 
 
@@ -226,12 +226,12 @@ Public Function GetTileAtPoint(X As Long, Y As Long) As udeLTileType
     GetTileAtPoint = GetTile(__intDiv(X , 32), __intDiv(Y , 32))
 End Function
 Public Function TileExistsAtPoint(X As Long, Y As Long) As Boolean
-    TileExistsAtPoint = curLevel.IsTile(__intDiv(X , 32), __intDiv(Y , 32))
+    TileExistsAtPoint = curOLevel.IsTile(__intDiv(X , 32), __intDiv(Y , 32))
 End Function
 
 
 Public Sub KillLevel()
-    Set curLevel = Nothing
+    Set curOLevel = Nothing
 End Sub
 
 
@@ -248,9 +248,9 @@ Dim TMP As udeLTileTag
         lPipeX(i) = -1
         lPipeY(i) = -1
     Next i
-    For X = 0 To curLevel.width
-        For Y = 0 To curLevel.height
-            TMP = curLevel.TileTag(X, Y)
+    For X = 0 To curOLevel.width
+        For Y = 0 To curOLevel.height
+            TMP = curOLevel.TileTag(X, Y)
             If TMP >= 8 And TMP <= 23 Then
                 TMP = TMP - 7
                 lPipeX(TMP) = X * 32 + 32
@@ -350,17 +350,17 @@ Dim xTest As Long
 Dim yTest As Long
 
 
-    For X = 0 To (curLevel.width + 0)
-        For Y = 0 To (curLevel.height + 0)
-            If curLevel.IsTile(X, Y) Then
+    For X = 0 To (curOLevel.width + 0)
+        For Y = 0 To (curOLevel.height + 0)
+            If curOLevel.IsTile(X, Y) Then
             
-                xTest = curLevel.xSrc(X, Y)
-                yTest = curLevel.ySrc(X, Y)
+                xTest = curOLevel.xSrc(X, Y)
+                yTest = curOLevel.ySrc(X, Y)
                 
-                If xTest = oCurWorldData.LevelData(mWorldData.curLevel).dfCoin.xSrc And yTest = oCurWorldData.LevelData(mWorldData.curLevel).dfCoin.ySrc Then
-                    SetTile X * 32, Y * 32, oCurWorldData.LevelData(mWorldData.curLevel).dfBrick.xSrc, oCurWorldData.LevelData(mWorldData.curLevel).dfBrick.ySrc
-                ElseIf xTest = oCurWorldData.LevelData(mWorldData.curLevel).dfBrick.xSrc And yTest = oCurWorldData.LevelData(mWorldData.curLevel).dfBrick.ySrc Then
-                    SetTile X * 32, Y * 32, oCurWorldData.LevelData(mWorldData.curLevel).dfCoin.xSrc, oCurWorldData.LevelData(mWorldData.curLevel).dfCoin.ySrc
+                If xTest = oCurWorldData.LevelData(curLevel).dfCoin.xSrc And yTest = oCurWorldData.LevelData(curLevel).dfCoin.ySrc Then
+                    SetTile X * 32, Y * 32, oCurWorldData.LevelData(curLevel).dfBrick.xSrc, oCurWorldData.LevelData(curLevel).dfBrick.ySrc
+                ElseIf xTest = oCurWorldData.LevelData(curLevel).dfBrick.xSrc And yTest = oCurWorldData.LevelData(curLevel).dfBrick.ySrc Then
+                    SetTile X * 32, Y * 32, oCurWorldData.LevelData(curLevel).dfCoin.xSrc, oCurWorldData.LevelData(curLevel).dfCoin.ySrc
                 End If
                 
             End If

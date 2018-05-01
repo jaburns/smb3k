@@ -78,7 +78,7 @@ Dim i As Long
         lStatCount = lStatCount + 1
         If lStatCount >= 5 Then
             lStatCount = 0
-            With oCurWorldData.LevelData(mWorldData.curLevel)
+            With oCurWorldData.LevelData(curLevel)
                 If lBlockDestroyCount >= 8 And lBlockDestroyCount <= 11 Then
                     SetTile 16 + (32 * lBlockDestroyCount), 176, .dfBrick.xSrc, .dfBrick.ySrc
                 Else
