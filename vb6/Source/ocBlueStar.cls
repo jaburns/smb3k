@@ -18,7 +18,7 @@ Private bActive As Boolean
 Public Sub CreateAt(X As Single, Y As Single)
     xPos = X
     yPos = Y
-    Randomize Timer
+    Randomize
     If Int(Rnd() * 2) = 0 Then xSpeed = 2 Else xSpeed = -2
     ySpeed = -5
     bActive = True
