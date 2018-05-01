@@ -186,7 +186,7 @@ Dim i As Long
         Exit Sub
     End If
     
-    For i = 1 To GetShellCount
+    For i = 1 To GetShellCount()
         If GetShellActive(i) And Not (GetShellX(i) = xPos And GetShellY(i) = yPos) Then
             If Abs(GetShellX(i) - xPos) < 32 And Abs(GetShellY(i) - yPos) < 20 Then
                 KillMe
@@ -388,7 +388,7 @@ Dim sTestX As Single
 Dim sTestY As Single
 Dim i As Long
     If Not bShell Then
-        For i = 1 To GetShellCount
+        For i = 1 To GetShellCount()
             If GetShellisShelled(i) Then
                 sTestX = GetShellX(i) - xPos
                 sTestY = Abs(GetShellY(i) - yPos)

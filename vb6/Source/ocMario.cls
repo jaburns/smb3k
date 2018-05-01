@@ -821,9 +821,9 @@ Dim lHeadTop As Long
                 sGravity = 4
                 PlaySound Sounds.Boing
             ElseIf tType = INJURETILE Then
-                Me.Injure
+                Injure
             ElseIf tType = DEADLY Then
-                Me.makeDie
+                makeDie
             End If
             
             yPos = yPos + 10
@@ -850,9 +850,9 @@ Dim lHeadTop As Long
                     PlaySound Sounds.Boing
                 End If
             ElseIf (tSolidA And tType = INJURETILE) Or (tSolidB And tTypeB = INJURETILE) Then
-                If (Not tSolidC) Or (tTypeC = INJURETILE) Then Me.Injure
+                If (Not tSolidC) Or (tTypeC = INJURETILE) Then Injure
             ElseIf (tSolidA And tType = DEADLY) Or (tSolidB And tTypeB = DEADLY) Then
-                If (Not tSolidC) Or (tTypeC = DEADLY) Then Me.makeDie
+                If (Not tSolidC) Or (tTypeC = DEADLY) Then makeDie
             End If
             
         End If
@@ -891,10 +891,10 @@ Dim yTest As Long
             If sRun > 0 Then sRun = -5 Else sRun = 5
             PlaySound Sounds.Boing
         ElseIf tTypeA = INJURETILE Or tTypeB = INJURETILE Then
-            Me.Injure
+            Injure
             sRun = 0
         ElseIf tTypeA = DEADLY Or tTypeB = DEADLY Then
-            Me.makeDie
+            makeDie
             sRun = 0
         Else
             sRun = 0
@@ -914,10 +914,10 @@ Dim yTest As Long
             If sRun > 0 Then sRun = -5 Else sRun = 5
             PlaySound Sounds.Boing
         ElseIf tTypeA = INJURETILE Or tTypeB = INJURETILE Then
-            Me.Injure
+            Injure
             sRun = 0
         ElseIf tTypeA = DEADLY Or tTypeB = DEADLY Then
-            Me.makeDie
+            makeDie
             sRun = 0
         Else
             sRun = 0

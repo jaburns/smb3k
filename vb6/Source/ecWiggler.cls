@@ -132,7 +132,7 @@ Dim u As Long
                 If getMarioFireX(i) > xPos(u) - 16 And getMarioFireX(i) < xPos(u) + 16 And getMarioFireY(i) > yPos(u) - 32 And getMarioFireY(i) < yPos(u) Then killMarioFire i
             End If
         Next i
-        For i = 1 To GetShellCount
+        For i = 1 To GetShellCount()
             If GetShellActive(i) Then
                 If Abs(GetShellX(i) - xPos(u)) < 32 And Abs(GetShellY(i) - yPos(u)) < 20 Then
                     KillMe
@@ -254,7 +254,7 @@ Dim sTestX As Single
 Dim sTestY As Single
 Dim i As Long
 Dim u As Long
-    For i = 1 To GetShellCount
+    For i = 1 To GetShellCount()
         If GetShellisShelled(i) Then
             sTestX = GetShellX(i) - xPos(lBall)
             sTestY = Abs(GetShellY(i) - yPos(lBall))

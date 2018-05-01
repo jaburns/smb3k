@@ -95,7 +95,7 @@ Dim i As Long
         End If
         End With
     
-        For i = 1 To GetShellCount
+        For i = 1 To GetShellCount()
             If GetShellActive(i) Then
                 If Abs(GetShellX(i) - xPos) < 32 Then
                     If GetShellY(i) > yPos - IIf(bDown, 0, lDraw) And GetShellY(i) < yPos + 32 + IIf(bDown, lDraw, 0) Then

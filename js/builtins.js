@@ -24,16 +24,17 @@ window.IIf = (a, b, c) => (a ? b : c);
 window.Abs = Math.abs;
 window.Sin = Math.sin;
 window.Cos = Math.cos;
+Math.Sqr = Math.sqrt;
+window.Rnd = Math.random;
+window.Sgn = Math.sign;
 window.Mid$ = (s, a, b) => s.substr(a - 1, b);
 window.Strings = { 
     Left$: (str, count) => str.substr(0, count),
     Right$: (str, count) => str.substr(str.length - count, count)
 };
-Math.Sqr = Math.sqrt;
 window.Len = x => x.toString().length;
 window.UBound = arr => arr(null, null, null, true);
 window.Randomize = () => {};
-window.Rnd = () => Math.random();
 window.DoEvents = async () => new Promise(resolve => setTimeout(resolve, 50));
 window.ConsoleLog = console.log.bind(console);
 

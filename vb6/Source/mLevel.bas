@@ -231,7 +231,7 @@ End Function
 
 
 Public Sub KillLevel()
-    Set curOLevel = Nothing
+    Set curOLevel = New oLevel
 End Sub
 
 

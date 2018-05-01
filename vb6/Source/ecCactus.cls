@@ -103,7 +103,7 @@ Dim i As Long
         End If
     Next i
     
-    For i = 1 To GetShellCount
+    For i = 1 To GetShellCount()
         If GetShellActive(i) Then
             If Abs(GetShellX(i) - xPos) < 32 And GetShellY(i) < (yPos + 32) And GetShellY(i) > (yPos - (lBalls * 32)) Then
                 KillMe
@@ -172,7 +172,7 @@ Dim sTestX As Single
 Dim sTestY As Single
 Dim i As Long
 Dim u As Long
-    For i = 1 To GetShellCount
+    For i = 1 To GetShellCount()
         If GetShellisShelled(i) Then
             For u = 0 To lBalls - 1
                 sTestX = GetShellX(i) - xPos

@@ -128,7 +128,7 @@ Dim i As Long
         End If
     Next i
     
-    For i = 1 To GetShellCount
+    For i = 1 To GetShellCount()
         If GetShellActive(i) Then
             If Abs(GetShellX(i) - xPos) < 32 And Abs(GetShellY(i) - yPos) < 20 Then
                 KillMe
@@ -181,7 +181,7 @@ Dim tTile As udeLTileType
 Dim sTestX As Single
 Dim sTestY As Single
 Dim i As Long
-    For i = 1 To GetShellCount
+    For i = 1 To GetShellCount()
         If GetShellisShelled(i) Then
             sTestX = GetShellX(i) - xPos
             sTestY = Abs(GetShellY(i) - yPos)
