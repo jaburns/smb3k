@@ -1,11 +1,5 @@
 import { pathToURL } from './utils';
 
-export const loadSoundElem = (url, collection) => {
-    const elem = new Audio(url);
-    collection.push(elem);
-    return collection.length - 1;
-};
-
 module.exports = () => {
     const _soundElems = [];
 
@@ -17,7 +11,10 @@ module.exports = () => {
         LoadSound: (path, channel, bits) => {
             console.log("Sound::LoadSound", path);
             const url = pathToURL(path);
-            return loadSoundElem(url, _soundElems);
+
+            const elem = new Audio(url);
+            _soundElems.push(elem);
+            return _soundElems.length - 1;
         },
 
         PlaySound: (id, loop) => {

@@ -35,7 +35,7 @@ Async Public Sub __main__()
     LoadSounds
     InitObjects
     Music.Volume = 80
-'   bMusicEnabled = IIf(InStr(Command$, "-nomusic"), False, True)
+    bMusicEnabled = True 'IIf(InStr(Command$, "-nomusic"), False, True)
     bSoundEnabled = True 'IIf(InStr(Command$, "-nosound"), False, True)
     
     'hide the mouse
