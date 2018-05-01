@@ -221,7 +221,7 @@ End Sub
 
 Async Public Sub UpdatePosition()
 
-    If yPos >= GetLevelHeight + 64 Then
+    If yPos >= GetLevelHeight() + 64 Then
         bAlive = False
         xSrc = 256
         yPos = yPos - 32
@@ -868,15 +868,15 @@ Dim yTest As Long
 
     'keep the player on the screen or warp him accross
     If GetLevelSideWarp Then
-        If xPos <= -9 Then xPos = GetLevelWidth + 8
-        If xPos >= GetLevelWidth + 9 Then xPos = -8
+        If xPos <= -9 Then xPos = GetLevelWidth() + 8
+        If xPos >= GetLevelWidth() + 9 Then xPos = -8
     Else
         If xPos <= 16 Then 
             xPos = 16
             sRun = 0
         End If
-        If xPos >= GetLevelWidth - 16 Then 
-            xPos = GetLevelWidth - 16
+        If xPos >= GetLevelWidth() - 16 Then 
+            xPos = GetLevelWidth() - 16
             sRun = 0
         End If
     End If

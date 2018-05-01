@@ -19,7 +19,7 @@ Public Sub CreateAt(X As Single, Y As Single)
     xPos = X
     yPos = Y
     Randomize Timer
-    If Int(Rnd * 2) = 0 Then xSpeed = 2 Else xSpeed = -2
+    If Int(Rnd() * 2) = 0 Then xSpeed = 2 Else xSpeed = -2
     ySpeed = -5
     bActive = True
 End Sub
@@ -30,15 +30,15 @@ Dim tTile As udeLTileType
     If Not bActive Then Exit Sub
     
     If GetLevelSideWarp Then
-        If xPos <= -1 Then xPos = GetLevelWidth
-        If xPos >= GetLevelWidth + 1 Then xPos = 0
+        If xPos <= -1 Then xPos = GetLevelWidth()
+        If xPos >= GetLevelWidth() + 1 Then xPos = 0
     Else
         If xPos <= 16 Then 
             xPos = 16
             xSpeed = 2
         End If
-        If xPos >= GetLevelWidth - 16 Then 
-            xPos = GetLevelWidth - 16
+        If xPos >= GetLevelWidth() - 16 Then 
+            xPos = GetLevelWidth() - 16
             xSpeed = -2
         End If
     End If

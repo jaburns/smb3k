@@ -47,7 +47,7 @@ Public Sub CreateAt(X As Long, Y As Long, bVicious As Boolean, bUpsideDown As Bo
     End If
     
     Randomize
-    lNextBiteCount = Int(Rnd * lBiteDelay)
+    lNextBiteCount = Int(Rnd() * lBiteDelay)
     lBiteValue = 0
     bAlive = True
     

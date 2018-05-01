@@ -31,7 +31,7 @@ Public Sub CreateAt(x As Long, y As Long)
     yInit = CSng(y)
     yPos = yInit
     Randomize
-    lNextFireCount = Int(Rnd * FIRE_DELAY)
+    lNextFireCount = Int(Rnd() * FIRE_DELAY)
     ySpeed = 0
     lFrame = 0
     bFrameOn = False

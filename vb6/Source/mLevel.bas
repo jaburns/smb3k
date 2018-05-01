@@ -77,9 +77,9 @@ Dim bYScroll As Boolean
     If xScreen <= 0 Then
         If xScreen < 0 Then xScreen = 0
         StartX = 0
-    ElseIf xScreen >= GetLevelWidth - 640 Then
-        If xScreen > GetLevelWidth - 640 Then xScreen = GetLevelWidth - 640
-        StartX = (GetLevelWidth / 32) - 20
+    ElseIf xScreen >= GetLevelWidth() - 640 Then
+        If xScreen > GetLevelWidth() - 640 Then xScreen = GetLevelWidth() - 640
+        StartX = (GetLevelWidth() / 32) - 20
     Else
         bgX1 = (xScreen Mod (640 * 2)) / 2
         bgX2 = (xScreen Mod (640 * 4)) / 4
@@ -92,9 +92,9 @@ Dim bYScroll As Boolean
     If yScreen <= 0 Then
         If yScreen < 0 Then yScreen = 0
         StartY = 0
-    ElseIf yScreen >= GetLevelHeight - 480 Then
-        If yScreen > GetLevelWidth - 480 Then yScreen = GetLevelWidth - 480
-        StartY = (GetLevelHeight / 32) - 15
+    ElseIf yScreen >= GetLevelHeight() - 480 Then
+        If yScreen > GetLevelWidth() - 480 Then yScreen = GetLevelWidth() - 480
+        StartY = (GetLevelHeight() / 32) - 15
     Else
         StartY = __intDiv(yScreen , 32)
         bYScroll = True
@@ -252,8 +252,9 @@ Dim TMP As udeLTileTag
         For Y = 0 To curLevel.height
             TMP = curLevel.TileTag(X, Y)
             If TMP >= 8 And TMP <= 23 Then
-                lPipeX(TMP - 7) = (X * 32) + 32
-                lPipeY(TMP - 7) = (Y * 32)
+                TMP = TMP - 7
+                lPipeX(TMP) = X * 32 + 32
+                lPipeY(TMP) = Y * 32
             End If
         Next Y
     Next X

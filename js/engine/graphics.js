@@ -1,7 +1,7 @@
 import { pathToURL, sleep } from '../utils';
 
-//const log = console.log.bind(console);
-const log = () => {};
+const log = console.log.bind(console);
+//const log = () => {};
 
 module.exports = () => {
     let _frameTime = 0;
@@ -11,6 +11,7 @@ module.exports = () => {
     const loadSurfaceImage = async url => new Promise(resolve => {
         let img = new Image();
         img.onload = () => {
+            img.onload = null;
             _loadedSurfaces.push(img);
             resolve(_loadedSurfaces.length - 1);
         };
@@ -23,38 +24,38 @@ module.exports = () => {
         },
 
         BeginScene: frameTime => {
-            log("Graphics::BeginScene", frameTime);
+        //  log("Graphics::BeginScene", frameTime);
             _frameTime = frameTime;
         },
 
         EndScene: async () => {
-            log("Graphics::EndScene");
+        //  log("Graphics::EndScene");
             await sleep(_frameTime);
         },
 
         SetFont: (font, size, bold, italic, underline, strike) => {
-            log("Graphics::SetFont", font, size, bold, italic, underline, strike);
+        //  log("Graphics::SetFont", font, size, bold, italic, underline, strike);
 
             _ctx.font = size + "pt " + font;
         },
 
         DrawText: (text, x, y, color, backcolor) => {
-            log("Graphics::DrawText", text, x, y, color, backcolor);
+        //  log("Graphics::DrawText", text, x, y, color, backcolor);
 
             if (typeof color !== 'undefined') _ctx.fillStyle = color;
 
-            _ctx.fillText(text, x + 5, y + 10);
+            _ctx.fillText(text, x + 5, y + 10)
         },
 
         DrawRect: (x, y, width, height, color) => {
-            log("Graphics::DrawRect", x, y, width, height, color);
+        //  log("Graphics::DrawRect", x, y, width, height, color);
 
             _ctx.fillStyle = '#000';
             _ctx.fillRect(x, y, width, height);
         },
 
         DrawSurface: (id, srcX, srcY, srcWidth, srcHeight, destX, destY, destWidth, destHeight, angle, alpha, r, g, b) => {
-            log("Graphics::DrawSurface", id, srcX, srcY, srcWidth, srcHeight, destX, destY, destWidth, destHeight, angle, alpha, r, g, b);
+        //  log("Graphics::DrawSurface", id, srcX, srcY, srcWidth, srcHeight, destX, destY, destWidth, destHeight, angle, alpha, r, g, b);
 
             if (typeof destWidth === 'undefined') destWidth = srcWidth;
             if (typeof destHeight === 'undefined') destHeight = srcHeight;
@@ -87,6 +88,7 @@ module.exports = () => {
 
         DestroySurface: (id) => {
             log("Graphics::DestroySurface", id);
+            _loadedSurfaces[id] = null;
         }
     };
 };

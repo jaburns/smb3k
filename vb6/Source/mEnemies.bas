@@ -72,8 +72,8 @@ Dim tTag As udeLTileTag
     bGoombossOn = False
     
     Mario.SetAlwaysSwimming False, 0
-    For X = 0 To __intDiv(GetLevelWidth , 32)
-        For Y = 0 To __intDiv(GetLevelHeight , 32)
+    For X = 0 To __intDiv(GetLevelWidth() , 32)
+        For Y = 0 To __intDiv(GetLevelHeight() , 32)
             tEnemy = GetTileEnemy(X, Y)
             tType = GetTile(X, Y)
             tTag = GetTileTagAtPoint(X * 32, Y * 32)
@@ -169,7 +169,7 @@ Dim tTag As udeLTileTag
                 Case OBJSINUSOIDLAVA
                     layer3enabled = True
                     layer3sinusoid = True
-                    layer3maximum = GetLevelHeight - (Y * 32) - 16
+                    layer3maximum = GetLevelHeight() - (Y * 32) - 16
                 Case OBJTALLCACTUS
                     TMP = UBound(zoTallCactus) + 1
                     ReDim Preserve zoTallCactus(TMP)

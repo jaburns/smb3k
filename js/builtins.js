@@ -13,9 +13,11 @@ window.vbBlue = "#00f";
 window.vbWhite = "#fff";
 
 window.App = { Path: "" };
+window.Int = x => Math.floor(x) >> 0;
 window.CSng = x => x;
-window.CLng = x => x >> 0;
-window.CInt = x => x >> 0;
+window.CByte = x => Math.floor(x) >> 0;
+window.CInt = x => Math.floor(x) >> 0;
+window.CLng = x => Math.floor(x) >> 0;
 window.CStr = x => x.toString();
 window.Trim$ = x => x.toString().trim();
 window.IIf = (a, b, c) => (a ? b : c);
@@ -30,6 +32,8 @@ window.Strings = {
 Math.Sqr = Math.sqrt;
 window.Len = x => x.toString().length;
 window.UBound = arr => arr(null, null, null, true);
+window.Randomize = () => {};
+window.Rnd = () => Math.random();
 window.DoEvents = async () => new Promise(resolve => setTimeout(resolve, 50));
 window.ConsoleLog = console.log.bind(console);
 

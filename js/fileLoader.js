@@ -45,49 +45,6 @@ module.exports = {
 
     LoadSavedGame: savedData => {
         console.log("FileLoader::LoadSavedGame");
-        // TODO implement
-    },
-
-    LoadEnemySkinFile: async (enemySkin, path) => {
-        const url = pathToURL(path);
-        console.log("FileLoader::LoadEnemySkinFile", url);
-        // TODO implement
-    },
-
-    LoadLevelTileset: async (tileSet, path) => {
-        const url = pathToURL(path);
-        console.log("FileLoader::LoadLevelTileset", url);
-        // TODO implement
-    },
-
-    loadMap: async (nodes, path) => {
-        const url = pathToURL(path);
-        console.log("FileLoader::loadMap", url);
-        const bytes = await loadBinaryFile(url);
-
-        const nodeUbound = chompByte(bytes);
-        nodes(null, null, {ubound: nodeUbound});
-        for (let i = 1; i <= nodeUbound; i++) {
-            nodes(i).zxPos = chompShort(bytes);
-            nodes(i).zyPos = chompShort(bytes);
-            nodes(i).zupNode = chompByte(bytes);
-            nodes(i).zdownNode = chompByte(bytes);
-            nodes(i).zleftNode = chompByte(bytes);
-            nodes(i).zrightNode = chompByte(bytes);
-            let x = chompByte(bytes);
-            if (x >= 128) {
-                x -= 128;
-                nodes(i).zpassThrough = true;
-            }
-            if (x > 0) {
-                x -= 1;
-                nodes(i).znodeTag = x;
-            }
-            nodes(i).znodeImage = chompByte(bytes);
-            nodes(i).zentryPoint = chompByte(bytes);
-            nodes(i).zexitWorld = chompByte(bytes);
-            console.log(nodes(i));
-        }
     },
 
     cwdLoadWorldData: async (data, path) => {
@@ -129,9 +86,109 @@ module.exports = {
         }
     },
 
-    LevelLoadFromFile: (level, path) => {
+    loadMap: async (nodes, path) => {
         const url = pathToURL(path);
-        console.log("FileLoader::LoadLevelFromFile", url);
-        // TODO implement
+        console.log("FileLoader::loadMap", url);
+        const bytes = await loadBinaryFile(url);
+
+        const nodeUbound = chompByte(bytes);
+        nodes(null, null, {ubound: nodeUbound});
+        for (let i = 1; i <= nodeUbound; i++) {
+            nodes(i).zxPos = chompShort(bytes);
+            nodes(i).zyPos = chompShort(bytes);
+            nodes(i).zupNode = chompByte(bytes);
+            nodes(i).zdownNode = chompByte(bytes);
+            nodes(i).zleftNode = chompByte(bytes);
+            nodes(i).zrightNode = chompByte(bytes);
+            let x = chompByte(bytes);
+            if (x >= 128) {
+                x -= 128;
+                nodes(i).zpassThrough = true;
+            }
+            if (x > 0) {
+                x -= 1;
+                nodes(i).znodeTag = x;
+            }
+            nodes(i).znodeImage = chompByte(bytes);
+            nodes(i).zentryPoint = chompByte(bytes);
+            nodes(i).zexitWorld = chompByte(bytes);
+        }
+    },
+
+    LevelLoadFromFile: async (level, path) => {
+        const url = pathToURL(path);
+        console.log("FileLoader::LevelLoadFromFile", url);
+        const bytes = await loadBinaryFile(url);
+
+        level.bSideWarp = chompByte(bytes) == 0xFF;
+        level.iStartX = chompShort(bytes);
+        level.iStartY = chompShort(bytes);
+        level.iWidth = chompShort(bytes);
+        level.iHeight = chompShort(bytes);
+        level.iTime = chompShort(bytes);
+
+        level.Column(null, null, {ubound: level.iWidth});
+        for (let xx = 0; xx <= level.iWidth; xx++) {
+            level.Column(xx).Row(null, null, {preserve: true, ubound: level.iHeight});
+            for (let yy = 0; yy <= level.iHeight; yy++) {
+                level.Column(xx).Row(yy).notEmpty = chompByte(bytes) == 0xFF;
+                level.Column(xx).Row(yy).xSrc = chompByte(bytes);
+                level.Column(xx).Row(yy).ySrc = chompByte(bytes);
+                level.Column(xx).Row(yy).tag = chompByte(bytes);
+                level.Column(xx).Row(yy).TileEnemy = chompByte(bytes);
+            }
+        }
+
+        console.log(level);
+    },
+
+    LoadEnemySkinFile: async (enemySkin, path) => {
+        const url = pathToURL(path);
+        console.log("FileLoader::LoadEnemySkinFile", url);
+        const bytes = await loadBinaryFile(url);
+
+        enemySkin.Goomba = chompString(bytes);
+        enemySkin.PiranaPlants = chompString(bytes);
+        enemySkin.BuzzyBeetle = chompString(bytes);
+        enemySkin.DumbKoopa = chompString(bytes);
+        enemySkin.SmartKoopa = chompString(bytes);
+        enemySkin.BumptyPenguin = chompString(bytes);
+        enemySkin.Spiney = chompString(bytes);
+        enemySkin.LittleBoo = chompString(bytes);
+        enemySkin.RotoDisc = chompString(bytes);
+        enemySkin.LavaBubble = chompString(bytes);
+        enemySkin.Thwomp = chompString(bytes);
+        enemySkin.DryBones = chompString(bytes);
+        enemySkin.MovingPlatform = chompString(bytes);
+        enemySkin.PowButton = chompString(bytes);
+        enemySkin.FreeCheepCheep = chompString(bytes);
+        enemySkin.BlockCheepCheep = chompString(bytes);
+        enemySkin.Layer3Lava = chompString(bytes);
+        enemySkin.TallCactus = chompString(bytes);
+        enemySkin.EnemyWings = chompString(bytes);
+        enemySkin.Bouncer = chompString(bytes);
+        enemySkin.BulletBill = chompString(bytes);
+        enemySkin.Bobomb = chompString(bytes);
+        enemySkin.BOSS_Goomboss = chompString(bytes);
+        enemySkin.Wiggler = chompString(bytes);
+        enemySkin.PowerBlock = chompString(bytes);
+        enemySkin.SavePoint = chompString(bytes);
+    },
+
+    LoadLevelTileset: async (tileSet, path) => {
+        const url = pathToURL(path);
+        console.log("FileLoader::LoadLevelTileset", url);
+        const bytes = await loadBinaryFile(url);
+    
+        tileSet.bWidth = chompByte(bytes);
+        tileSet.bHeight = chompByte(bytes);
+
+        tileSet.Column(null, null, {ubound: tileSet.bWidth});
+        for (let xx = 0; xx <= tileSet.bWidth; xx++) {
+            tileSet.Column(xx).Row(null, null, {preserve: true, ubound: tileSet.bHeight});
+            for (let yy = 0; yy <= tileSet.bHeight; yy++) {
+                tileSet.Column(xx).Row(yy, chompByte(bytes));
+            }
+        }
     },
 };

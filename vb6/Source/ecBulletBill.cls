@@ -47,8 +47,8 @@ Public Sub CreateAt(X As Long, Y As Long, Optional ByVal bIsSeeker As Boolean = 
     bHasSeeked = False
     lSeekDir = 0
     Randomize
-    lCount = Int(Rnd * 50)
-    lNextCount = 30 + Int(Rnd * 20)
+    lCount = Int(Rnd() * 50)
+    lNextCount = 30 + Int(Rnd() * 20)
 End Sub
 
 
@@ -65,7 +65,7 @@ Dim i As Long
         If lCount >= lNextCount Then
             lCount = 0
             Randomize
-            lNextCount = 30 + Int(Rnd * 20)
+            lNextCount = 30 + Int(Rnd() * 20)
             bActive = True
             bDying = False
             xPos = xInit + IIf(Mario.xPos > xInit, 16, -16)

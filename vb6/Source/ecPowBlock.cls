@@ -103,15 +103,15 @@ Private Sub MoveMe()
     xPos = xPos + xSpeed
     
     If GetLevelSideWarp Then
-        If xPos <= -1 Then xPos = GetLevelWidth
-        If xPos >= GetLevelWidth + 1 Then xPos = 0
+        If xPos <= -1 Then xPos = GetLevelWidth()
+        If xPos >= GetLevelWidth() + 1 Then xPos = 0
     Else
         If xPos <= 16 Then 
             xPos = 16
             xSpeed = 0
         End If
-        If xPos >= GetLevelWidth - 16 Then 
-            xPos = GetLevelWidth - 16
+        If xPos >= GetLevelWidth() - 16 Then 
+            xPos = GetLevelWidth() - 16
             xSpeed = 0
         End If
     End If

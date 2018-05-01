@@ -61,8 +61,9 @@ Public Sub SetStartPos(X As Integer, Y As Integer)
 End Sub
 
 Public Function IsTile(X As Long, Y As Long) As Boolean
-On Error Resume Next
-IsTile = zoLevel.Column(X).Row(Y).notEmpty
+    If X >= 0 And X <= UBound(zoLevel.Column) And Y >= 0 And Y <= UBound(zoLevel.Column(X).Row) Then
+        IsTile = zoLevel.Column(X).Row(Y).notEmpty
+    End If
 End Function
 
 Public Property Get SideWarp() As Boolean
@@ -82,23 +83,27 @@ Public Property Get StartY() As Long
 End Property
 
 Public Property Get xSrc(X As Long, Y As Long) As Long
-On Error Resume Next
-xSrc = CLng(zoLevel.Column(X).Row(Y).xSrc)
+    If X >= 0 And X <= UBound(zoLevel.Column) And Y >= 0 And Y <= UBound(zoLevel.Column(X).Row) Then
+        xSrc = CLng(zoLevel.Column(X).Row(Y).xSrc)
+    End If
 End Property
 
 Public Property Get ySrc(X As Long, Y As Long) As Long
-On Error Resume Next
-ySrc = CLng(zoLevel.Column(X).Row(Y).ySrc)
+    If X >= 0 And X <= UBound(zoLevel.Column) And Y >= 0 And Y <= UBound(zoLevel.Column(X).Row) Then
+        ySrc = CLng(zoLevel.Column(X).Row(Y).ySrc)
+    End If
 End Property
 
 Public Property Get TileTag(X As Long, Y As Long) As udeLTileTag
-On Error Resume Next
-    TileTag = zoLevel.Column(X).Row(Y).tag
+    If X >= 0 And X <= UBound(zoLevel.Column) And Y >= 0 And Y <= UBound(zoLevel.Column(X).Row) Then
+        TileTag = zoLevel.Column(X).Row(Y).tag
+    End If
 End Property
 
 Public Property Get TileEnemy(X As Long, Y As Long) As udeLTileEnemy
-On Error Resume Next
-    TileEnemy = zoLevel.Column(X).Row(Y).TileEnemy
+    If X >= 0 And X <= UBound(zoLevel.Column) And Y >= 0 And Y <= UBound(zoLevel.Column(X).Row) Then
+        TileEnemy = zoLevel.Column(X).Row(Y).TileEnemy
+    End If
 End Property
 
 Public Sub SetTileTag(X As Long, Y As Long, tag As udeLTileTag)
@@ -123,6 +128,7 @@ Public Property Get Time() As Long
 On Error Resume Next
 Time = CLng(zoLevel.iTime)
 End Property
+
 Public Sub SetTime(lTime As Long)
 On Error Resume Next
 zoLevel.iTime = CInt(lTime)

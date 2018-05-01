@@ -108,7 +108,7 @@ Async Public Sub MainGameLoop(sMusic As String, lX As Long, lY As Long, lInTime 
     layer3frm = 0
     layer3frmcount = 0
     layer3speed = 0.1
-    layer3y = GetLevelHeight
+    layer3y = GetLevelHeight()
     Do Until Not Mario.bAlive Or Mario.bHasWon
     
         UpdateInput
@@ -218,8 +218,8 @@ Private Sub HandleScrolling()
 
     If levScrollStyle = lScr_Right Then
     
-        If drawLevelX < GetLevelWidth - 640 Then drawLevelX = drawLevelX + levScrollSpeed
-        If drawLevelX > GetLevelWidth - 640 Then drawLevelX = GetLevelWidth - 640
+        If drawLevelX < GetLevelWidth() - 640 Then drawLevelX = drawLevelX + levScrollSpeed
+        If drawLevelX > GetLevelWidth() - 640 Then drawLevelX = GetLevelWidth() - 640
         CenterLevelMarioY
         If Mario.xPos < drawLevelX + 16 Then
             Mario.ResetXPos drawLevelX + 16, levScrollSpeed
@@ -250,8 +250,8 @@ Private Sub HandleScrolling()
         
     ElseIf levScrollStyle = lScr_Down Then
     
-        If drawLevelY < GetLevelHeight - 480 Then drawLevelY = drawLevelY + levScrollSpeed
-        If drawLevelY > GetLevelHeight - 480 Then drawLevelY = GetLevelHeight - 480
+        If drawLevelY < GetLevelHeight() - 480 Then drawLevelY = drawLevelY + levScrollSpeed
+        If drawLevelY > GetLevelHeight() - 480 Then drawLevelY = GetLevelHeight() - 480
         CenterLevelMarioX
         If Mario.yPos < drawLevelY + IIf(Mario.isTall, 52, 32) Then
             Mario.ResetYPos Mario.yPos + (4 * levScrollSpeed), 1
@@ -270,8 +270,8 @@ End Sub
 Private Sub CenterLevelMarioX()
     If Mario.xPos <= 320 Then
         drawLevelX = 0
-    ElseIf Mario.xPos >= GetLevelWidth - 320 Then
-        drawLevelX = GetLevelWidth - 640
+    ElseIf Mario.xPos >= GetLevelWidth() - 320 Then
+        drawLevelX = GetLevelWidth() - 640
     Else
         drawLevelX = Mario.xPos - 320
     End If
@@ -280,8 +280,8 @@ End Sub
 Private Sub CenterLevelMarioY()
     If Mario.yPos <= 240 Then
         drawLevelY = 0
-    ElseIf Mario.yPos >= GetLevelHeight - 240 Then
-        drawLevelY = GetLevelHeight - 480
+    ElseIf Mario.yPos >= GetLevelHeight() - 240 Then
+        drawLevelY = GetLevelHeight() - 480
     Else
         drawLevelY = Mario.yPos - 240
     End If
@@ -411,7 +411,7 @@ Private Sub HandleLayerThree()
     If layer3sinusoid Then
         layer3speed = layer3speed + 0.7  'speed is actually a time increment here
         If layer3speed > 360 Then layer3speed = layer3speed - 360
-        layer3y = GetLevelHeight - (Sin((layer3speed - 90) * PI / 180) * (layer3maximum / 2)) - (layer3maximum / 2) - 16
+        layer3y = GetLevelHeight() - (Sin((layer3speed - 90) * PI / 180) * (layer3maximum / 2)) - (layer3maximum / 2) - 16
     Else
         If layer3speed < 2 Then layer3speed = layer3speed * 1.08
         layer3y = layer3y - layer3speed

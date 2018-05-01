@@ -167,7 +167,9 @@ Dim testTag As Byte
 
             lMarioFrame = lMarioFrame + 1
             If nodeMap.NodeTag(curNode) > 40 And nodeMap.NodeTag(curNode) <= 110 And GameKeyDown(DebugB) And DebugModeEnabled Then
-                oWorldPassData.bWorldPassed(curWorld).bLevelPassed(nodeMap.NodeTag(curNode) - 41) = True
+                Dim __i As Long
+                __i = nodeMap.NodeTag(curNode) - 41;
+                oWorldPassData.bWorldPassed(curWorld).bLevelPassed(__i) = True
             End If
             
             For u = 0 To 0
