@@ -1,6 +1,6 @@
 
 export const pathToURL = path =>
-    window.location.protocol + "//" + window.location.host + "/assets" + path
+    window.location.href + "assets" + path
         .replace("bmp", "png")
         .replace("gif", "png");
 

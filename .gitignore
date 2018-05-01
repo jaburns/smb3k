@@ -2,6 +2,7 @@
 **/*.rs.bk
 target/
 node_modules/
+gh_pages/
 public/bundle.js*
 package-lock.json
 Thumbs.db
