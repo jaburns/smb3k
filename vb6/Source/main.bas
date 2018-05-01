@@ -172,8 +172,8 @@ End Sub
 
 Private Sub HandleLevelEntry()
     If mpExitPipe = mpNothing Then
-        nextStartX = GetLevelStartX
-        nextStartY = GetLevelStartY
+        nextStartX = GetLevelStartX()
+        nextStartY = GetLevelStartY()
     ElseIf mpExitPipe = mpExitUp Then
         nextStartX = GetLevelPipeX(nextStartPipe)
         nextStartY = GetLevelPipeY(nextStartPipe)
