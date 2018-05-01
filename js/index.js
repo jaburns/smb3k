@@ -1,2 +1,2 @@
-require('./builtins');
+require('./globals');
 require('./game')();

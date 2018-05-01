@@ -1,8 +1,8 @@
-window.new_DXGraphics = require('./engine/graphics');
-window.new_DXKeyboard = require('./engine/keyboard');
-window.new_DXJoystick = require('./engine/joystick');
-window.new_DXSound = require('./engine/sound');
-window.new_DXMusic = require('./engine/music');
+window.new_DXGraphics = require('./graphics');
+window.new_DXKeyboard = require('./keyboard');
+window.new_DXJoystick = require('./joystick');
+window.new_DXSound = require('./sound');
+window.new_DXMusic = require('./music');
 
 window.__fileLoader = require('./fileLoader');
 window.False = false;

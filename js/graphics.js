@@ -1,4 +1,4 @@
-import { pathToURL, sleep } from '../utils';
+import { pathToURL, sleep } from './utils';
 
 const log = console.log.bind(console);
 //const log = () => {};
@@ -24,39 +24,29 @@ module.exports = () => {
         },
 
         BeginScene: frameTime => {
-        //  log("Graphics::BeginScene", frameTime);
             _frameTime = frameTime;
         },
 
         EndScene: async () => {
-        //  log("Graphics::EndScene");
             await sleep(_frameTime);
         },
 
         SetFont: (font, size, bold, italic, underline, strike) => {
-        //  log("Graphics::SetFont", font, size, bold, italic, underline, strike);
-
             _ctx.font = size + "pt " + font;
         },
 
         DrawText: (text, x, y, color, backcolor) => {
-        //  log("Graphics::DrawText", text, x, y, color, backcolor);
-
             if (typeof color !== 'undefined') _ctx.fillStyle = color;
 
             _ctx.fillText(text, x + 5, y + 10)
         },
 
         DrawRect: (x, y, width, height, color) => {
-        //  log("Graphics::DrawRect", x, y, width, height, color);
-
             _ctx.fillStyle = '#000';
             _ctx.fillRect(x, y, width, height);
         },
 
         DrawSurface: (id, srcX, srcY, srcWidth, srcHeight, destX, destY, destWidth, destHeight, angle, alpha, r, g, b) => {
-        //  log("Graphics::DrawSurface", id, srcX, srcY, srcWidth, srcHeight, destX, destY, destWidth, destHeight, angle, alpha, r, g, b);
-
             if (typeof destWidth === 'undefined') destWidth = srcWidth;
             if (typeof destHeight === 'undefined') destHeight = srcHeight;
             if (typeof alpha !== 'undefined') _ctx.globalAlpha = alpha / 100;
@@ -79,6 +69,11 @@ module.exports = () => {
         GetSurfaceHeight: id => _loadedSurfaces[id].height,
 
         CreateSurface: async (path, colorKey, isD3D, notBitmap, reload) => {
+            log("Graphics::CreateSurface", pathToURL(path));
+            if (path.substr(path.length - 1) === '/') {
+                log("Graphics::CreateSurface skipping missing texture, returning null.");
+                return null;
+            }
             let url = pathToURL(path);
             log("Graphics::CreateSurface", pathToURL(path));
             let id = await loadSurfaceImage(url);

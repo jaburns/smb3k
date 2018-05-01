@@ -3,6 +3,7 @@ module.exports = () => {
         Initialize: hWnd => {/*nop*/},
 
         LoadSound: (path, channel, bits) => {
+            console.log("Sound::LoadSound", path);
             // TODO implement
         },
 

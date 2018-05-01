@@ -1,4 +1,3 @@
-
 export const pathToURL = path =>
     window.location.href + "assets" + path
         .replace("bmp", "png")
