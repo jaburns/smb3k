@@ -310,7 +310,7 @@ Dim lKeyDown As Long
                     gameCoins = 0
                     gameLives = 3
                     gameGreens = 3
-                    blBossesPassed = BP_1
+                    blBossesPassed = BP_NONE
                 ElseIf (oSaveGameData.gameSlot(curSel).sSaveString = "[EMPTY]" Or oSaveGameData.gameSlot(curSel).lastWorldSaved <= 9) Then
                     LoadBlankWorldPassInfo
                     curWorld = 0
