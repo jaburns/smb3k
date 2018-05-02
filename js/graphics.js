@@ -47,6 +47,13 @@ module.exports = () => {
         },
 
         DrawSurface: (id, srcX, srcY, srcWidth, srcHeight, destX, destY, destWidth, destHeight, angle, alpha, r, g, b) => {
+            srcX = Math.floor(srcX);
+            srcY = Math.floor(srcY);
+            srcWidth = Math.floor(srcWidth);
+            srcHeight = Math.floor(srcHeight);
+            destX = Math.floor(destX);
+            destY = Math.floor(destY);
+
             if (typeof destWidth === 'undefined') destWidth = srcWidth;
             if (typeof destHeight === 'undefined') destHeight = srcHeight;
             if (typeof alpha !== 'undefined') _ctx.globalAlpha = alpha / 100;
