@@ -40,6 +40,8 @@ window.ConsoleLog = console.log.bind(console);
 
 window.__intDiv = (a, b) => Math.floor(a / b) >> 0;
 
+window.__saveGameDate = () => (new Date).toLocaleDateString();
+
 window.__makeArray = (lbound, ubound, makeElem) => {
     let arr = [];
     for (let i = lbound; i <= ubound; i++) {

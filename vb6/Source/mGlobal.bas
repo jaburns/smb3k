@@ -359,8 +359,6 @@ End Function
 
 
 Public Sub LoadSavedGame()
-ConsoleLog "Skipping load of saved game data. Setting all save files to empty."
-' __fileLoader.LoadSavedGame oSaveGameData
 'Dim fFile As Long
 'Dim tempSaveGame As udtSaveGameData
 'If Not fileExist(App.Path & "\Mods\" & sWorldSetName & "\SavedGames.3ks") Then
@@ -373,16 +371,16 @@ ConsoleLog "Skipping load of saved game data. Setting all save files to empty."
 '    Open App.Path & "\Mods\" & sWorldSetName & "\SavedGames.3ks" For Binary Access Read Lock Write As fFile
 '    Get fFile, 1, oSaveGameData
 '    Close fFile
+__fileLoader.LoadSavedGame oSaveGameData
 End Sub
 
 Public Sub SaveGameData()
-Dim fFile As Long
-ConsoleLog "Skipping save of saved game data."
+__fileLoader.SaveGameData oSaveGameData
 ' __fileLoader.LoadSavedGame oSaveGameData
 'fFile = FreeFile
 'Open App.Path & "\Mods\" & sWorldSetName & "\SavedGames.3ks" For Binary Access Write Lock Read Write As fFile
 'Put fFile, 1, oSaveGameData
-Close fFile
+'Close fFile
 End Sub
 
 

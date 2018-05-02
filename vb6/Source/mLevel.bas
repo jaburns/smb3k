@@ -36,7 +36,6 @@ End Function
 
 Public Sub SetLevelTime(lTime As Long, Optional ByVal resetMaxTime As Boolean = False)
     curOLevel.SetTime lTime
-    ConsoleLog "TIME", lTime
     If resetMaxTime Then lMaxTime = lTime
 End Sub
 

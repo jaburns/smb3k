@@ -53,7 +53,6 @@ Async Public Sub __main__()
     Set Music = Nothing
     Set Mario = Nothing
     Set GFX = Nothing
-    frmFrontEnd.ReShow
     
 errOut:
 End Sub

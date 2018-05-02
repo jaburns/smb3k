@@ -446,8 +446,6 @@ Private Sub DrawBar()
 Dim sBonus As String
 Dim timeWidth As Single
 Dim i As Long
-
-    ConsoleLog "HELLO1"
     
     If Not bDisableTime Then
         timeWidth = ((lTime - (lTimeIncCount / 30)) / lMaxTime) * 640
@@ -553,7 +551,7 @@ Dim lEscapeCount As Long
         sFactor = (Cos(sAngle * 3.141592654 / 180) * 20)
         DrawLevel drawLevelX, drawLevelY, True
         GFX.DrawSurface surfList.Objects, 0, 0, 256, 63, 192, 208, , , sFactor, 75
-        GFX.DrawText " Press [Q] to quit game ", 0, 0, vbWhite, 0
+    '   GFX.DrawText " Press [Q] to quit game ", 0, 0, vbWhite, 0
     
     GFX.EndScene
     Loop

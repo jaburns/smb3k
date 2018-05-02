@@ -2,13 +2,40 @@
 <html>
     <head>
         <style>
+            html, body {
+                background-color: #1E1E1E;
+                color: #aaa;
+                font-family: sans-serif;
+                font-size: 12pt;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 95%;
+            }
             canvas { 
-                background-color: black; 
+                background-color: grey; 
+                border: #3E3E3E 5px solid;
+            }
+            p {
+                text-align: center;
+            }
+            span { 
+                padding-right: 10px;
+                font-style: italic;
             }
         </style>
     </head>
     <body>
-        <canvas id="game" width="640" height="480"></canvas>
+        <div id="stuff">
+            <canvas id="game" width="640" height="480"></canvas>
+            <p>
+                <b>Arrows:</b> <span>movement</span>
+                <b>Shift:</b> <span>run</span>
+                <b>Z:</b> <span>jump / select</span>
+                <b>X:</b> <span>switch powerup</span>
+                <b>P:</b> <span>pause</span>
+            </p>
+        </div>
         <script src="bundle.js"></script>
     </body>
 </html>

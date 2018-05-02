@@ -122,7 +122,11 @@ fn make_gfx_create_surface_async(line: &str) -> String {
     line.replace("GFX.CreateSurface", "await GFX.CreateSurface")
 }
 
-fn write_statement_line(line: &StatementLine, type_lookup: &TypeLookup, async_funcs: &Vec<String>) -> String {
+fn write_statement_line(
+    line: &StatementLine,
+    type_lookup: &TypeLookup,
+    async_funcs: &Vec<String>,
+) -> String {
     let mut result = String::new();
 
     match line {
@@ -295,7 +299,11 @@ fn write_statement_line(line: &StatementLine, type_lookup: &TypeLookup, async_fu
     make_gfx_create_surface_async(result.as_str())
 }
 
-fn write_function_body(body: &Vec<StatementLine>, type_lookup: &TypeLookup, async_funcs: &Vec<String>) -> String {
+fn write_function_body(
+    body: &Vec<StatementLine>,
+    type_lookup: &TypeLookup,
+    async_funcs: &Vec<String>,
+) -> String {
     let mut result = String::new();
 
     for s in body {

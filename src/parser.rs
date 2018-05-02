@@ -578,12 +578,13 @@ fn call_sub_statement() -> Parser<'static, u8, StatementLine> {
             } else {
                 args
             }
-        }
+        },
     })
 }
 
 fn file_operation() -> Parser<'static, u8, StatementLine> {
-    ((seq(b"Open ") | seq(b"Close ") | seq(b"Get ") | seq(b"Put ") | seq(b"Line ")) * rest_of_the_line())
+    ((seq(b"Open ") | seq(b"Close ") | seq(b"Get ") | seq(b"Put ") | seq(b"Line "))
+        * rest_of_the_line())
         .map(|_| StatementLine::Empty)
 }
 

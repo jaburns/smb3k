@@ -121,7 +121,7 @@ Dim testTag As Byte
         UpdateInput
         If GameKeyDown(QuitFromPauseKey) Then DebugModeEnabled = False
 '       If DebugKeysPressed() Then DebugModeEnabled = True
-DebugModeEnabled = True
+'DebugModeEnabled = True
         If GameKeyDown(DebugA) Then showSaveScreen True
         'If GameKeyDown(DebugA) And DebugModeEnabled Then If gameMarioStat < 4 Then gameMarioStat = gameMarioStat + 1 Else gameMarioStat = 0
     
@@ -199,7 +199,6 @@ DebugModeEnabled = True
                 dirMario = dDown
                 getSpeeds
             ElseIf GameKeyDown(Jump) Then
-                ConsoleLog "Trying to enter pipe"
                 testTag = nodeMap.NodeTag(curNode)
                 If testTag > 0 And testTag < 21 Then
                     For i = 1 To nodeMap.nodeCount
@@ -444,7 +443,7 @@ Dim bSavedGameLoaded As Boolean
                     .worldPassedData = oWorldPassData
                     .lastWorldSaved = curWorld + 10
                     .lastMapNode = curNode
-                    .sSaveString = CStr(Date) & " - Progress:" & CStr(lLevelPassedCount) 'sWorldNameList(oSaveGameData.gameSlot(i).lastWorldSaved - 10)
+                    .sSaveString = __saveGameDate() & " - Progress:" & CStr(lLevelPassedCount) 'sWorldNameList(oSaveGameData.gameSlot(i).lastWorldSaved - 10)
                     .lastMarioStatus = gameMarioStat
                     .lastMarioReserve = marioReserveItem
                     .lastMarioCoins = gameCoins

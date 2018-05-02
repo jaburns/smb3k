@@ -35,6 +35,30 @@ const chompString = bytes => {
     return result.map(x => String.fromCharCode(x)).join("");
 };
 
+const serializeWorldPassedData = data => {
+    const result = [];
+    const uboundWorlds = data.bWorldPassed(null,null,null,true);
+    for (let i = 0; i <= uboundWorlds; i++) {
+        const world = [];
+        const uboundLevels = data.bWorldPassed(i).bLevelPassed(null,null,null,true);
+        for (let j = 0; j <= uboundLevels; j++) {
+            world.push(data.bWorldPassed(i).bLevelPassed(j));
+        }
+        result.push(world);
+    }
+    return result;
+};
+
+const deserializeWorldPassedData = (data, arrays) => {
+    data.bWorldPassed(null, null, {ubound: arrays.length-1});
+    for (let i = 0; i < arrays.length; i++) {
+        data.bWorldPassed(i).bLevelPassed(null, null, {ubound: arrays[i].length-1});
+        for (let j = 0; j < arrays[i].length; j++) {
+            data.bWorldPassed(i).bLevelPassed(j, arrays[i][j]);
+        }
+    }
+};
+
 module.exports = {
     LoadWorldList: worldList => {
         worldList(null, null, {ubound: 2});
@@ -43,8 +67,46 @@ module.exports = {
         worldList(2, "FungiForest");
     },
 
-    LoadSavedGame: savedData => {
+    LoadSavedGame: saveData => {
         console.log("FileLoader::LoadSavedGame");
+        const saveString = localStorage.getItem('smb3k_saves');
+        if (saveString === null) return;
+        const slots = JSON.parse(saveString);
+
+        for (let i = 1; i <= 5; i++) {
+            const slot = saveData.gameSlot(i);
+            for (let k in slots[i-1]) {
+                if (k === 'worldPassedData') {
+                    deserializeWorldPassedData(slot.worldPassedData, slots[i-1].worldPassedData);
+                } else {
+                    slot[k] = slots[i-1][k];
+                }
+            }
+        }
+    },
+
+    SaveGameData: saveData => {
+        console.log("FileLoader::SaveGameData");
+        let slots = [];
+
+        for (let i = 1; i <= 5; i++) {
+            slots.push({
+                worldPassedData: serializeWorldPassedData(saveData.gameSlot(i).worldPassedData),
+                sSaveString: saveData.gameSlot(i).sSaveString,
+                lastWorldSaved: saveData.gameSlot(i).lastWorldSaved,
+                lastMapNode: saveData.gameSlot(i).lastMapNode,
+                lastMarioStatus: saveData.gameSlot(i).lastMarioStatus,
+                lastMarioReserve: saveData.gameSlot(i).lastMarioReserve,
+                lastMarioLives: saveData.gameSlot(i).lastMarioLives,
+                lastMarioCoins: saveData.gameSlot(i).lastMarioCoins,
+                lastMarioGreens: saveData.gameSlot(i).lastMarioGreens,
+                lastBossesPassed: saveData.gameSlot(i).lastBossesPassed,
+            });
+        }
+
+        const saveString = JSON.stringify(slots);
+        console.log("Saved data:", saveString);
+        localStorage.setItem('smb3k_saves', saveString);
     },
 
     cwdLoadWorldData: async (data, path) => {
