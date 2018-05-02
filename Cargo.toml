@@ -1,7 +1,0 @@
-[package]
-name = "smb3k"
-version = "0.0.1"
-authors = []
-
-[dependencies]
-pom = "1.1.0"

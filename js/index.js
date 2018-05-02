@@ -1,2 +1,0 @@
-require('./globals');
-require('./game')();
