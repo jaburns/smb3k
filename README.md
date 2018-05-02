@@ -1,5 +1,7 @@
 ### SMB 3K
 
+[Click here to play it](https://jaburns.github.io/smb3k/)
+
 #### Building and running:
 - Install cargo/rust, install npm/node.
 - Run `cargo run` to transpile the VB6 source to JS.
