@@ -359,7 +359,7 @@ Dim tTag As udeLTileTag
         tTypeB = GetTileAtPoint(CLng(xPos) - 14, CLng(yPos) + 2)
         tTag = GetTileTagAtPoint(CLng(xPos) - 16, CLng(yPos) + 2)
         If GameKeyDown(Down) And sGravity = 0 And tTypeA = SOLID And tTypeB = SOLID And tTag >= 8 And tTag <= 23 And lPipeStat = mpNothing Then
-            If oCurWorldData.LevelData(curLevel).PipeDest(tTag - 7).destLevel >= 0 Then
+            If oCurWorldData.LevelData(curLevel).PipeDest(tTag - 7).destLevel < 32768 Then
                 lPipeStat = mpEnterDown
                 lPipeValue = 0
                 lPipeValueMax = IIf(mStatus = MarioSmall, 32, 64)
@@ -372,7 +372,7 @@ Dim tTag As udeLTileTag
         tTypeB = GetTileAtPoint(CLng(xPos) - 14, CLng(yPos) - IIf(mStatus = MarioSmall, 38, 64))
         tTag = GetTileTagAtPoint(CLng(xPos) - 16, CLng(yPos) - IIf(mStatus = MarioSmall, 38, 64))
         If GameKeyDown(Up) And tTypeA = SOLID And tTypeB = SOLID And tTag >= 8 And tTag <= 23 And lPipeStat = mpNothing Then
-            If oCurWorldData.LevelData(curLevel).PipeDest(tTag - 7).destLevel >= 0 Then
+            If oCurWorldData.LevelData(curLevel).PipeDest(tTag - 7).destLevel < 32768 Then
                 lPipeStat = mpEnterUp
                 lPipeValue = 0
                 lPipeValueMax = IIf(mStatus = MarioSmall, 32, 64)
@@ -386,7 +386,7 @@ Dim tTag As udeLTileTag
         tTypeB = GetTileAtPoint(CLng(xPos) + 18, CLng(yPos) - 30)
         tTag = GetTileTagAtPoint(CLng(xPos) + 18, CLng(yPos) - 16)
         If GameKeyDown(Right) And tTypeA = SOLID And sGravity = 0 And tTypeB = SOLID And tTag >= 8 And tTag <= 23 And lPipeStat = mpNothing Then
-            If oCurWorldData.LevelData(curLevel).PipeDest(tTag - 7).destLevel >= 0 Then
+            If oCurWorldData.LevelData(curLevel).PipeDest(tTag - 7).destLevel < 32768 Then
                 lPipeStat = mpEnterRight
                 lPipeValue = 0
                 lPipeValueMax = 32
@@ -399,7 +399,7 @@ Dim tTag As udeLTileTag
         tTypeB = GetTileAtPoint(CLng(xPos) - 18, CLng(yPos) - 30)
         tTag = GetTileTagAtPoint(CLng(xPos) - 18, CLng(yPos) - 16)
         If GameKeyDown(Left) And tTypeA = SOLID And sGravity = 0 And tTypeB = SOLID And tTag >= 8 And tTag <= 23 And lPipeStat = mpNothing Then
-            If oCurWorldData.LevelData(curLevel).PipeDest(tTag - 7).destLevel >= 0 Then
+            If oCurWorldData.LevelData(curLevel).PipeDest(tTag - 7).destLevel < 32768 Then
                 lPipeStat = mpEnterLeft
                 lPipeValue = 0
                 lPipeValueMax = 32
@@ -411,7 +411,7 @@ Dim tTag As udeLTileTag
         tTag = GetTileTagAtPoint(CLng(xPos), CLng(yPos) - 16)
         If GameKeyDown(Up) And sGravity = 0 And tTag >= 8 And tTag <= 23 And lPipeStat = mpNothing Then
             If TileExistsAtPoint(CLng(xPos), CLng(yPos) - 16) Then
-            If oCurWorldData.LevelData(curLevel).PipeDest(tTag - 7).destLevel >= 0 Then
+            If oCurWorldData.LevelData(curLevel).PipeDest(tTag - 7).destLevel < 32768 Then
                 lPipeStat = mpEnterDoor
                 lPipeValue = 0
                 lPipeValueMax = 16
