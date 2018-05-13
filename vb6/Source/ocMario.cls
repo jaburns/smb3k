@@ -429,9 +429,6 @@ Dim tTag As udeLTileTag
     lPipeValue = lPipeValue + 2
     If lPipeValue >= lPipeValueMax Then
         If lPipeStat < 6 Then
-            Do While SoundPlaying(Sounds.Pipe)
-                DoEvents
-            Loop
             bAlive = False
         Else
             If lPipeStat = mpExitDoor Then
