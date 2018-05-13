@@ -3,7 +3,7 @@ module.exports = () => {
 
     return {
         Key_J: -1,//74,
-        Key_F9: -1,//57,
+        Key_F9: 83, // Mapped to "S" for saving game on map screen.
         Key_F10: -1,//48,
         Key_L: -1,//76,
         Key_Q: -1, //81,
