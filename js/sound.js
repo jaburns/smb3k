@@ -2,6 +2,7 @@ import { pathToURL } from './utils';
 
 module.exports = () => {
     const _soundElems = [];
+    const _soundPlayedOnce = {};
 
     return {
         Initialize: hWnd => {
@@ -18,12 +19,13 @@ module.exports = () => {
         },
 
         PlaySound: (id, loop) => {
+            _soundPlayedOnce[id] = true;
             _soundElems[id].play();
             _soundElems[id].currentTime = 0;
         },
 
         StopSound: () => {},
 
-        StillPlaying: id => !_soundElems[id].ended,
+        StillPlaying: id => _soundPlayedOnce[id] && !_soundElems[id].ended,
     };
 };
